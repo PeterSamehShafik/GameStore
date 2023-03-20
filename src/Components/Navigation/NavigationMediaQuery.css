@@ -1,0 +1,12 @@
+@media (max-width: 767.98px){
+    .side-nav>div{
+        margin-left: 0px !important;
+        align-items: center !important;
+    }
+    .side-nav .nav-item{
+        margin-left: 1rem;
+    }
+    .side-nav .nav-item span{
+        display: none;
+    }
+}

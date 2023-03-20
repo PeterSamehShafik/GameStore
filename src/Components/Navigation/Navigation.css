@@ -1,0 +1,29 @@
+.nav-item{
+    font-size: larger;
+}
+.nav-item a{
+    padding: 0px;
+}
+.nav-link{
+    padding:0px;
+}
+.nav-link.active{
+    background-color: transparent !important;
+}
+.icon{
+    background-color: #383636;
+    width:1.5rem;
+    color: #fff;
+    font-size: larger;
+    padding: 0.5rem;
+    transition: all 0.2s ease-in-out;
+}
+.nav-item:hover .icon{
+    background-color: #fff !important;
+    color: black !important;
+}
+.nav-link.active .icon{
+    background-color: #fff !important;
+    color: black !important;
+}
+

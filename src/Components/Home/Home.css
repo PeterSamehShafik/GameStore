@@ -1,0 +1,39 @@
+
+main .card{
+    cursor: pointer !important;
+    transition: all 0.4s !important;
+    min-height: 18rem !important;
+}
+
+
+main .card:hover{
+    background-color: #383636 !important;
+    transform: scale(1.03) !important;
+}
+main .card .img{
+    overflow: hidden !important;
+}
+
+.cart{
+    transition: all 0.4s;
+    cursor: pointer;
+}
+.cart:hover{
+    color: blueviolet !important;
+}
+
+main .card-footer{
+    border-top: none !important;
+}
+
+.fav{
+    transition: all 0.4s;
+    cursor: pointer;
+}
+.fav:hover{
+    color: red !important;
+}
+
+.col-md-6, .col-lg-4, .col-md-6, .col-lg-6{
+    transition: all 0.2s;
+}

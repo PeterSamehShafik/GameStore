@@ -1,0 +1,22 @@
+.close-btn{
+    border: none !important;
+}
+.game-check{
+    background-color: #2c3035;
+}
+
+.game-name{
+    transition: all 0.4s;
+    cursor: pointer;
+}
+.game-name:hover{
+    color: white !important;
+}
+.game-check .close-btn{
+    background-color: rgb(58, 57, 57) !important;
+    transition: all 0.4s;
+}
+
+.game-check .close-btn:hover{
+    background-color: rgb(75, 73, 73) !important;
+}

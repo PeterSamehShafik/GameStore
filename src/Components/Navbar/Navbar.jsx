@@ -1,0 +1,60 @@
+import React from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import './Navbar.css'
+import { useSelector } from 'react-redux';
+
+
+function Navbar() {
+    const location = useLocation()
+    
+    const games =[]
+
+    
+    return <>
+        <nav className="navbar top-nav navbar-expand-lg navbar-dark text-white position-sticky ">
+            <div className="container-fluid px-5">
+                <Link to='/' className="navbar-brand" >
+                    <i className="fa-solid fa-gamepad me-3"></i>
+                    <span className='fw-bolder'>Game Store</span>
+                </Link>
+                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span className="navbar-toggler-icon"></span>
+                </button>
+                <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                    {location.pathname === '/' ? "" :
+                        <form className="d-flex align-items-center m-auto ms-lg-auto w-50" role="search">
+                            <input className="form-control me-2 search" type="search" placeholder="Search games..." aria-label="Search" />
+                            <i className="fa-solid fa-magnifying-glass"></i>
+                        </form>
+                    }
+                    <ul className="navbar-nav">
+                        {location.pathname === '/' ?
+                            <Link to='/home' className="ms-lg-5 ms-4 navbar-brand" >
+                                <i className="fa-solid fa-cart-shopping me-3"></i>
+                                <span className='fw-bolder'>Browse Store</span>
+                            </Link>
+                            : ""
+                        }
+                    </ul>
+                    <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+                        <li className="nav-item">
+                            <div className="nav-link text-white fw-bolder mx-4" aria-current="page" >
+                                <i className="fa-brands fa-github"></i>
+                                <span className="ms-3">Peter</span>
+                            </div>
+                        </li>
+                        <li className="nav-item">
+                            <div className="nav-link text-white fw-bolder ms-4" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample" >
+                                <i className="fa-solid fa-bag-shopping"></i>
+                                <span className="ms-3" >Cart: {games.length}</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+    </>
+}
+
+export default Navbar

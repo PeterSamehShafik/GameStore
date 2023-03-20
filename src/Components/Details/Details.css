@@ -1,0 +1,21 @@
+.accordion-item{
+    border:none !important;
+}
+
+.accordion-header{
+    border: none !important;
+    box-shadow: none !important;
+}
+.accordion-body{
+    border-bottom: 1px white solid !important;
+}
+.accordion ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.text-bg-test{
+    background-color: #2c3035 !important;
+    color: white !important;
+}

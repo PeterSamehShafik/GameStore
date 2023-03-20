@@ -1,0 +1,16 @@
+?key=0c04e7dfd9db4de8b14711042cab0d8c
+
+List of games (Home Page)
+https://api.rawg.io/api/games?key=0c04e7dfd9db4de8b14711042cab0d8c
+
+
+Game details
+https://api.rawg.io/api/games/3498?key=0c04e7dfd9db4de8b14711042cab0d8c
+
+
+Search & order
+https://api.rawg.io/api/games?key=0c04e7dfd9db4de8b14711042cab0d8c&search=valo&ordering=name/-name
+
+
+filter by genre
+https://api.rawg.io/api/games?key=0c04e7dfd9db4de8b14711042cab0d8c&genres=action
