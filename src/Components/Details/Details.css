@@ -19,3 +19,8 @@
     background-color: #2c3035 !important;
     color: white !important;
 }
+
+.picSize{
+    width: 5rem;
+    height: 40rem;
+}

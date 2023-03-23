@@ -20,7 +20,7 @@ function App() {
 
         <Route path='' element={<StartScreen />} />
         <Route path='home' element={<Home />} />
-        <Route path='details' element={<Details />} />
+        <Route path='details/:slug/:id' element={<Details />} />
 
       </Routes>
 
