@@ -11,6 +11,8 @@ import './index.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import '@fortawesome/fontawesome-free/js/all.min.js'
 
+export const baseURL = 'https://game-store-be.vercel.app/api/v1'
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
