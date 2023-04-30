@@ -1,28 +1,42 @@
-body{
+body {
     background-color: #0f1011;
     color: white;
 }
-.search{
-    background-color: rgba(255, 255, 255,0.1) !important;
+
+.search {
+    background-color: rgba(255, 255, 255, 0.1) !important;
     border: none !important;
 }
-.search:hover{
-    background-color: rgba(255, 255, 255,0.13) !important;   
+
+.search:hover {
+    background-color: rgba(255, 255, 255, 0.13) !important;
 }
-.search:focus{
+
+.search:focus {
     box-shadow: none !important;
-    background-color: rgba(255, 255, 255,0.15) !important;
+    background-color: rgba(255, 255, 255, 0.15) !important;
     color: white;
 }
-.cursor-pointer{
+
+.cursor-pointer {
     cursor: pointer !important;
 }
-.cursor-normal{
+
+.cursor-normal {
     cursor: default !important;
 }
 
-a{
+a {
     text-decoration: none !important;
     color: inherit !important;
 }
-  
+
+.hover-50, .hover-75{
+    transition: all 0.1s;
+}
+.hover-50:hover {
+    opacity: 50% !important;
+}
+.hover-75:hover {
+    opacity: 75% !important;
+}

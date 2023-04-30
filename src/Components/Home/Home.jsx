@@ -13,12 +13,14 @@ function Home() {
   // console.log(data)
   // const dispatch = useDispatch()
   const [isGrid, setIsGrid] = useState(true);
-  const [games, setGames] = useState(null);
+  const [games, setGames] = useState('loading');
 
   async function getGames() {
-    const { data } = await axios
-      .get(`${baseURL}/game/all`)
-      .catch((err) => console.log(err));
+    const { data } = await axios.get(`${baseURL}/game/all`)
+      .catch((err) => {
+        setGames(null)
+        console.log(err)
+      })
     console.log(data);
     // console.log(data)
     setGames(data.games);
@@ -85,49 +87,55 @@ function Home() {
                 </div>
                 <div className="games-show mt-3">
                   <div className="row g-3">
-                    {games?.map((game, idx) => {
-                      return (
-                        <div
-                          key={game._id}
-                          className={
-                            isGrid
-                              ? "col-md-6 col-lg-4"
-                              : " col-md-6 col-lg-6 offset-md-3 offset-lg-3"
-                          }
-                        >
-                          <Link to={`/details/${game.slug}/${game._id}`}>
-                            <div className="card text-bg-dark rounded-4">
-                              <img
-                                src={game.mainPic.secure_url}
-                                className="card-img-top rounded-4 rounded-bottom img-fluid"
-                                alt={game.slug}
-                              />
-                              <div className="card-body pt-1">
-                                <div className="cart-price d-flex justify-content-between align-items-start">
-                                  <span className="cart text-muted fw-bolder">
-                                    Add to cart <strong></strong>
-                                  </span>
-                                  <p className="fw-bolder m-0">${game.price}</p>
+                    {games === "loading" ? 
+                      <div><p>Loading....</p></div>
+                     :
+                      games ?
+                        games?.map((game, idx) => {
+                          return (
+                            <div
+                              key={game._id}
+                              className={
+                                isGrid
+                                  ? "col-md-6 col-lg-4"
+                                  : " col-md-6 col-lg-6 offset-md-3 offset-lg-3"
+                              }
+                            >
+                              <Link to={`/details/${game.slug}/${game._id}`}>
+                                <div className="card text-bg-dark rounded-4">
+                                  <img
+                                    src={game.mainPic.secure_url}
+                                    className="card-img-top rounded-4 rounded-bottom img-fluid"
+                                    alt={game.slug}
+                                  />
+                                  <div className="card-body pt-1">
+                                    <div className="cart-price d-flex justify-content-between align-items-start">
+                                      <span className="cart text-muted fw-bolder">
+                                        Add to cart <strong></strong>
+                                      </span>
+                                      <p className="fw-bolder m-0">${game.price}</p>
+                                    </div>
+                                    <h5 className="card-title fw-bolder mt-2 h4">
+                                      {game.name}
+                                    </h5>
+                                  </div>
+                                  <div className="card-footer">
+                                    <div className="add-to-fav d-flex">
+                                      <span className="fa-2x fav ms-auto">
+                                        <i
+                                          className="fa-regular fa-heart"
+                                          id="heart-icon"
+                                        ></i>
+                                      </span>
+                                    </div>
+                                  </div>
                                 </div>
-                                <h5 className="card-title fw-bolder mt-2 h4">
-                                  {game.name}
-                                </h5>
-                              </div>
-                              <div className="card-footer">
-                                <div className="add-to-fav d-flex">
-                                  <span className="fa-2x fav ms-auto">
-                                    <i
-                                      className="fa-regular fa-heart"
-                                      id="heart-icon"
-                                    ></i>
-                                  </span>
-                                </div>
-                              </div>
+                              </Link>
                             </div>
-                          </Link>
-                        </div>
-                      );
-                    })}
+                          );
+                        })
+                    : <div><p>Can't loading games, contact the administrator</p></div>}
+
                   </div>
                 </div>
               </div>
