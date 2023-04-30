@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import './Cart.css'
-import { useSelector, useDispatch } from 'react-redux';
-import { removeFromCart } from '../Redux/StoreSlices';
+// import { useSelector, useDispatch } from 'react-redux';
+// import { removeFromCart } from '../Redux/StoreSlices';
 function Cart() {
     // const {games,totalPrice} = useSelector(state=>state.currentCart)
     // const dispatch = useDispatch()
