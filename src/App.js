@@ -5,8 +5,8 @@ import { Routes, Route, useNavigate, Navigate } from 'react-router-dom'
 import Navbar from './Components/Navbar/Navbar';
 import Details from './Components/Details/Details';
 import Cart from './Components/Cart/Cart';
-import { Provider } from 'react-redux';
-import { CartStore } from './Components/Redux/CartStore.js';
+// import { Provider } from 'react-redux';
+// import { CartStore } from './Components/Redux/CartStore.js';
 
 function App() {
 
