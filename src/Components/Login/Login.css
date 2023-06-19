@@ -1,0 +1,47 @@
+.fa-check , .fa-xmark
+{
+  right: 15px;
+  top: 10px;
+  font-size: 20px;
+  /* display: none; */
+}
+.fa-check
+{
+  color: green;
+}
+.fa-xmark
+{
+  color: red;
+}
+.checked-right
+{
+    border: 2px solid greenyellow;
+}
+.checked-wrong
+{
+    border: 2px solid red;
+}
+.button-disabled
+{
+  background-color: gray !important;
+  border-color: gray !important;
+}
+.wrong-input
+{
+  font-size: 14px !important;
+}
+#tsparticles
+{
+    position: fixed;
+    width: 100%;
+    z-index: -1;
+}
+.sign-up-page
+{
+    height: 92vh;
+}
+
+.form-control:focus {
+    border-color: transparent !important;
+    box-shadow: none;
+}
