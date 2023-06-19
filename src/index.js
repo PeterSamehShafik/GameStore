@@ -11,11 +11,19 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
+
 // import 'jquery/dist/jquery.min.js'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import '@fortawesome/fontawesome-free/js/all.min.js'
 
 export const baseURL = 'https://game-store-be.vercel.app/api/v1'
+export const BEARERKEY = "gameStore3000__"
+export const config = {
+  headers: {
+    authorization: BEARERKEY + localStorage.getItem("token"),
+  },
+};
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

@@ -2,13 +2,12 @@ import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import './Navbar.css'
 import { useSelector } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
-function Navbar() {
+function Navbar({currentUser, removeUser, cart}) {
     const location = useLocation()
-    
     const games =[]
-
     
     return <>
         <nav className="navbar top-nav navbar-expand-lg navbar-dark text-white position-sticky ">
@@ -37,18 +36,43 @@ function Navbar() {
                         }
                     </ul>
                     <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-                        <li className="nav-item">
-                            <div className="nav-link text-white fw-bolder mx-4" aria-current="page" >
-                                <i className="fa-brands fa-github"></i>
-                                <span className="ms-3">Peter</span>
-                            </div>
-                        </li>
-                        <li className="nav-item">
-                            <div className="nav-link text-white fw-bolder ms-4" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample" >
-                                <i className="fa-solid fa-bag-shopping"></i>
-                                <span className="ms-3" >Cart: {games.length}</span>
-                            </div>
-                        </li>
+                        {
+                            currentUser?
+                            <>
+                                <li className="nav-item">
+                                    <div className="nav-link text-white fw-bolder mx-4" aria-current="page" >
+                                        <Link to ='/profile' >
+                                            <i className="fa-brands fa-github"></i>
+                                            <span className="ms-3">{currentUser?.firstName}</span>
+                                        </Link>
+                                    </div>
+                                </li>
+                                <li className="nav-item">
+                                    <div className="nav-link text-white fw-bolder ms-4" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample" >
+                                        <FontAwesomeIcon icon="fa-solid fa-bag-shopping" />
+                                        <span className="ms-3" >Cart: {cart?.games?.length}</span>
+                                    </div>
+                                </li>
+                                <li className="nav-item" onClick={removeUser}>
+                                    <div className="nav-link text-white fw-bolder mx-4" aria-current="page" >
+                                        <span >Logout</span>
+                                    </div>
+                                </li>
+                            </>
+                            :
+                            <>
+                                 <li className="nav-item">
+                                    <div className="nav-link text-white fw-bolder mx-4" aria-current="page" >
+                                        <Link to='login'>Login</Link>
+                                    </div>
+                                </li>
+                                <li className="nav-item">
+                                    <div className="nav-link text-white fw-bolder mx-4" aria-current="page" >
+                                        <Link to='signup'>Signup</Link>
+                                    </div>
+                                </li>
+                            </>
+                        }
                     </ul>
                 </div>
             </div>
