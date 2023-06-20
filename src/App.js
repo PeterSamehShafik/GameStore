@@ -101,7 +101,6 @@ function App() {
     }
 
   }
-
   useEffect(() => {
     if (localStorage.getItem("token")) {
       currentUser();
@@ -123,9 +122,9 @@ function App() {
       <Route path='' element={<StartScreen />} />
       <Route path='home' element={<Home />} />
       <Route path='profile' element={<Profile />} />
-      <Route path='details/:slug/:id' element={<Details currentUser={crrUser} getCart={getCart} cart={cart} />} />
-      <Route path='login' element={<ProtectedLogin> <Login currentUser={currentUser} /> </ProtectedLogin> } />
-      <Route path='signup' element={ <ProtectedLogin> <Signup /> </ProtectedLogin> } />
+      <Route path='details/:slug/:id' element={<Details currentUser={crrUser} getCart={getCart} cart={cart}  />} />
+      <Route path='login' element={<ProtectedLogin> <Login currentUser={currentUser} /> </ProtectedLogin>} />
+      <Route path='signup' element={<ProtectedLogin> <Signup /> </ProtectedLogin>} />
 
     </Routes>
 
