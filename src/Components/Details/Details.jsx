@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Details.css";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { BEARERKEY, baseURL } from "../../index.js";
 import HoverVideoPlayer from "react-hover-video-player";
@@ -9,12 +9,45 @@ import { Carousel } from "react-responsive-carousel";
 import Rating from "@mui/material/Rating";
 import Cart from '../Cart/Cart.jsx'
 
-function Details({ currentUser, getCart }) {
+//modal
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+
+
+
+function Details({ currentUser, getCart, cart }) {
+  let navigate = useNavigate();
   const [game, setGame] = useState("Loading");
   const [gameRate, setGameRate] = useState(0);
+  const [isInCart, setIsInCart] = useState(false);
   const [comments, setComments] = useState("loading");
+  //modal
+  const [showModal, setShowModal] = useState(false);
+  const [modalData, setModalData] = useState({
+    header: "",
+    body: "",
+    isMainBtn: true
+
+  });
+  const handleCloseModal = () => setShowModal(false);
+  const handleShowModal = () => setShowModal(true);
+
+  const callModal = ({ header = "Are you sure?", body, closeBtnColor = "secondary", closeBtnTxt = "Close", mainBtnColor = "primary", mainBtnTxt, mainBtnFunc, isMainBtn = true } = {}) => {
+    setModalData({ ...modalData, header, body, closeBtnColor, closeBtnTxt, mainBtnColor, mainBtnTxt, mainBtnFunc, isMainBtn })
+    handleShowModal()
+  }
+  const applyCloseModel = () => {
+    modalData.mainBtnFunc()
+    handleCloseModal()
+  }
+  //end of modal
   const { id } = useParams();
   const [addCommentFlag, setAddCommentFlag] = useState(false);
+  const checkCart = async () => {
+    await getCart();
+    const res = cart.games?.find(e => e._id == id)
+    res ? setIsInCart(true) : setIsInCart(false)
+  }
 
   const getGame = async () => {
     const { data } = await axios
@@ -74,7 +107,8 @@ function Details({ currentUser, getCart }) {
         getGameComment();
       }
     } else {
-      alert("you can't add empty comment");
+      callModal({ header: "Warning", body: "You can't add empty comment", isMainBtn: false, closeBtnTxt: "OK", closeBtnColor: "warning" })
+      setAddCommentFlag(false);
     }
   };
   const editComment = (commentID) => {
@@ -110,10 +144,11 @@ function Details({ currentUser, getCart }) {
         editSection.classList.add("d-none");
         text.innerHTML = textArea.value;
       } else {
-        alert("Failed to update comment");
+
+        callModal({header:"Warning!", body:"Failed to update comment", isMainBtn:false, closeBtnTxt:"Close", closeBtnColor:"warning"})
       }
     } else {
-      alert("Can't add empty comment");
+      callModal({header:"Warning!", body:"Can't add empty comment", isMainBtn:false, closeBtnTxt:"Close", closeBtnColor:"warning"})
     }
   };
   const deleteComment = async (commentID, index) => {
@@ -134,8 +169,10 @@ function Details({ currentUser, getCart }) {
       const tempComments = [...comments];
       tempComments.splice(index, 1);
       setComments(tempComments);
+      callModal({header:"Success!", body:"The comment removed successfully", isMainBtn:false, closeBtnTxt:"Close", closeBtnColor:"success"})
+    
     } else {
-      alert("Failed to delete comment");
+      callModal({header:"Warning!", body:"Failed to delete comment", isMainBtn:false, closeBtnTxt:"Close", closeBtnColor:"warning"})
     }
   };
   //End of Comment APIS
@@ -158,16 +195,21 @@ function Details({ currentUser, getCart }) {
         }
       });
     if (result?.data?.message == "done") {
-      alert("Added!");
+      callModal({header:"Success!", body:"The Game added to your cart", isMainBtn:false, closeBtnTxt:"OK", closeBtnColor:"success"})
       //to render cart component
       getCart();
+      setIsInCart(true);
     }
   };
 
   useEffect(() => {
     getGame();
     getGameComment();
+    checkCart();
   }, []);
+  useEffect(() => {
+    checkCart();
+  }, [cart]);
 
   return (
     <>
@@ -265,7 +307,7 @@ function Details({ currentUser, getCart }) {
                             <ul className="text-bg-test">
                               <li className="fw-bolder">{game.name}</li>
                               <li className="text-white-50">
-                                Relased: {game.released.split("T")[0]}
+                                Released: {game.released.split("T")[0]}
                               </li>
                               <li className="text-white-50">
                                 Platforms:
@@ -333,19 +375,35 @@ function Details({ currentUser, getCart }) {
                 </div>
                 {
                   game.createdBy?._id == currentUser?._id ? (
-                  <span
-                    className="fw-bolder text-success pe-2"
-                  >
-                    Creator
-                  </span>
-                ) : (
-                  <span
-                    className="cart text-muted fw-bolder pe-2"
-                    onClick={addToCart}
-                  >
-                    Add to cart <strong>✚</strong>
-                  </span>
-                )}
+                    <span
+                      className="fw-bolder text-success pe-2"
+                    >
+                      Creator
+                    </span>
+                  ) :
+                    <>
+                      {isInCart && currentUser ? <span
+                        className="fw-bolder pe-2 text-success"
+
+                      >
+                        Added 
+                      </span> :
+                        currentUser ?
+                          <span
+                            className="cart text-muted fw-bolder pe-2"
+                            onClick={addToCart}>
+                            Add to cart <strong>✚</strong>
+                          </span> :
+                          <span
+                            className="cart text-muted fw-bolder pe-2"
+                            onClick={() => { callModal({ header: "Warning", body: "You need to login before adding to a cart", mainBtnTxt: "Sign in", mainBtnFunc: () => { navigate('/login') }, mainBtnColor: "success" }) }}>
+                            Add to cart <strong>✚</strong>
+                          </span>
+                      }
+
+
+                    </>
+                }
               </div>
             </div>
           </div>
@@ -362,9 +420,14 @@ function Details({ currentUser, getCart }) {
                     placeholder="What do you think? Add a comment and collaborate"
                     rows="3"
                   ></textarea>
-                  <button className="btn btn-success mt-2" onClick={addComment}>
-                    {addCommentFlag ? "Waiting..." : "Post Comment"}{" "}
-                  </button>
+                  {currentUser ?
+                    <button className="btn btn-success mt-2" onClick={addComment}>
+                      {addCommentFlag ? "Waiting..." : "Post Comment"}{" "}
+                    </button> :
+                    <button className="btn btn-success mt-2" onClick={() => { callModal({ header: "Warning", body: "You need to login before adding a comment", mainBtnTxt: "Sign in", mainBtnFunc: () => { navigate('/login') }, mainBtnColor: "success" }) }}>
+                      {addCommentFlag ? "Waiting..." : "Post Comment"}{" "}
+                    </button>}
+
                 </div>
                 <hr />
                 {comments === "loading" ? (
@@ -406,8 +469,8 @@ function Details({ currentUser, getCart }) {
                                 </div>
                               </div>
                               {comment?.createdBy?._id == currentUser?._id ||
-                              currentUser?.role == "superAdmin" ||
-                              game?.createdBy?._id == currentUser?._id ? (
+                                currentUser?.role == "superAdmin" ||
+                                game?.createdBy?._id == currentUser?._id ? (
                                 <div className="dropdownmenu ms-auto">
                                   <div className="dropdown">
                                     <button
@@ -425,7 +488,7 @@ function Details({ currentUser, getCart }) {
                                       aria-labelledby="dropdownMenuButton1"
                                     >
                                       {comment?.createdBy?._id ==
-                                      currentUser?._id ? (
+                                        currentUser?._id ? (
                                         <>
                                           <span
                                             onClick={() => {
@@ -442,13 +505,14 @@ function Details({ currentUser, getCart }) {
                                       )}
                                       {comment?.createdBy?._id ==
                                         currentUser?._id ||
-                                      currentUser?.role == "superAdmin" ||
-                                      game?.createdBy?._id ==
+                                        currentUser?.role == "superAdmin" ||
+                                        game?.createdBy?._id ==
                                         currentUser?._id ? (
                                         <span
                                           className="cursor-pointer text-danger hover-75 dropdown-item"
                                           onClick={() => {
-                                            deleteComment(comment._id, index);
+
+                                            callModal({ isMainBtn: true, header: "Delete Comment", body: "Are you sure?", mainBtnTxt: "Yes", mainBtnColor: "danger", mainBtnFunc: () => deleteComment(comment._id, index), closeBtnTxt:"No", closeBtnColor:"success" })
                                           }}
                                         >
                                           <i className="fa-solid fa-trash-can fa-lg"></i>{" "}
@@ -493,6 +557,26 @@ function Details({ currentUser, getCart }) {
               </div>
             </div>
           </div>
+
+          <Modal show={showModal} onHide={handleCloseModal} className="text-white" >
+            <Modal.Header closeButton>
+              <Modal.Title>{modalData.header}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>{modalData.body}</Modal.Body>
+            <Modal.Footer>
+              <Button variant={modalData.closeBtnColor} onClick={handleCloseModal}>
+                {modalData.closeBtnTxt}
+              </Button>
+              {modalData.isMainBtn == true ?
+                <Button variant={modalData.mainBtnColor} onClick={applyCloseModel}>
+                  {modalData.mainBtnTxt}
+                </Button>
+                : ""
+              }
+
+            </Modal.Footer>
+          </Modal>
+
         </div>
       ) : (
         <div className="m-auto d-flex flex-column align-items-center mt-5">
