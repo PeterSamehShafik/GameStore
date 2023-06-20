@@ -99,3 +99,18 @@ a {
     } 
   }
 /* End of loading Screen */
+
+/* Modal */
+.modal-content{
+  background-color: #101e2c !important;
+}
+
+.modal-header .btn-close{
+  opacity: 0.8;
+  transition: all 0.2s;
+}
+.modal-header .btn-close:hover{
+  transform: scale(1.1);
+  opacity: 1;
+}
+/* end of modal */
