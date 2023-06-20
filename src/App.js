@@ -12,6 +12,11 @@ import Login from './Components/Login/Login.jsx'
 import { baseURL, BEARERKEY } from './index.js'
 import axios from 'axios';
 import Profile from './Components/Profile/Profile.jsx';
+import Wishlist from './Components/Profile/Wishlist.jsx';
+import Info from './Components/Profile/Info.jsx';
+import Followers from './Components/Profile/Followers.jsx';
+import Games from './Components/Profile/Games.jsx';
+import Activity from './Components/Profile/Activity.jsx';
 
 
 
@@ -109,8 +114,6 @@ function App() {
   }, [])
   return <>
 
-    {/* <Provider store={CartStore}> */}
-
     <Navbar currentUser={crrUser} removeUser={removeUser} cart={cart} />
     {
       crrUser ?
@@ -122,7 +125,28 @@ function App() {
 
       <Route path='' element={<StartScreen />} />
       <Route path='home' element={<Home />} />
-      <Route path='profile' element={<Profile />} />
+      <Route path='profile' element={<Profile />} >
+        <Route
+          path="info"
+          element={<Info />}
+        />
+        <Route
+          path="wishlist"
+          element={<Wishlist />}
+        />
+        <Route
+          path="activity"
+          element={<Activity />}
+        />
+        <Route
+          path="following"
+          element={<Followers />}
+        />
+        <Route
+          path="games"
+          element={<Games />}
+        />
+      </Route>
       <Route path='details/:slug/:id' element={<Details currentUser={crrUser} getCart={getCart} cart={cart} />} />
       <Route path='login' element={<ProtectedLogin> <Login currentUser={currentUser} /> </ProtectedLogin> } />
       <Route path='signup' element={ <ProtectedLogin> <Signup /> </ProtectedLogin> } />
