@@ -14,26 +14,31 @@ import axios from 'axios';
 import Profile from './Components/Profile/Profile.jsx';
 
 
+
 // import { Provider } from 'react-redux';
 // import { CartStore } from './Components/Redux/CartStore.js';
 
 function App() {
+
   // Cart
   const [cart, setCart] = useState([]);
   const getCart = async () => {
-    const config = {
-      headers: {
-        authorization: BEARERKEY + localStorage.getItem("token"),
-      },
-    };
-    const result = await axios.get(`${baseURL}/cart`, config).catch(function (error) {
-      if (error.response) {
-        console.log(error.response);
+    if (localStorage.getItem("token")) {
+      const config = {
+        headers: {
+          authorization: BEARERKEY + localStorage.getItem("token"),
+        },
+      };
+      const result = await axios.get(`${baseURL}/cart`, config).catch(function (error) {
+        if (error.response) {
+          console.log(error.response);
+        }
+      })
+
+      // console.log(result)
+      if (result?.data?.message == "done") {
+        setCart(result?.data?.cart)
       }
-    })
-    //console.log(result)
-    if (result?.data?.message == "done") {
-      setCart(result?.data?.cart)
     }
   }
   //End of Cart
@@ -88,6 +93,7 @@ function App() {
     });
     if (result?.data?.message == "done") {
       localStorage.removeItem("token");
+      localStorage.removeItem("token");
       navigate('/login');
       setCrrrUser(null);
     } else {
@@ -95,13 +101,10 @@ function App() {
     }
 
   }
+
   useEffect(() => {
     if (localStorage.getItem("token")) {
       currentUser();
-    }
-    else {
-      removeUser();
-      //setCrrrUser(null);
     }
   }, [])
   return <>
@@ -120,9 +123,9 @@ function App() {
       <Route path='' element={<StartScreen />} />
       <Route path='home' element={<Home />} />
       <Route path='profile' element={<Profile />} />
-      <Route path='details/:slug/:id' element={<Details currentUser={crrUser} getCart={getCart} />} />
-      <Route path='login' element={<Login currentUser={currentUser} />} />
-      <Route path='signup' element={<Signup />} />
+      <Route path='details/:slug/:id' element={<Details currentUser={crrUser} getCart={getCart} cart={cart} />} />
+      <Route path='login' element={<ProtectedLogin> <Login currentUser={currentUser} /> </ProtectedLogin> } />
+      <Route path='signup' element={ <ProtectedLogin> <Signup /> </ProtectedLogin> } />
 
     </Routes>
 
