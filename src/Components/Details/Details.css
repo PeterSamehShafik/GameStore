@@ -27,11 +27,12 @@
     height: 40rem;
 }
 
-.game-carousal img {
+/* carousal */
+ .game-carousal img {
     width: auto !important;
     max-height: 30rem !important;
 }
-
+/*
 
 .carousel.carousel-slider .control-arrow {
     border: 1px white solid !important;
@@ -42,7 +43,9 @@
 .carousel.carousel-slider:hover .control-arrow:hover {
     border: 1px aqua solid !important;
     border-radius: 20%;
-}
+} */
+/* end of carousal */
+
 
 .comment-area {
     background-color: transparent !important;

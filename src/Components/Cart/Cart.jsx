@@ -9,6 +9,7 @@ import Modal from 'react-bootstrap/Modal';
 // import { useSelector, useDispatch } from 'react-redux';
 // import { removeFromCart } from '../Redux/StoreSlices';
 function Cart({ getCart, cart, setCart }) {
+    
     // const {games,totalPrice} = useSelector(state=>state.currentCart)
     // const dispatch = useDispatch()
     //modal
@@ -72,7 +73,7 @@ function Cart({ getCart, cart, setCart }) {
             <div className="offcanvas-body d-flex flex-column justify-content-between">
                 <div className="games-list">
                     {
-                        cart.length != 0 ?
+                        cart.games?.length != 0 ?
                             cart.games?.map((game, idx) =>
                                 <div key={idx} className="game-check my-2 p-3 rounded-4 text-white-50 d-flex justify-content-between align-items-center">
                                     <h6 className="game-name m-0">{game.name}</h6>
