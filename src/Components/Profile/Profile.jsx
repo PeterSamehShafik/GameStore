@@ -68,8 +68,8 @@ export default function Profile() {
                 <div className="card-body">
                   <div className="d-flex flex-column align-items-center ">
                     <img
-                      src={profile.profilePic.secure_url }
-                      alt="Admin"
+                      src={profile.profilePic?.secure_url }
+                      alt="Profile Picture"
                       className="rounded-circle"
                       width="150"
                     />
@@ -155,7 +155,7 @@ export default function Profile() {
                                     <div key={idx} className="game-check my-2 rounded-4 text-white-50 d-flex justify-content-between align-items-center">
                                         <div className="d-flex ">
 
-                                        <img src={game.mainPic.secure_url} className="img-fluid rounded" width={100} height={100} alt="" srcSet="" />
+                                        <img src={game.mainPic?.secure_url} className="img-fluid rounded" width={100} height={100} alt="" srcSet="" />
                                         <h6 className="game-name m-0 text-center p-3">{game.name}</h6>
                                         </div>
                                         <div className="lefted pe-3">
