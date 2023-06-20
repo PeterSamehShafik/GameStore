@@ -2,49 +2,168 @@ import React, { useEffect, useState } from "react";
 import "./Details.css";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
-import { baseURL } from "../../index.js";
-import HoverVideoPlayer from 'react-hover-video-player';
+import { BEARERKEY, baseURL } from "../../index.js";
+import HoverVideoPlayer from "react-hover-video-player";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
-import { Carousel } from 'react-responsive-carousel';
-import Rating from '@mui/material/Rating';
+import { Carousel } from "react-responsive-carousel";
+import Rating from "@mui/material/Rating";
+import Cart from '../Cart/Cart.jsx'
 
-
-
-function Details() {
+function Details({ currentUser, getCart }) {
   const [game, setGame] = useState("Loading");
   const [gameRate, setGameRate] = useState(0);
   const [comments, setComments] = useState("loading");
   const { id } = useParams();
+  const [addCommentFlag, setAddCommentFlag] = useState(false);
 
   const getGame = async () => {
-    const { data } = await axios.get(`${baseURL}/game/${id}`)
+    const { data } = await axios
+      .get(`${baseURL}/game/${id}`)
       .catch(function (error) {
         if (error.response) {
           setGame(null);
         }
       });
     if (data.message == "done") {
-      console.log(data.game);
       setGame(data.game);
-      setGameRate(data.game.avgRate)
+      setGameRate(data.game.avgRate);
     } else {
       setGame(null);
     }
   };
   const getGameComment = async () => {
-    const { data } = await axios.get(`${baseURL}/game/${id}/comment`)
+    const { data } = await axios
+      .get(`${baseURL}/game/${id}/comment`)
       .catch(function (error) {
         if (error.response) {
           setComments(null);
         }
       });
     if (data.message == "done") {
-      console.log(data);
+      data.comments.reverse();
       setComments(data.comments);
     } else {
       setComments(null);
     }
   };
+
+  // Comment APIS
+  const addComment = async () => {
+    setAddCommentFlag(true);
+    const commentBody = document.getElementById("commentBody").value;
+    if (commentBody != "") {
+      const config = {
+        headers: {
+          authorization: BEARERKEY + localStorage.getItem("token"),
+        },
+      };
+      const reqBody = {
+        body: commentBody,
+      };
+      const result = await axios
+        .post(`${baseURL}/game/${game._id}/comment/add`, reqBody, config)
+        .catch(function (error) {
+          if (error.response) {
+            console.log(error.response);
+            setAddCommentFlag(false);
+          }
+        });
+      if (result?.data?.message == "done") {
+        document.getElementById("commentBody").value = "";
+        setAddCommentFlag(false);
+        getGameComment();
+      }
+    } else {
+      alert("you can't add empty comment");
+    }
+  };
+  const editComment = (commentID) => {
+    let editSection = document.getElementById(commentID);
+    let text = document.getElementById(commentID).previousElementSibling;
+    let textArea = editSection.children[0];
+    text.classList.add("d-none");
+    editSection.classList.remove("d-none");
+    textArea.value = text.innerHTML;
+  };
+  const saveEditComment = async (commentID) => {
+    let editSection = document.getElementById(commentID);
+    let text = document.getElementById(commentID).previousElementSibling;
+    let textArea = editSection.children[0];
+    if (textArea.value != "") {
+      const config = {
+        headers: {
+          authorization: BEARERKEY + localStorage.getItem("token"),
+        },
+      };
+      const body = {
+        body: textArea.value,
+      };
+      let result = await axios
+        .put(`${baseURL}/game/${game._id}/comment/${commentID}`, body, config)
+        .catch(function (error) {
+          if (error.response) {
+            console.log(error.response);
+          }
+        });
+      if (result?.data?.message == "done") {
+        text.classList.remove("d-none");
+        editSection.classList.add("d-none");
+        text.innerHTML = textArea.value;
+      } else {
+        alert("Failed to update comment");
+      }
+    } else {
+      alert("Can't add empty comment");
+    }
+  };
+  const deleteComment = async (commentID, index) => {
+    const config = {
+      headers: {
+        authorization: BEARERKEY + localStorage.getItem("token"),
+      },
+    };
+    let result = await axios
+      .delete(`${baseURL}/game/${game._id}/comment/${commentID}`, config)
+      //console.log(`${baseURL}/game/${game._id}/comment/${commentID}`)
+      .catch(function (error) {
+        if (error.response) {
+          console.log(error.response);
+        }
+      });
+    if (result?.data?.message == "done") {
+      const tempComments = [...comments];
+      tempComments.splice(index, 1);
+      setComments(tempComments);
+    } else {
+      alert("Failed to delete comment");
+    }
+  };
+  //End of Comment APIS
+
+  //AddToCart
+  const addToCart = async () => {
+    const config = {
+      headers: {
+        authorization: BEARERKEY + localStorage.getItem("token"),
+      },
+    };
+    const body = {
+      body: "",
+    };
+    const result = await axios
+      .put(`${baseURL}/cart/add/${game._id}`, body, config)
+      .catch(function (error) {
+        if (error.response) {
+          console.log(error.response);
+        }
+      });
+    if (result?.data?.message == "done") {
+      alert("Added!");
+      //to render cart component
+      getCart();
+    }
+  };
+
   useEffect(() => {
     getGame();
     getGameComment();
@@ -53,14 +172,15 @@ function Details() {
   return (
     <>
       {game === "Loading" ? (
-        <div className="container-fluid px-5">
-          <header className="d-flex justify-content-between align-items-center">
-            <Link to="/home" className="back-store h4 fw-bolder">
-              <i className="fa-solid fa-arrow-left me-2"></i>
-              <strong>Store</strong>
-            </Link>
-          </header>
-          <p> Loading...... </p>
+        <div className="w-100 vh-100 d-flex justify-content-center align-items-center position-absolute top-0">
+          <div className="sk-chase">
+            <div className="sk-chase-dot"></div>
+            <div className="sk-chase-dot"></div>
+            <div className="sk-chase-dot"></div>
+            <div className="sk-chase-dot"></div>
+            <div className="sk-chase-dot"></div>
+            <div className="sk-chase-dot"></div>
+          </div>
         </div>
       ) : game ? (
         <div className="container-fluid px-5 ">
@@ -70,12 +190,11 @@ function Details() {
               <strong>Store</strong>
             </Link>
           </header>
-
           <div className="row">
             <div className=" col-lg-4 ">
               <div className="game-pic-vid d-flex flex-column align-items-center">
                 <div className="main-pic-vid">
-                  {game.video?.secure_url ?
+                  {game.video?.secure_url ? (
                     <HoverVideoPlayer
                       videoSrc={game.video.secure_url}
                       pausedOverlay={
@@ -84,9 +203,9 @@ function Details() {
                           alt={game.slug}
                           style={{
                             // Make the image expand to cover the video's dimensions
-                            width: '100%',
-                            height: '100%',
-                            objectFit: 'cover',
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
                           }}
                         />
                       }
@@ -96,11 +215,13 @@ function Details() {
                         </div>
                       }
                     />
-                    :
-                    <img src={game.mainPic.secure_url} alt={game.slug} className="img-fluid" />
-                  }
-
-
+                  ) : (
+                    <img
+                      src={game.mainPic.secure_url}
+                      alt={game.slug}
+                      className="img-fluid"
+                    />
+                  )}
                 </div>
                 <div className="game-name">
                   <h2 className="display-6 fw-bolder mb-0 cursor-normal">
@@ -115,16 +236,13 @@ function Details() {
                     precision={0.5}
                     size="large"
                     onChange={(event, newValue) => {
-                      console.log(event)
-                      setGameRate(newValue)
+                      setGameRate(newValue);
                     }}
                   />
                 </div>
               </div>
-
             </div>
             <div className=" col-lg-8 d-flex flex-column justify-content-between align-items-center">
-
               <div className="about-section w-100">
                 <div
                   className="accordion text-bg-dark accordion-flush"
@@ -152,14 +270,11 @@ function Details() {
                               <li className="text-white-50">
                                 Platforms:
                                 {game.platform.map((platform, idx) => {
-                                  return <span key={idx}> {platform} </span>
+                                  return <span key={idx}> {platform} </span>;
                                 })}
                               </li>
                               <li className="text-white-50">
-                                {
-                                  game.genreId ?
-                                    "Genre: " : ""
-                                }
+                                {game.genreId ? "Genre: " : ""}
                                 {game.genreId?.name}{" "}
                               </li>
                               <li className="text-white-50">
@@ -188,20 +303,25 @@ function Details() {
                 </div>
               </div>
               <div className="game-carousal mt-2">
-                {game?.pics[0]?.secure_url ? <>
-                  <h2>Game Images:</h2> <hr />
-                  <Carousel infiniteLoop showStatus={false}  >
-                    {game.pics.map((image, idx) => {
-                      return <div key={idx} className="game-carousal d-flex align-items-center justify-content-center h-100">
-                        <img src={image.secure_url} className="img-fluid" />
-                      </div>
-                    })}
-                  </Carousel>
-                </>
-                  :
+                {game?.pics[0]?.secure_url ? (
+                  <>
+                    <h2>Game Images:</h2> <hr />
+                    <Carousel infiniteLoop showStatus={false}>
+                      {game.pics.map((image, idx) => {
+                        return (
+                          <div
+                            key={idx}
+                            className="game-carousal d-flex align-items-center justify-content-center h-100"
+                          >
+                            <img src={image.secure_url} className="img-fluid" />
+                          </div>
+                        );
+                      })}
+                    </Carousel>
+                  </>
+                ) : (
                   "No images for this Game"
-                }
-
+                )}
               </div>
               <div className="game-functionalities mt-1 w-100 text-bg-dark d-flex p-3 justify-content-between align-items-center">
                 <div className="price-lv h5 text-muted">
@@ -211,79 +331,174 @@ function Details() {
                     {/* <i className="fa-solid fa-heart"></i> */}
                   </span>
                 </div>
-                <span className="cart text-muted fw-bolder">
-                  Add to cart <strong>✚</strong>
-                </span>
+                {
+                  game.createdBy?._id == currentUser?._id ? (
+                  <span
+                    className="fw-bolder text-success pe-2"
+                  >
+                    Creator
+                  </span>
+                ) : (
+                  <span
+                    className="cart text-muted fw-bolder pe-2"
+                    onClick={addToCart}
+                  >
+                    Add to cart <strong>✚</strong>
+                  </span>
+                )}
               </div>
-
             </div>
           </div>
-          <div className="row mt-2 mb-4" >
+          <div className="row mt-2 mb-4">
             <div className="container">
               <div className="comments-section w-75 m-auto">
                 <div className="comments-header">
                   <h2>Comments:</h2> <hr />
                 </div>
                 <div className="comments-add">
-                  <textarea className="form-control comment-area" placeholder="What do you think? Add a comment and collaborate" rows="3"></textarea>
-                  <button className="btn btn-success mt-2"> Post Comment </button>
+                  <textarea
+                    id="commentBody"
+                    className="form-control comment-area"
+                    placeholder="What do you think? Add a comment and collaborate"
+                    rows="3"
+                  ></textarea>
+                  <button className="btn btn-success mt-2" onClick={addComment}>
+                    {addCommentFlag ? "Waiting..." : "Post Comment"}{" "}
+                  </button>
                 </div>
                 <hr />
-                {comments === "loading" ? <p>Loading.....</p> :
-                  comments ?
-                    comments.length>0?
-                    comments.map((comment) => {
-                      return <div className="comments-show my-2">
-                        <div className="user-comment hover-75 p-3 shadow rounded-5">
-                          <div className="comment-details d-flex ">
-                            {/* neeeeeeeeeed to return imgg backeenddd */}
-                            <img alt="user" className="img-fluid rounded-circle user-pic me-2" src="https://res.cloudinary.com/dpiwjrxdt/image/upload/v1678136871/Users/ahmed-63fb951be0c738057dfbe3ab/profilePic/ggbim5znb3zss4tphiwr.png" />
-                            <div className="comment-body">
-                              <h4 className="user-name fw-bolder">{comment.createdBy.firstName} {comment.createdBy.lastName}</h4>
-                              <p> {comment.body} </p>
+                {comments === "loading" ? (
+                  <p>Loading.....</p>
+                ) : comments ? (
+                  comments.length > 0 ? (
+                    comments.map((comment, index) => {
+                      return (
+                        <div className="comments-show my-2">
+                          <div className="user-comment hover-75 p-3 shadow rounded-5">
+                            <div className="comment-details d-flex ">
+                              <img
+                                alt="user"
+                                className="img-fluid rounded-circle user-pic me-2"
+                                src={comment.createdBy?.profilePic?.secure_url}
+                              />
+                              <div className="comment-body w-100">
+                                <h4 className="user-name fw-bolder">
+                                  {comment.createdBy.firstName}{" "}
+                                  {comment.createdBy.lastName}
+                                </h4>
+                                <p className=""> {comment.body} </p>
+                                <div
+                                  className="edit-comment-section d-flex d-none"
+                                  id={comment._id}
+                                >
+                                  <textarea
+                                    className="form-control bg-transparent text-white w-100 h-50"
+                                    type="text"
+                                  />
+                                  <button
+                                    className="btn btn-outline-success d-block ms-2 h-50"
+                                    onClick={() => {
+                                      saveEditComment(comment._id);
+                                    }}
+                                  >
+                                    Save
+                                  </button>
+                                </div>
+                              </div>
+                              {comment?.createdBy?._id == currentUser?._id ||
+                              currentUser?.role == "superAdmin" ||
+                              game?.createdBy?._id == currentUser?._id ? (
+                                <div className="dropdownmenu ms-auto">
+                                  <div className="dropdown">
+                                    <button
+                                      className="btn btn-transparent text-white dropdown-toggle"
+                                      type="button"
+                                      id="dropdownMenuButton1"
+                                      data-bs-toggle="dropdown"
+                                      aria-expanded="false"
+                                    >
+                                      <i className="fa-solid fa-ellipsis-vertical"></i>
+                                    </button>
+
+                                    <ul
+                                      className="dropdown-menu"
+                                      aria-labelledby="dropdownMenuButton1"
+                                    >
+                                      {comment?.createdBy?._id ==
+                                      currentUser?._id ? (
+                                        <>
+                                          <span
+                                            onClick={() => {
+                                              editComment(comment._id);
+                                            }}
+                                            className="cursor-pointer text-success me-2 hover-75 dropdown-item"
+                                          >
+                                            <i className="fa-solid fa-pen-to-square fa-lg"></i>
+                                            <span className="ps-2">Edit</span>
+                                          </span>
+                                        </>
+                                      ) : (
+                                        ""
+                                      )}
+                                      {comment?.createdBy?._id ==
+                                        currentUser?._id ||
+                                      currentUser?.role == "superAdmin" ||
+                                      game?.createdBy?._id ==
+                                        currentUser?._id ? (
+                                        <span
+                                          className="cursor-pointer text-danger hover-75 dropdown-item"
+                                          onClick={() => {
+                                            deleteComment(comment._id, index);
+                                          }}
+                                        >
+                                          <i className="fa-solid fa-trash-can fa-lg"></i>{" "}
+                                          <span className="ps-2">Delete</span>
+                                        </span>
+                                      ) : (
+                                        ""
+                                      )}
+                                    </ul>
+                                  </div>
+                                </div>
+                              ) : (
+                                ""
+                              )}
                             </div>
-                          </div>
-                          <hr className="my-2" />
-                          <div className="comment-footer d-flex justify-content-between align-items-center">
-                            <div className="social-comment d-flex ms-1">
-                              <div className="like p-1 cursor-pointer me-3">
-                                <i className="fa-solid fa-thumbs-up fa-xl"></i>
-                                <span> {comment.likes.length} </span>
+                            <hr className="my-2" />
+                            <div className="comment-footer d-flex justify-content-between align-items-center">
+                              <div className="social-comment d-flex ms-1">
+                                <div className="like p-1 cursor-pointer me-3">
+                                  <i className="fa-solid fa-thumbs-up fa-xl"></i>
+                                  <span> {comment.likes.length} </span>
+                                </div>
+
+                                <div className="unlike p-1 cursor-pointer">
+                                  <i className="fa-solid fa-thumbs-down fa-xl"></i>
+                                  <span> {comment.dislikes.length} </span>
+                                </div>
                               </div>
 
-                              <div className="unlike p-1 cursor-pointer">
-                                <i className="fa-solid fa-thumbs-down fa-xl"></i>
-                                <span> {comment.dislikes.length} </span>
-                              </div>
-
+                              <div className="owner-admin-control mt-0"></div>
                             </div>
-
-                            <div className="owner-admin-control mt-0">
-                              <span className="cursor-pointer text-success me-2 hover-75">Edit Comment</span>
-                              <span className="cursor-pointer text-danger hover-75">Delete Comment</span>
-                            </div>
-
                           </div>
-
                         </div>
-                      </div>
+                      );
                     })
-                    : <p>Be the first to comment !</p>
-                    : <p>Cannot Load Comments</p>
-                }
+                  ) : (
+                    <p>Be the first to comment !</p>
+                  )
+                ) : (
+                  <p>Cannot Load Comments</p>
+                )}
               </div>
             </div>
           </div>
         </div>
       ) : (
-        <div className="container-fluid px-5">
-          <header className="d-flex justify-content-between align-items-center">
-            <Link to="/home" className="back-store h4 fw-bolder">
-              <i className="fa-solid fa-arrow-left me-2"></i>
-              <strong>Store</strong>
-            </Link>
-          </header>
-          <p> Game not found!! </p>
+        <div className="m-auto d-flex flex-column align-items-center mt-5">
+          <img src="/error?.png" className="img-fluid w-25" alt="" srcset="" />
+          <p className="fs-1 mx-auto">Something went wrong....</p>
+          <p className="fs-1 mx-auto">Please try again</p>
         </div>
       )}
     </>
