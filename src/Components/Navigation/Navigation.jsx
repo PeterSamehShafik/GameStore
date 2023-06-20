@@ -11,7 +11,7 @@ function Navigation() {
                     <h2 className='fw-bolder h3 mb-3'>Filters</h2>
                     <li className="nav-item my-2">
                         <a href="#" className="nav-link ps-0  d-flex align-items-center" aria-current="page">
-                            <i className="fa-solid fa-gift icon me-2 rounded-3"></i>
+                            <i className="fa-solid fa-gift icon me-2 rounded-3 "></i>
                             <span>Wishlist</span>
                         </a>                        
                     </li>
