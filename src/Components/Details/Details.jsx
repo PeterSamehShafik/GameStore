@@ -12,13 +12,14 @@ import Cart from '../Cart/Cart.jsx'
 //modal
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import jwtDecode from "jwt-decode";
 
 
 
 function Details({ currentUser, getCart, cart }) {
   let navigate = useNavigate();
   const [game, setGame] = useState("Loading");
-  const [gameRate, setGameRate] = useState(0);
+  const [userRate, setUserRate] = useState(0);
   const [isInCart, setIsInCart] = useState(false);
   const [comments, setComments] = useState("loading");
   //modal
@@ -41,25 +42,57 @@ function Details({ currentUser, getCart, cart }) {
     handleCloseModal()
   }
   //end of modal
+
   const { id } = useParams();
   const [addCommentFlag, setAddCommentFlag] = useState(false);
   const checkCart = async () => {
-    await getCart();
     const res = cart.games?.find(e => e._id == id)
     res ? setIsInCart(true) : setIsInCart(false)
   }
+  const giveRate = async (newValue) => {
+    const config = {
+      headers: {
+        authorization: BEARERKEY + localStorage.getItem("token"),
+      },
+    }
+    const reqBody = {
+      rate: newValue,
+    };
+    const result = await axios
+      .post(`${baseURL}/game/${id}/rate/add`, reqBody, config)
+      .catch(function (error) {
+        if (error.response) {
+          console.log(error.response)
+          callModal({ header: "Error", body: "Something went wrong, please try again", isMainBtn: false, closeBtnTxt: "OK" })
+        }
+      });
+
+    if (result?.data?.message == "done") {
+      setUserRate(newValue);
+    }
+
+  }
 
   const getGame = async () => {
+    let config = {};
+    if (localStorage.getItem("token")) {
+      config = {
+        headers: {
+          userId: jwtDecode(localStorage.getItem("token")).id
+        },
+      }
+    }
     const { data } = await axios
-      .get(`${baseURL}/game/${id}`)
+      .get(`${baseURL}/game/${id}`, config)
       .catch(function (error) {
         if (error.response) {
           setGame(null);
         }
       });
     if (data.message == "done") {
+
       setGame(data.game);
-      setGameRate(data.game.avgRate);
+      setUserRate(data.game.userRate);
     } else {
       setGame(null);
     }
@@ -145,10 +178,10 @@ function Details({ currentUser, getCart, cart }) {
         text.innerHTML = textArea.value;
       } else {
 
-        callModal({header:"Warning!", body:"Failed to update comment", isMainBtn:false, closeBtnTxt:"Close", closeBtnColor:"warning"})
+        callModal({ header: "Warning!", body: "Failed to update comment", isMainBtn: false, closeBtnTxt: "Close", closeBtnColor: "warning" })
       }
     } else {
-      callModal({header:"Warning!", body:"Can't add empty comment", isMainBtn:false, closeBtnTxt:"Close", closeBtnColor:"warning"})
+      callModal({ header: "Warning!", body: "Can't add empty comment", isMainBtn: false, closeBtnTxt: "Close", closeBtnColor: "warning" })
     }
   };
   const deleteComment = async (commentID, index) => {
@@ -169,10 +202,10 @@ function Details({ currentUser, getCart, cart }) {
       const tempComments = [...comments];
       tempComments.splice(index, 1);
       setComments(tempComments);
-      callModal({header:"Success!", body:"The comment removed successfully", isMainBtn:false, closeBtnTxt:"Close", closeBtnColor:"success"})
-    
+      callModal({ header: "Success!", body: "The comment removed successfully", isMainBtn: false, closeBtnTxt: "Close", closeBtnColor: "success" })
+
     } else {
-      callModal({header:"Warning!", body:"Failed to delete comment", isMainBtn:false, closeBtnTxt:"Close", closeBtnColor:"warning"})
+      callModal({ header: "Warning!", body: "Failed to delete comment", isMainBtn: false, closeBtnTxt: "Close", closeBtnColor: "warning" })
     }
   };
   //End of Comment APIS
@@ -195,7 +228,7 @@ function Details({ currentUser, getCart, cart }) {
         }
       });
     if (result?.data?.message == "done") {
-      callModal({header:"Success!", body:"The Game added to your cart", isMainBtn:false, closeBtnTxt:"OK", closeBtnColor:"success"})
+      callModal({ header: "Success!", body: "The Game added to your cart", isMainBtn: false, closeBtnTxt: "OK", closeBtnColor: "success" })
       //to render cart component
       getCart();
       setIsInCart(true);
@@ -210,6 +243,7 @@ function Details({ currentUser, getCart, cart }) {
   useEffect(() => {
     checkCart();
   }, [cart]);
+
 
   return (
     <>
@@ -270,17 +304,29 @@ function Details({ currentUser, getCart, cart }) {
                     {game.name}
                   </h2>
                 </div>
-                <div className="rate-game mt-2 bg-secondary p-2 rounded-3">
-                  <Rating
-                    name="simple-controlled"
-                    value={gameRate}
-                    readOnly
-                    precision={0.5}
-                    size="large"
-                    onChange={(event, newValue) => {
-                      setGameRate(newValue);
-                    }}
-                  />
+                <div className="rating mx-auto d-flex flex-column align-items-center mt-3" >
+                  {game.avgRate ?
+                    <div className="game-rating d-flex ">
+                      <span className="fs-1 bg-warning px-4 rounded-circle fw-bold d-flex justify-content-center align-items-center">
+                        {game.avgRate}
+                      </span>
+                      <div className="rate-info ms-2">
+                        <h4>User Score</h4>
+                        <p>Mixed or average reviews
+                          based on users</p>
+                      </div>
+                    </div> : ""}
+                  <div className="rate-game my-2 bg-secondary p-2 rounded-3 w-auto">
+                    <Rating
+                      name="simple-controlled"
+                      value={userRate}
+                      precision={0.5}
+                      size="large"
+                      onChange={(event, newValue) => {
+                        giveRate(newValue)
+                      }}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -386,7 +432,7 @@ function Details({ currentUser, getCart, cart }) {
                         className="fw-bolder pe-2 text-success"
 
                       >
-                        Added 
+                        Added
                       </span> :
                         currentUser ?
                           <span
@@ -436,9 +482,9 @@ function Details({ currentUser, getCart, cart }) {
                   comments.length > 0 ? (
                     comments.map((comment, index) => {
                       return (
-                        <div className="comments-show my-2">
+                        <div key={comment._id} className="comments-show my-2">
                           <div className="user-comment hover-75 p-3 shadow rounded-5">
-                            <div className="comment-details d-flex ">
+                            <div className="comment-details d-flex align-items-start">
                               <img
                                 alt="user"
                                 className="img-fluid rounded-circle user-pic me-2"
@@ -512,7 +558,7 @@ function Details({ currentUser, getCart, cart }) {
                                           className="cursor-pointer text-danger hover-75 dropdown-item"
                                           onClick={() => {
 
-                                            callModal({ isMainBtn: true, header: "Delete Comment", body: "Are you sure?", mainBtnTxt: "Yes", mainBtnColor: "danger", mainBtnFunc: () => deleteComment(comment._id, index), closeBtnTxt:"No", closeBtnColor:"success" })
+                                            callModal({ isMainBtn: true, header: "Delete Comment", body: "Are you sure?", mainBtnTxt: "Yes", mainBtnColor: "danger", mainBtnFunc: () => deleteComment(comment._id, index), closeBtnTxt: "No", closeBtnColor: "success" })
                                           }}
                                         >
                                           <i className="fa-solid fa-trash-can fa-lg"></i>{" "}
