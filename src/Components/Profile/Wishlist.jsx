@@ -7,7 +7,6 @@ export default function Wishlist() {
   const [wishList, setWishList] = useState(null);
 
   const getWishList = async () => {
-    
     const config = {
       headers: {
         authorization: BEARERKEY + localStorage.getItem("token"),
@@ -56,7 +55,7 @@ export default function Wishlist() {
         wishList.length != 0 ? (
           <div className="row gutters-sm">
             <div className="col-sm-12 mb-3">
-              <div className="card h-100">
+              <div className="card h-100 ">
                 <div className="card-body py-0 px-0">
                   {wishList?.map((game, idx) => (
                     <div
@@ -67,7 +66,7 @@ export default function Wishlist() {
                           : "game-check text-white-50 d-flex justify-content-between align-items-center bg-dark mx-0 rounded-3"
                       }
                     >
-                      <div className="d-flex my-0 px-0">
+                      <div className="d-flex my-0 px-0 align-items-center">
                         <img
                           src={game.mainPic?.secure_url}
                           className="img-fluid rounded"

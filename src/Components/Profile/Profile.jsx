@@ -134,53 +134,65 @@ export default function Profile() {
               </div>
               <div className="col-md-8">
                 <div className="card mb-3">
-                  <ul className="fs-6 d-flex justify-content-between py-3 px-4 mb-0 rounded-2">
-                    <li className="nav-item" onClick={modifyButtons}>
-                      <Link
-                        className={pathname == "info" ? "text-violet" : ""}
-                        to="info"
-                        id="info"
-                      >
-                        Info
-                      </Link>
-                    </li>
-                    <li className="nav-item " onClick={modifyButtons}>
-                      <Link
-                        className={pathname == "activity" ? "text-violet" : ""}
-                        to="activity"
-                        id="activity"
-                      >
-                        Activity
-                      </Link>
-                    </li>
-                    <li className="nav-item" onClick={modifyButtons}>
-                      <Link
-                        className={pathname == "wishlist" ? "text-violet" : ""}
-                        to="wishlist"
-                        id="wishlist"
-                      >
-                        Wishlist
-                      </Link>
-                    </li>
-                    <li className="nav-item" onClick={modifyButtons}>
-                      <Link
-                        className={pathname == "following" ? "text-violet" : ""}
-                        to="following"
-                        id="following"
-                      >
-                        Followers
-                      </Link>
-                    </li>
-                    <li className="nav-item" onClick={modifyButtons}>
-                      <Link
-                        className={pathname == "games" ? "text-violet" : ""}
-                        to="games"
-                        id="games"
-                      >
-                        Games
-                      </Link>
-                    </li>
+                <nav className="navbar navbar-expand-lg navbar-light bg-dark-grey">
+                  <div className="">
+                    <div className="ms-auto">
+                      <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span className="navbar-toggler-icon"></span>
+                      </button>
+                    </div>
+                    <div className="collapse navbar-collapse" id="navbarNav">
+                      <ul className="fs-6 py-2 px-4 mb-0 rounded-2 navbar-nav">
+                      <li className="nav-item me-3" onClick={modifyButtons}>
+                        <Link
+                          className={pathname == "info" ? "text-violet" : ""}
+                          to="info"
+                          id="info"
+                        >
+                          Info
+                        </Link>
+                      </li>
+                      <li className="nav-item me-3 " onClick={modifyButtons}>
+                        <Link
+                          className={pathname == "activity" ? "text-violet" : ""}
+                          to="activity"
+                          id="activity"
+                        >
+                          Activity
+                        </Link>
+                      </li>
+                      <li className="nav-item me-3" onClick={modifyButtons}>
+                        <Link
+                          className={pathname == "wishlist" ? "text-violet" : ""}
+                          to="wishlist"
+                          id="wishlist"
+                        >
+                          Wishlist
+                        </Link>
+                      </li>
+                      <li className="nav-item me-3" onClick={modifyButtons}>
+                        <Link
+                          className={pathname == "following" ? "text-violet" : ""}
+                          to="following"
+                          id="following"
+                        >
+                          Followers
+                        </Link>
+                      </li>
+                      <li className="nav-item me-3" onClick={modifyButtons}>
+                        <Link
+                          className={pathname == "games" ? "text-violet" : ""}
+                          to="games"
+                          id="games"
+                        >
+                          Games
+                        </Link>
+                      </li>
                   </ul>
+                    </div>
+                  </div>
+                </nav>
+                  
                 </div>
                 <Outlet context={[profile, setProfile]} />
               </div>
