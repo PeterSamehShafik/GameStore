@@ -121,3 +121,6 @@ a {
 .bg-grey{
   background: #2c3035 !important;
 }
+.back-store h4 :hover{
+  color: #8a2be2 !important;
+}

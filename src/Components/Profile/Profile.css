@@ -64,7 +64,6 @@
     background-color: #202428;
 }
 .profile li:hover{
-    color: #8a2be2 !important;
     transition: all 0.2s;
 }
 

@@ -43,7 +43,6 @@ export default function Profile() {
     if(!file){
       return;
     }
-    console.log(file)
     const formData = new FormData();
     formData.append("image", file);
     await axios
@@ -75,7 +74,7 @@ export default function Profile() {
       {profile ? (
         <div className="container profile">
           <header className="d-flex justify-content-between align-items-center mb-2">
-            <Link to="/home" className="back-store h4 fw-bolder bg-violet">
+            <Link to="/home" className="back-store h4 fw-bolder">
               <i className="fa-solid fa-arrow-left me-2"></i>
               <strong>Store</strong>
             </Link>
@@ -103,8 +102,8 @@ export default function Profile() {
                       <div className="save-image-buttons d-flex justify-content-between">
                       {
                           file?
-                            <div>
-                              <button className="btn btn-success btn-sm" onClick={saveImage}> Save </button>
+                            <div className="mt-2">
+                              <button className="btn btn-success btn-sm me-2" onClick={saveImage}> Save </button>
                               <button className="btn btn-danger btn-sm" onClick={() => {setFile(null)}}> Cancel </button>
                             </div>
                           :
