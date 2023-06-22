@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "./Profile.css";
-import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import axios from "axios";
 import { baseURL, BEARERKEY } from "./../../index.js";
-import Info from "./Info.jsx";
 
 export default function Profile() {
   const [profile, setProfile] = useState(null);
+  const [pathname, setPathname] = useState("");
+  const [file, setFile] = useState(null);
   const getProfile = async () => {
     const config = {
       headers: {
@@ -25,8 +26,50 @@ export default function Profile() {
     }
   };
   function modifyButtons(e) {
-    // ${e.target}
+    setPathname(e.target.id);
   }
+  const test = (e) => {
+    if(e.target.files){
+      setFile(e.target.files[0])
+      let Profile = {...profile};
+      Profile.temp = URL.createObjectURL(e.target.files[0])
+      setProfile(Profile)
+    }
+  };
+
+  const saveImage = async() => {
+    if(!file){
+      return;
+    }
+    const formData = new FormData();
+    formData.append("image", file);
+    await axios
+    .patch(`${baseURL}/user/profilePic`, {
+      image: file
+      }, {
+      headers: { "Content-Type": "multipart/form-data", authorization: BEARERKEY+localStorage.getItem("token") }
+    })
+    .then((response) => {
+  // handle the response
+      if (response.data.message == "done") {
+        let temp = {...profile};
+        temp.profilePic.secure_url = response.data.updatedUser.profilePic.secure_url;
+        setProfile(temp);
+        setFile(null)
+      }
+    })
+    .catch((error) => {
+      // handle errors
+      console.log(error);
+    });
+  }
+  const removePic = () => {
+    let temp = {...profile}
+    delete temp.temp;
+    setProfile(temp);
+    setFile(null);
+  }
+
   useEffect(() => {
     getProfile();
   }, []);
@@ -44,15 +87,39 @@ export default function Profile() {
           <div className="main-body">
             <div className="row">
               <div className="col-md-4">
-                <div className="card">
+                <div className="card ">
                   <div className="card-body">
-                    <div className="d-flex flex-column align-items-center ">
-                      <img
-                        src={profile.profilePic?.secure_url}
-                        alt="Profile Picture"
-                        className="rounded-circle img-fluid"
-                        width="150"
-                      />
+                    <div className="d-flex flex-column align-items-center">
+                      <div className="profile-img position-relative">
+                        <div className="image-upload position-absolute top-0 end-0">
+                          <label htmlFor="file-input">
+                            <i className="fa-regular fa-pen-to-square fa-lg"></i>
+                          </label>
+                          <input id="file-input" type="file" onChange={test} />
+                        </div>
+                        <img
+                          src={
+                            profile.temp?
+                              profile.temp
+                              :
+                              profile.profilePic?.secure_url
+                          }
+                          alt="Profile Picture"
+                          className="rounded-circle img-fluid "
+                          width="150"
+                        />
+                      </div>
+                      <div className="save-image-buttons d-flex justify-content-between">
+                      {
+                          file?
+                            <div className="mt-2">
+                              <button className="btn btn-success btn-sm me-2" onClick={saveImage}> Save </button>
+                              <button className="btn btn-danger btn-sm" onClick={removePic}> Cancel </button>
+                            </div>
+                          :
+                          ''
+                        }
+                      </div>
                       <div className="mt-3">
                         <h4>
                           {profile.firstName} {profile.lastName}
@@ -67,25 +134,67 @@ export default function Profile() {
               </div>
               <div className="col-md-8">
                 <div className="card mb-3">
-                  <ul class="fs-6 d-flex justify-content-between py-3 px-4 mb-0 rounded-2">
-                    <li class="nav-item" onClick={modifyButtons}>
-                      <Link to="info">Info</Link>
-                    </li>
-                    <li class="nav-item " onClick={modifyButtons}>
-                      <Link to="activity">Activity</Link>
-                    </li>
-                    <li class="nav-item" onClick={modifyButtons}>
-                      <Link to="wishlist">Wishlist</Link>
-                    </li>
-                    <li class="nav-item" onClick={modifyButtons}>
-                      <Link to="following">Followers</Link>
-                    </li>
-                    <li class="nav-item">
-                      <Link to="games">Games</Link>
-                    </li>
+                <nav className="navbar navbar-expand-lg navbar-light bg-dark-grey">
+                  <div className="">
+                    <div className="ms-auto">
+                      <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span className="navbar-toggler-icon"></span>
+                      </button>
+                    </div>
+                    <div className="collapse navbar-collapse" id="navbarNav">
+                      <ul className="fs-6 py-2 px-4 mb-0 rounded-2 navbar-nav">
+                      <li className="nav-item me-3" onClick={modifyButtons}>
+                        <Link
+                          className={pathname == "info" ? "text-violet" : ""}
+                          to="info"
+                          id="info"
+                        >
+                          Info
+                        </Link>
+                      </li>
+                      <li className="nav-item me-3 " onClick={modifyButtons}>
+                        <Link
+                          className={pathname == "activity" ? "text-violet" : ""}
+                          to="activity"
+                          id="activity"
+                        >
+                          Activity
+                        </Link>
+                      </li>
+                      <li className="nav-item me-3" onClick={modifyButtons}>
+                        <Link
+                          className={pathname == "wishlist" ? "text-violet" : ""}
+                          to="wishlist"
+                          id="wishlist"
+                        >
+                          Wishlist
+                        </Link>
+                      </li>
+                      <li className="nav-item me-3" onClick={modifyButtons}>
+                        <Link
+                          className={pathname == "following" ? "text-violet" : ""}
+                          to="following"
+                          id="following"
+                        >
+                          Followers
+                        </Link>
+                      </li>
+                      <li className="nav-item me-3" onClick={modifyButtons}>
+                        <Link
+                          className={pathname == "games" ? "text-violet" : ""}
+                          to="games"
+                          id="games"
+                        >
+                          Games
+                        </Link>
+                      </li>
                   </ul>
+                    </div>
+                  </div>
+                </nav>
+                  
                 </div>
-                <Outlet context={[profile]} />
+                <Outlet context={[profile, setProfile]} />
               </div>
             </div>
           </div>

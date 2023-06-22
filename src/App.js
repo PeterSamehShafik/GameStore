@@ -36,7 +36,7 @@ function App() {
       };
       const result = await axios.get(`${baseURL}/cart`, config).catch(function (error) {
         if (error.response) {
-          console.log(error.response);
+          //console.log(error.response);
         }
       })
 
@@ -127,6 +127,10 @@ function App() {
       <Route path='home' element={<Home />} />
       <Route path='profile' element={<Profile />} >
         <Route
+          index
+          element={<Info />}
+        />
+        <Route
           path="info"
           element={<Info />}
         />
@@ -148,8 +152,8 @@ function App() {
         />
       </Route>
       <Route path='details/:slug/:id' element={<Details currentUser={crrUser} getCart={getCart} cart={cart} />} />
-      <Route path='login' element={<ProtectedLogin> <Login currentUser={currentUser} /> </ProtectedLogin> } />
-      <Route path='signup' element={ <ProtectedLogin> <Signup /> </ProtectedLogin> } />
+      <Route path='login' element={<ProtectedLogin> <Login currentUser={currentUser} /> </ProtectedLogin>} />
+      <Route path='signup' element={<ProtectedLogin> <Signup /> </ProtectedLogin>} />
 
     </Routes>
 

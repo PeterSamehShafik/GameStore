@@ -113,4 +113,14 @@ a {
   transform: scale(1.1);
   opacity: 1;
 }
+.text-violet{
+  color: #8a2be2 !important;
+}
 /* end of modal */
+
+.bg-grey{
+  background: #2c3035 !important;
+}
+.back-store h4 :hover{
+  color: #8a2be2 !important;
+}

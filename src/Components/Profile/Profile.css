@@ -8,9 +8,10 @@
     padding: 15px;
 }
 .profile .card {
-    background: #2c3035 !important;
+    
     box-shadow: 0 1px 3px 0 rgba(106, 121, 41, 0.1), 0 1px 2px 0 rgba(0,0,0,.06);
 }
+
 .profile header:hover{
     color: rgb(61, 18, 101);
     transition: all 0.2s;
@@ -63,6 +64,27 @@
     background-color: #202428;
 }
 .profile li:hover{
-    color: #8a2be2 !important;
     transition: all 0.2s;
 }
+
+.game .card:hover{
+    transform: scale(1.08);
+    cursor: pointer;
+    transition: all 0.5s ease-in-out;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
+
+.profile .fa-pen-to-square{
+    cursor: pointer;
+
+}
+.profile .fa-pen-to-square:hover{
+    transform: scale(1.02);
+}
+.bg-dark-grey{
+    background-color: #202428;
+}
+.image-upload>input {
+display: none;
+}
+  
