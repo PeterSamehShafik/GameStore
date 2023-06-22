@@ -2,8 +2,50 @@ import React, { useEffect, useState } from "react";
 import { BEARERKEY, baseURL } from "../../index.js";
 import axios from "axios";
 import { Link } from "react-router-dom";
+//modal
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
+import jwtDecode from "jwt-decode";
 
 export default function Wishlist() {
+  //modal
+  const [showModal, setShowModal] = useState(false);
+  const [modalData, setModalData] = useState({
+    header: "",
+    body: "",
+    isMainBtn: true,
+  });
+  const handleCloseModal = () => setShowModal(false);
+  const handleShowModal = () => setShowModal(true);
+
+  const callModal = ({
+    header = "Are you sure?",
+    body,
+    closeBtnColor = "secondary",
+    closeBtnTxt = "Close",
+    mainBtnColor = "primary",
+    mainBtnTxt,
+    mainBtnFunc,
+    isMainBtn = true,
+  } = {}) => {
+    setModalData({
+      ...modalData,
+      header,
+      body,
+      closeBtnColor,
+      closeBtnTxt,
+      mainBtnColor,
+      mainBtnTxt,
+      mainBtnFunc,
+      isMainBtn,
+    });
+    handleShowModal();
+  };
+  const applyCloseModel = () => {
+    modalData.mainBtnFunc();
+    handleCloseModal();
+  };
+  //end of modal
   const [wishList, setWishList] = useState(null);
 
   const getWishList = async () => {
@@ -86,7 +128,17 @@ export default function Wishlist() {
                         <button
                           className="close-btn rounded-circle bg-transparent text-white ms-3"
                           onClick={() => {
-                            removeFromWishList(game._id, idx);
+                            callModal({
+                              isMainBtn: true,
+                              header: "Are you sure?",
+                              body: "You're going to delete this game from your wishlist.",
+                              mainBtnTxt: "Yes",
+                              mainBtnColor: "danger",
+                              mainBtnFunc: () => { removeFromWishList(game._id, idx) },
+                              closeBtnTxt: "No",
+                              closeBtnColor: "success",
+                            });
+
                           }}
                         >
                           <i className="fa-solid fa-xmark fa-xs"></i>
@@ -97,6 +149,34 @@ export default function Wishlist() {
                 </div>
               </div>
             </div>
+            <Modal
+              show={showModal}
+              onHide={handleCloseModal}
+              className="text-white"
+            >
+              <Modal.Header closeButton>
+                <Modal.Title>{modalData.header}</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>{modalData.body}</Modal.Body>
+              <Modal.Footer>
+                <Button
+                  variant={modalData.closeBtnColor}
+                  onClick={handleCloseModal}
+                >
+                  {modalData.closeBtnTxt}
+                </Button>
+                {modalData.isMainBtn == true ? (
+                  <Button
+                    variant={modalData.mainBtnColor}
+                    onClick={applyCloseModel}
+                  >
+                    {modalData.mainBtnTxt}
+                  </Button>
+                ) : (
+                  ""
+                )}
+              </Modal.Footer>
+            </Modal>
           </div>
         ) : (
           <div className="fs-5 text-center mt-5"> Wishlist is empty... </div>

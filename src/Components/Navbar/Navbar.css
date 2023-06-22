@@ -1,21 +1,25 @@
-nav{
+nav {
     --bs-bg-opacity: 1;
     background-color: transparent;
 }
 
-.navbar{
+.navbar {
     font-size: larger;
 }
-.nav-link{
+
+.nav-link {
     cursor: pointer;
 }
 
-@media (max-width: 575.98px){
-    nav.top-nav{
+@media (max-width: 575.98px) {
+    nav.top-nav {
         --bs-bg-opacity: 1;
         background-color: black !important;
     }
-    nav.top-nav form, nav input{
-        width:90% !important ;
+
+    nav.top-nav form,
+    nav input {
+        width: 90% !important;
     }
 }
+
