@@ -31,12 +31,10 @@ export default function Profile() {
   const test = (e) => {
     if(e.target.files){
       setFile(e.target.files[0])
+      let Profile = {...profile};
+      Profile.temp = URL.createObjectURL(e.target.files[0])
+      setProfile(Profile)
     }
-    // let formData = new FormData();
-    // let imagefile = e.target;
-    // console.log(imagefile)
-    // formData.append("image", imagefile.files[0]);
-    // console.log(formData);
   };
 
   const saveImage = async() => {
@@ -65,6 +63,13 @@ export default function Profile() {
       console.log(error);
     });
   }
+  const removePic = () => {
+    let temp = {...profile}
+    delete temp.temp;
+    setProfile(temp);
+    setFile(null);
+  }
+
   useEffect(() => {
     getProfile();
   }, []);
@@ -93,7 +98,12 @@ export default function Profile() {
                           <input id="file-input" type="file" onChange={test} />
                         </div>
                         <img
-                          src={profile.profilePic?.secure_url}
+                          src={
+                            profile.temp?
+                              profile.temp
+                              :
+                              profile.profilePic?.secure_url
+                          }
                           alt="Profile Picture"
                           className="rounded-circle img-fluid "
                           width="150"
@@ -104,7 +114,7 @@ export default function Profile() {
                           file?
                             <div className="mt-2">
                               <button className="btn btn-success btn-sm me-2" onClick={saveImage}> Save </button>
-                              <button className="btn btn-danger btn-sm" onClick={() => {setFile(null)}}> Cancel </button>
+                              <button className="btn btn-danger btn-sm" onClick={removePic}> Cancel </button>
                             </div>
                           :
                           ''
