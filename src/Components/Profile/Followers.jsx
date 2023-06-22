@@ -8,7 +8,7 @@ export default function Followers() {
         followings.length != 0?
           <div>follower</div>
         :
-        <div className="fs-5 "> Time to make up new friends! </div>
+        <div className="fs-5 text-center mt-5"> Time to make up new friends! </div>
       :
       <div className="row gutters-sm">
         <div className="col-sm-12 mb-3">

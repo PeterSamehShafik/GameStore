@@ -7,54 +7,73 @@ import HoverVideoPlayer from "react-hover-video-player";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
 import Rating from "@mui/material/Rating";
-import Cart from '../Cart/Cart.jsx'
+import Cart from "../Cart/Cart.jsx";
 
 //modal
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 import jwtDecode from "jwt-decode";
-
-
 
 function Details({ currentUser, getCart, cart }) {
   let navigate = useNavigate();
   const [game, setGame] = useState("Loading");
   const [userRate, setUserRate] = useState(0);
   const [isInCart, setIsInCart] = useState(false);
+  const [isInWishlist, setIsInWishlist] = useState(false);
+  const [wishList, setWishList] = useState([]);
   const [comments, setComments] = useState("loading");
   //modal
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState({
     header: "",
     body: "",
-    isMainBtn: true
-
+    isMainBtn: true,
   });
   const handleCloseModal = () => setShowModal(false);
   const handleShowModal = () => setShowModal(true);
 
-  const callModal = ({ header = "Are you sure?", body, closeBtnColor = "secondary", closeBtnTxt = "Close", mainBtnColor = "primary", mainBtnTxt, mainBtnFunc, isMainBtn = true } = {}) => {
-    setModalData({ ...modalData, header, body, closeBtnColor, closeBtnTxt, mainBtnColor, mainBtnTxt, mainBtnFunc, isMainBtn })
-    handleShowModal()
-  }
+  const callModal = ({
+    header = "Are you sure?",
+    body,
+    closeBtnColor = "secondary",
+    closeBtnTxt = "Close",
+    mainBtnColor = "primary",
+    mainBtnTxt,
+    mainBtnFunc,
+    isMainBtn = true,
+  } = {}) => {
+    setModalData({
+      ...modalData,
+      header,
+      body,
+      closeBtnColor,
+      closeBtnTxt,
+      mainBtnColor,
+      mainBtnTxt,
+      mainBtnFunc,
+      isMainBtn,
+    });
+    handleShowModal();
+  };
   const applyCloseModel = () => {
-    modalData.mainBtnFunc()
-    handleCloseModal()
-  }
+    modalData.mainBtnFunc();
+    handleCloseModal();
+  };
   //end of modal
 
   const { id } = useParams();
   const [addCommentFlag, setAddCommentFlag] = useState(false);
   const checkCart = async () => {
-    const res = cart.games?.find(e => e._id == id)
-    res ? setIsInCart(true) : setIsInCart(false)
-  }
+    const res = cart.games?.find((e) => e._id == id);
+    res ? setIsInCart(true) : setIsInCart(false);
+  };
+
   const giveRate = async (newValue) => {
     const config = {
       headers: {
         authorization: BEARERKEY + localStorage.getItem("token"),
       },
-    }
+    };
     const reqBody = {
       rate: newValue,
     };
@@ -62,25 +81,29 @@ function Details({ currentUser, getCart, cart }) {
       .post(`${baseURL}/game/${id}/rate/add`, reqBody, config)
       .catch(function (error) {
         if (error.response) {
-          console.log(error.response)
-          callModal({ header: "Error", body: "Something went wrong, please try again", isMainBtn: false, closeBtnTxt: "OK" })
+          console.log(error.response);
+          callModal({
+            header: "Error",
+            body: "Something went wrong, please try again",
+            isMainBtn: false,
+            closeBtnTxt: "OK",
+          });
         }
       });
 
     if (result?.data?.message == "done") {
       setUserRate(newValue);
     }
-
-  }
+  };
 
   const getGame = async () => {
     let config = {};
     if (localStorage.getItem("token")) {
       config = {
         headers: {
-          userId: jwtDecode(localStorage.getItem("token")).id
+          userId: jwtDecode(localStorage.getItem("token")).id,
         },
-      }
+      };
     }
     const { data } = await axios
       .get(`${baseURL}/game/${id}`, config)
@@ -90,7 +113,6 @@ function Details({ currentUser, getCart, cart }) {
         }
       });
     if (data.message == "done") {
-
       setGame(data.game);
       setUserRate(data.game.userRate);
     } else {
@@ -140,7 +162,13 @@ function Details({ currentUser, getCart, cart }) {
         getGameComment();
       }
     } else {
-      callModal({ header: "Warning", body: "You can't add empty comment", isMainBtn: false, closeBtnTxt: "OK", closeBtnColor: "warning" })
+      callModal({
+        header: "Warning",
+        body: "You can't add empty comment",
+        isMainBtn: false,
+        closeBtnTxt: "OK",
+        closeBtnColor: "warning",
+      });
       setAddCommentFlag(false);
     }
   };
@@ -177,11 +205,22 @@ function Details({ currentUser, getCart, cart }) {
         editSection.classList.add("d-none");
         text.innerHTML = textArea.value;
       } else {
-
-        callModal({ header: "Warning!", body: "Failed to update comment", isMainBtn: false, closeBtnTxt: "Close", closeBtnColor: "warning" })
+        callModal({
+          header: "Warning!",
+          body: "Failed to update comment",
+          isMainBtn: false,
+          closeBtnTxt: "Close",
+          closeBtnColor: "warning",
+        });
       }
     } else {
-      callModal({ header: "Warning!", body: "Can't add empty comment", isMainBtn: false, closeBtnTxt: "Close", closeBtnColor: "warning" })
+      callModal({
+        header: "Warning!",
+        body: "Can't add empty comment",
+        isMainBtn: false,
+        closeBtnTxt: "Close",
+        closeBtnColor: "warning",
+      });
     }
   };
   const deleteComment = async (commentID, index) => {
@@ -202,10 +241,21 @@ function Details({ currentUser, getCart, cart }) {
       const tempComments = [...comments];
       tempComments.splice(index, 1);
       setComments(tempComments);
-      callModal({ header: "Success!", body: "The comment removed successfully", isMainBtn: false, closeBtnTxt: "Close", closeBtnColor: "success" })
-
+      callModal({
+        header: "Success!",
+        body: "The comment removed successfully",
+        isMainBtn: false,
+        closeBtnTxt: "Close",
+        closeBtnColor: "success",
+      });
     } else {
-      callModal({ header: "Warning!", body: "Failed to delete comment", isMainBtn: false, closeBtnTxt: "Close", closeBtnColor: "warning" })
+      callModal({
+        header: "Warning!",
+        body: "Failed to delete comment",
+        isMainBtn: false,
+        closeBtnTxt: "Close",
+        closeBtnColor: "warning",
+      });
     }
   };
   //End of Comment APIS
@@ -228,17 +278,66 @@ function Details({ currentUser, getCart, cart }) {
         }
       });
     if (result?.data?.message == "done") {
-      callModal({ header: "Success!", body: "The Game added to your cart", isMainBtn: false, closeBtnTxt: "OK", closeBtnColor: "success" })
+      callModal({
+        header: "Success!",
+        body: "The Game added to your cart",
+        isMainBtn: false,
+        closeBtnTxt: "OK",
+        closeBtnColor: "success",
+      });
       //to render cart component
       getCart();
       setIsInCart(true);
     }
   };
 
+  // AddToWishList
+  const addToWishList = async () => {
+    // console.log("test")
+    // const localWishlist = JSON.parse(localStorage.getItem("wishlist"));
+    // const res = localWishlist?.find(e => e == game.id);
+    // if (!res) {
+      const config = {
+        headers: {
+          authorization: BEARERKEY + localStorage.getItem("token"),
+        },
+      };
+      const result = await axios
+        .patch(`${baseURL}/user/wishlist/add/${game._id}`, {}, config)
+        .catch((error) => {
+          console.log(error);
+        });
+      if (result?.data?.message == "done") {
+        console.log(JSON.stringify(result?.data?.update?.wishList))
+        localStorage.setItem("wishlist", JSON.stringify(result?.data?.update?.wishList))
+        setIsInWishlist(true);
+      } else {
+        alert("Failed to add game to wishlist");
+      }
+    // } 
+  };
+  // const checkWishList = () => {
+  //   const localWishlist = JSON.parse(localStorage.getItem("wishlist"));
+  //   let exist = false;
+  //   if(localWishlist){
+  //     console.log(localWishlist)
+  //     for (const w of localWishlist) {
+  //       if(w.localeCompare(game._id) == 0){
+  //         console.log("first")
+  //         exist = true;
+  //         break;
+  //       }
+  //     }
+  //   }
+  //   console.log(exist)
+  //   exist ?  setIsInWishlist(true): setIsInWishlist(false);
+  // };
+
   useEffect(() => {
     getGame();
     getGameComment();
     checkCart();
+    // checkWishList();
   }, []);
   useEffect(() => {
     checkCart();
@@ -304,18 +403,20 @@ function Details({ currentUser, getCart, cart }) {
                     {game.name}
                   </h2>
                 </div>
-                <div className="rating mx-auto d-flex flex-column align-items-center mt-3" >
-                  {game.avgRate ?
+                <div className="rating mx-auto d-flex flex-column align-items-center mt-3">
+                  {game.avgRate ? (
                     <div className="game-rating d-flex ">
                       <span className="fs-1 bg-warning px-4 rounded-circle fw-bold d-flex justify-content-center align-items-center">
                         {game.avgRate}
                       </span>
                       <div className="rate-info ms-2">
                         <h4>User Score</h4>
-                        <p>Mixed or average reviews
-                          based on users</p>
+                        <p>Mixed or average reviews based on users</p>
                       </div>
-                    </div> : ""}
+                    </div>
+                  ) : (
+                    ""
+                  )}
                   <div className="rate-game my-2 bg-secondary p-2 rounded-3 w-auto">
                     <Rating
                       name="simple-controlled"
@@ -323,7 +424,7 @@ function Details({ currentUser, getCart, cart }) {
                       precision={0.5}
                       size="large"
                       onChange={(event, newValue) => {
-                        giveRate(newValue)
+                        giveRate(newValue);
                       }}
                     />
                   </div>
@@ -414,42 +515,57 @@ function Details({ currentUser, getCart, cart }) {
               <div className="game-functionalities mt-1 w-100 text-bg-dark d-flex p-3 justify-content-between align-items-center">
                 <div className="price-lv h5 text-muted">
                   <span className="fw-bolder m-0 me-2">${game.price}</span>
-                  <span className="fav ms-auto h4">
-                    <i className="fa-regular fa-heart"></i>
-                    {/* <i className="fa-solid fa-heart"></i> */}
-                  </span>
-                </div>
-                {
-                  game.createdBy?._id == currentUser?._id ? (
-                    <span
-                      className="fw-bolder text-success pe-2"
+                  <span
+                      className="fav ms-auto h4 disabled"
+                      onClick={addToWishList}
                     >
-                      Creator
-                    </span>
-                  ) :
-                    <>
-                      {isInCart && currentUser ? <span
-                        className="fw-bolder pe-2 text-success"
-
-                      >
-                        Added
-                      </span> :
-                        currentUser ?
-                          <span
-                            className="cart text-muted fw-bolder pe-2"
-                            onClick={addToCart}>
-                            Add to cart <strong>✚</strong>
-                          </span> :
-                          <span
-                            className="cart text-muted fw-bolder pe-2"
-                            onClick={() => { callModal({ header: "Warning", body: "You need to login before adding to a cart", mainBtnTxt: "Sign in", mainBtnFunc: () => { navigate('/login') }, mainBtnColor: "success" }) }}>
-                            Add to cart <strong>✚</strong>
-                          </span>
+                      {
+                        isInWishlist?
+                        <i className="fa-solid fa-heart"></i>
+                        :
+                        ''
                       }
-
-
-                    </>
-                }
+                      {
+                        !isInWishlist?
+                        <i className="fa-regular fa-heart"></i>
+                        :
+                        ''
+                      }
+                    </span>
+                </div>
+                {game.createdBy?._id == currentUser?._id ? (
+                  <span className="fw-bolder text-success pe-2">Creator</span>
+                ) : (
+                  <>
+                    {isInCart && currentUser ? (
+                      <span className="fw-bolder pe-2 text-success">Added</span>
+                    ) : currentUser ? (
+                      <span
+                        className="cart text-muted fw-bolder pe-2"
+                        onClick={addToCart}
+                      >
+                        Add to cart <strong>✚</strong>
+                      </span>
+                    ) : (
+                      <span
+                        className="cart text-muted fw-bolder pe-2"
+                        onClick={() => {
+                          callModal({
+                            header: "Warning",
+                            body: "You need to login before adding to a cart",
+                            mainBtnTxt: "Sign in",
+                            mainBtnFunc: () => {
+                              navigate("/login");
+                            },
+                            mainBtnColor: "success",
+                          });
+                        }}
+                      >
+                        Add to cart <strong>✚</strong>
+                      </span>
+                    )}
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -466,14 +582,31 @@ function Details({ currentUser, getCart, cart }) {
                     placeholder="What do you think? Add a comment and collaborate"
                     rows="3"
                   ></textarea>
-                  {currentUser ?
-                    <button className="btn btn-success mt-2" onClick={addComment}>
+                  {currentUser ? (
+                    <button
+                      className="btn btn-success mt-2"
+                      onClick={addComment}
+                    >
                       {addCommentFlag ? "Waiting..." : "Post Comment"}{" "}
-                    </button> :
-                    <button className="btn btn-success mt-2" onClick={() => { callModal({ header: "Warning", body: "You need to login before adding a comment", mainBtnTxt: "Sign in", mainBtnFunc: () => { navigate('/login') }, mainBtnColor: "success" }) }}>
+                    </button>
+                  ) : (
+                    <button
+                      className="btn btn-success mt-2"
+                      onClick={() => {
+                        callModal({
+                          header: "Warning",
+                          body: "You need to login before adding a comment",
+                          mainBtnTxt: "Sign in",
+                          mainBtnFunc: () => {
+                            navigate("/login");
+                          },
+                          mainBtnColor: "success",
+                        });
+                      }}
+                    >
                       {addCommentFlag ? "Waiting..." : "Post Comment"}{" "}
-                    </button>}
-
+                    </button>
+                  )}
                 </div>
                 <hr />
                 {comments === "loading" ? (
@@ -515,8 +648,8 @@ function Details({ currentUser, getCart, cart }) {
                                 </div>
                               </div>
                               {comment?.createdBy?._id == currentUser?._id ||
-                                currentUser?.role == "superAdmin" ||
-                                game?.createdBy?._id == currentUser?._id ? (
+                              currentUser?.role == "superAdmin" ||
+                              game?.createdBy?._id == currentUser?._id ? (
                                 <div className="dropdownmenu ms-auto">
                                   <div className="dropdown">
                                     <button
@@ -534,7 +667,7 @@ function Details({ currentUser, getCart, cart }) {
                                       aria-labelledby="dropdownMenuButton1"
                                     >
                                       {comment?.createdBy?._id ==
-                                        currentUser?._id ? (
+                                      currentUser?._id ? (
                                         <>
                                           <span
                                             onClick={() => {
@@ -551,14 +684,26 @@ function Details({ currentUser, getCart, cart }) {
                                       )}
                                       {comment?.createdBy?._id ==
                                         currentUser?._id ||
-                                        currentUser?.role == "superAdmin" ||
-                                        game?.createdBy?._id ==
+                                      currentUser?.role == "superAdmin" ||
+                                      game?.createdBy?._id ==
                                         currentUser?._id ? (
                                         <span
                                           className="cursor-pointer text-danger hover-75 dropdown-item"
                                           onClick={() => {
-
-                                            callModal({ isMainBtn: true, header: "Delete Comment", body: "Are you sure?", mainBtnTxt: "Yes", mainBtnColor: "danger", mainBtnFunc: () => deleteComment(comment._id, index), closeBtnTxt: "No", closeBtnColor: "success" })
+                                            callModal({
+                                              isMainBtn: true,
+                                              header: "Delete Comment",
+                                              body: "Are you sure?",
+                                              mainBtnTxt: "Yes",
+                                              mainBtnColor: "danger",
+                                              mainBtnFunc: () =>
+                                                deleteComment(
+                                                  comment._id,
+                                                  index
+                                                ),
+                                              closeBtnTxt: "No",
+                                              closeBtnColor: "success",
+                                            });
                                           }}
                                         >
                                           <i className="fa-solid fa-trash-can fa-lg"></i>{" "}
@@ -604,25 +749,34 @@ function Details({ currentUser, getCart, cart }) {
             </div>
           </div>
 
-          <Modal show={showModal} onHide={handleCloseModal} className="text-white" >
+          <Modal
+            show={showModal}
+            onHide={handleCloseModal}
+            className="text-white"
+          >
             <Modal.Header closeButton>
               <Modal.Title>{modalData.header}</Modal.Title>
             </Modal.Header>
             <Modal.Body>{modalData.body}</Modal.Body>
             <Modal.Footer>
-              <Button variant={modalData.closeBtnColor} onClick={handleCloseModal}>
+              <Button
+                variant={modalData.closeBtnColor}
+                onClick={handleCloseModal}
+              >
                 {modalData.closeBtnTxt}
               </Button>
-              {modalData.isMainBtn == true ?
-                <Button variant={modalData.mainBtnColor} onClick={applyCloseModel}>
+              {modalData.isMainBtn == true ? (
+                <Button
+                  variant={modalData.mainBtnColor}
+                  onClick={applyCloseModel}
+                >
                   {modalData.mainBtnTxt}
                 </Button>
-                : ""
-              }
-
+              ) : (
+                ""
+              )}
             </Modal.Footer>
           </Modal>
-
         </div>
       ) : (
         <div className="m-auto d-flex flex-column align-items-center mt-5">

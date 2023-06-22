@@ -24,7 +24,7 @@ export default function Activity() {
           </div>
         </div>
       :
-        <div className="fs-5 "> What are you waiting for? <br />Start interacting with others... </div>
+        <div className="fs-5 text-center mt-5"> What are you waiting for? <br />Start interacting with others... </div>
       :
       <div className="row gutters-sm">
           <div className="col-sm-12 mb-3">

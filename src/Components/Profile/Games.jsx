@@ -8,11 +8,11 @@ export default function Games() {
   return <>
   {
       games? 
-        // games.length != 0?
+        games.length != 0?
           <div className="container game">
             <div className="row">
               <div className="col-md-4">
-                <div className="card rounded-3">
+                <div className="card rounded-3 bg-grey">
                   <img src='/default_game.jpg' className="card-img-top img-fluid" alt="..." />
                   <div className="card-body">
                     <h5 className="card-title">Valorant</h5>
@@ -24,8 +24,8 @@ export default function Games() {
               </div>
             </div>
           </div>
-          // :
-          // <div className="fs-5 "> Add you first Game! </div>
+          :
+          <div className="fs-5 text-center mt-5"> Add you first Game! </div>
       :
       <div className="row gutters-sm">
           <div className="col-sm-12 mb-3">
