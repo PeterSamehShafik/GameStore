@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import "./Navbar.css";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { roles } from './../../index';
 
 function Navbar({ currentUser, removeUser, cart }) {
   const location = useLocation();
@@ -54,15 +55,25 @@ function Navbar({ currentUser, removeUser, cart }) {
                 ""
               )}
             </ul>
-            <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+            <ul className="navbar-nav ms-auto mb-2 mb-lg-0 d-flex align-items-center">
               {currentUser ? (
                 <>
+                  {currentUser.role === roles.admin || currentUser.role === roles.superAdmin ?
+                    <li className="nav-item">
+                      <div className="nav-link text-white fw-bolder mx-2">
+                        <Link to="/cpanel" className="c-panel d-flex align-items-center text-warning">
+                          <i className="fa-solid fa-gear fa-spin" ></i>
+                          <span className="ms-1 " >C.Panel</span>
+                        </Link>
+                      </div>
+                    </li> : ""}
+
                   <li className="nav-item">
                     <div
-                      className="nav-link text-white fw-bolder mx-4"
+                      className="nav-link text-white fw-bolder ms-2"
                       aria-current="page"
                     >
-                      <Link to="/profile">
+                      <Link to="/profile/info">
                         <i className="fa-brands fa-github"></i>
                         <span className="ms-3">{currentUser?.firstName}</span>
                       </Link>
@@ -70,7 +81,7 @@ function Navbar({ currentUser, removeUser, cart }) {
                   </li>
                   <li className="nav-item">
                     <div
-                      className="nav-link text-white fw-bolder ms-4"
+                      className="nav-link text-white fw-bolder ms-2"
                       data-bs-toggle="offcanvas"
                       data-bs-target="#offcanvasExample"
                       aria-controls="offcanvasExample"
@@ -87,7 +98,7 @@ function Navbar({ currentUser, removeUser, cart }) {
                   </li>
                   <li className="nav-item" onClick={removeUser}>
                     <div
-                      className="nav-link text-white fw-bolder mx-4"
+                      className="nav-link text-white fw-bolder ms-2"
                       aria-current="page"
                     >
                       <span>Logout</span>
@@ -117,7 +128,7 @@ function Navbar({ currentUser, removeUser, cart }) {
             </ul>
           </div>
         </div>
-      </nav>
+      </nav >
     </>
   );
 }

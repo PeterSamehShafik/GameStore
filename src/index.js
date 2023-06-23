@@ -18,6 +18,7 @@ import '@fortawesome/fontawesome-free/js/all.min.js'
 
 export const baseURL = 'https://game-store-be.vercel.app/api/v1'
 export const BEARERKEY = "gameStore3000__"
+export const roles = {user:"user", admin:"admin", superAdmin:"superAdmin"}
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

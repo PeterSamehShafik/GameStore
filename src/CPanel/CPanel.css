@@ -1,0 +1,56 @@
+.CPanel {
+    background-color: beige;
+    color: black;
+    font-size: 0.8rem !important;
+    transition: all 0.2s;
+}
+
+#sideBarMenu,
+.barContent {
+    transition: all 0.2s;
+}
+
+.CPanel .nav-item,
+.CPanel .nav-link {
+    width: 100%;
+    margin-bottom: 0.5rem;
+    padding: 0.2rem 0.5rem;
+}
+
+.CPanel .active,
+.current-active {
+    transition: all 0.2s;
+}
+
+.CPanel .nav-item .current-active,
+.CPanel .nav-item.current-active {
+    border-left: 5px solid rgb(53, 255, 53) !important;
+}
+
+.CPanel .nav-link:hover,
+.CPanel .nav-item:hover {
+    background-color: rgba(17, 17, 17, 0.5) !important;
+}
+
+.CPanel .nav-item.active,
+.CPanel .nav-item.active:hover {
+    background-color: rgb(17, 17, 17);
+}
+
+
+.c-panel-menu .dropdown-menu {
+    -webkit-transition: none !important;
+    transition: none !important;
+
+}
+
+.c-panel-menu .dropdown-menu.show {
+    transform: translate(0.5rem, 6.5rem) !important;
+}
+
+.coll-show {
+    width: 1.3rem !important;
+    height: 0.2rem !important;
+    background-color: aliceblue !important;
+    margin: 0.2rem 0 !important;
+}

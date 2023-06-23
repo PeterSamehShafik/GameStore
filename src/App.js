@@ -2,7 +2,7 @@ import './App.css';
 import React, { useEffect, useState } from "react";
 import StartScreen from './Components/StartScreen/StartScreen';
 import Home from './Components/Home/Home';
-import { Routes, Route, useNavigate, Navigate } from 'react-router-dom'
+import { Routes, Route, useNavigate, Navigate, useLocation } from 'react-router-dom'
 import Navbar from './Components/Navbar/Navbar';
 import Details from './Components/Details/Details';
 import Cart from './Components/Cart/Cart';
@@ -17,13 +17,19 @@ import Info from './Components/Profile/Info.jsx';
 import Followers from './Components/Profile/Followers.jsx';
 import Games from './Components/Profile/Games.jsx';
 import Activity from './Components/Profile/Activity.jsx';
+import CPanel from './CPanel/CPanel.jsx';
+import CPNav from './CPanel/CPNav/CPNav.jsx';
+import GameControl from './CPanel/GameControl/GameControl.jsx';
+import UserControl from './CPanel/UserControl/UserControl.jsx';
 
 
 
 // import { Provider } from 'react-redux';
 // import { CartStore } from './Components/Redux/CartStore.js';
+import GenreControl from './CPanel/GenreControl/GenreControl';
 
 function App() {
+  const location = useLocation()
 
   // Cart
   const [cart, setCart] = useState([]);
@@ -81,7 +87,8 @@ function App() {
     if (result?.data?.message == "done") {
       setCrrrUser(result.data.user);
     } else {
-      //window.alert("Failed to get profile data")
+      localStorage.removeItem("token");
+      setCrrrUser(null);
     }
 
   }
@@ -98,7 +105,6 @@ function App() {
     });
     if (result?.data?.message == "done") {
       localStorage.removeItem("token");
-      localStorage.removeItem("token");
       navigate('/login');
       setCrrrUser(null);
     } else {
@@ -113,8 +119,8 @@ function App() {
     }
   }, [])
   return <>
+    {location.pathname.toLowerCase().includes("cpanel") ? "" : <Navbar currentUser={crrUser} removeUser={removeUser} cart={cart} />}
 
-    <Navbar currentUser={crrUser} removeUser={removeUser} cart={cart} />
     {
       crrUser ?
         <Cart cart={cart} getCart={getCart} setCart={setCart} />
@@ -125,6 +131,26 @@ function App() {
 
       <Route path='' element={<StartScreen />} />
       <Route path='home' element={<Home />} />
+
+      <Route path='cpanel' element={<CPanel removeUser={removeUser} />}>
+        <Route
+          index
+          element={<CPNav />}
+        />
+        <Route
+          path="games"
+          element={<GameControl />}
+        />
+        <Route
+          path="users"
+          element={<UserControl />}
+        />
+        <Route
+          path="genres"
+          element={<GenreControl />}
+        />
+      </Route>
+
       <Route path='profile' element={<Profile />} >
         <Route
           index
