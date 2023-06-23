@@ -66,6 +66,7 @@ export default function Profile() {
   const removePic = () => {
     let temp = {...profile}
     delete temp.temp;
+    console.log("first")
     setProfile(temp);
     setFile(null);
   }
