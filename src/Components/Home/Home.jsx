@@ -16,13 +16,13 @@ function Home() {
   const [games, setGames] = useState('loading');
 
   async function getGames() {
-    const { data } = await axios.get(`${baseURL}/game/all`)
+    const result = await axios.get(`${baseURL}/game/all`)
       .catch((err) => {
         setGames(null)
         console.log(err)
       })
     // console.log(data)
-    setGames(data.games);
+    setGames(result?.data?.games);
   }
 
   function makeGrid() {
@@ -45,7 +45,7 @@ function Home() {
 
   return (
     <>
-      <main className="d-flex mt-5">
+      <main className="d-flex mt-5 games">
         {
           games == "loading" ?
             <div className="w-100 vh-100 d-flex justify-content-center align-items-center position-absolute top-0">

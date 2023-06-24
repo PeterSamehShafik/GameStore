@@ -466,10 +466,12 @@ function Details({ currentUser, getCart, cart }) {
                                 {game.genreId ? "Genre: " : ""}
                                 {game.genreId?.name}{" "}
                               </li>
-                              <li className="text-white-50">
-                                Publisher: {game.createdBy.firstName}{" "}
-                                {game.createdBy.lastName}{" "}
-                              </li>
+                              <Link to={`/profile/${game.createdBy._id}`}>
+                                <li className="text-white-50">
+                                  Publisher: {game.createdBy.firstName}{" "}
+                                  {game.createdBy.lastName}{" "}
+                                </li>
+                              </Link>
                             </ul>
                           </div>
                         </div>
@@ -625,8 +627,8 @@ function Details({ currentUser, getCart, cart }) {
                               />
                               <div className="comment-body w-100">
                                 <h4 className="user-name fw-bolder">
-                                  {comment.createdBy.firstName}{" "}
-                                  {comment.createdBy.lastName}
+                                  {comment?.createdBy?.firstName}{" "}
+                                  {comment?.createdBy?.lastName}
                                 </h4>
                                 <p className=""> {comment.body} </p>
                                 <div

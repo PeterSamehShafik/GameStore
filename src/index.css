@@ -124,3 +124,6 @@ a {
 .back-store h4 :hover{
   color: #8a2be2 !important;
 }
+.cursor-pointer{
+  cursor: pointer;
+}

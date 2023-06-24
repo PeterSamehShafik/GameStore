@@ -6,8 +6,10 @@ import { useOutletContext } from "react-router-dom";
 import { BEARERKEY, baseURL } from "../../index.js";
 
 export default function Info() {
-  const [profile,setProfile] = useOutletContext();
+  const [profile] = useOutletContext();
+  const [info, setInfo] = useState(profile)
   const [edit, setEdit] = useState(false)
+
   const [newProfile, setNewProfile] = useState({
     firstName: '',
     lastName: '',
@@ -23,7 +25,7 @@ export default function Info() {
     const temp = {...newProfile};
     const inputs =  Array.from(document.getElementsByClassName("edit-input"));
       for (const input of inputs) {
-        if(input.id == "DOB"){
+        if(input.id === "DOB"){
           input.value = profile[input.id].split('T')[0]
         }else{
           input.value = profile[input.id]
@@ -65,9 +67,9 @@ export default function Info() {
         }
       });
       console.log(result)
-      if (result?.data?.message == "done") {
+      if (result?.data?.message === "done") {
         setRegFlag(false);
-        setProfile(result.data.updatedUser)
+        setInfo(result.data.updatedUser)
         setEdit(false);
       } else{
         setRegFlag(false);
@@ -78,7 +80,7 @@ export default function Info() {
 
   function getError(key) {
     for (const error of errList) {
-      if (error.context.key == key) {
+      if (error.context.key === key) {
         return error.message;
       }
     }
@@ -89,7 +91,7 @@ export default function Info() {
   }, [edit]);
   return (
     <>
-      {profile ? (
+      {info ? (
         <div className="row gutters-sm">
           <div className="col">
             <div className="card mb-3 bg-grey">
@@ -163,7 +165,7 @@ export default function Info() {
                           <h6 className="mb-0">First Name</h6>
                         </div>
                         <div className="col-sm-9 text-secondary">
-                          {profile.firstName}
+                          {info.firstName}
                         </div>
                       </div>
                       <hr />
@@ -172,7 +174,7 @@ export default function Info() {
                           <h6 className="mb-0">Last Name</h6>
                         </div>
                         <div className="col-sm-9 text-secondary">
-                          {profile.lastName}
+                          {info.lastName}
                         </div>
                       </div>
                       <hr />
@@ -181,7 +183,7 @@ export default function Info() {
                           <h6 className="mb-0">Date of Birth</h6>
                         </div>
                         <div className="col-sm-9 text-secondary">
-                          {profile.DOB.split("T")[0]}
+                          {info.DOB.split("T")[0]}
                         </div>
                       </div>
                       <hr />
@@ -189,21 +191,21 @@ export default function Info() {
                         <div className="col-sm-3">
                           <h6 className="mb-0">Email</h6>
                         </div>
-                        <div className="col-sm-9 text-secondary">{profile.email}</div>
+                        <div className="col-sm-9 text-secondary">{info.email}</div>
                       </div>
                       <hr />
                       <div className="row">
                         <div className="col-sm-3">
                           <h6 className="mb-0">Phone</h6>
                         </div>
-                        <div className="col-sm-9 text-secondary">{profile.phone}</div>
+                        <div className="col-sm-9 text-secondary">{info.phone}</div>
                       </div>
                       <hr />
                       <div className="row">
                         <div className="col-sm-3">
                           <h6 className="mb-0">Age</h6>
                         </div>
-                        <div className="col-sm-9 text-secondary">{profile.age}</div>
+                        <div className="col-sm-9 text-secondary">{info.age}</div>
                       </div>
                       <hr />
                       <div className="row">
@@ -211,7 +213,7 @@ export default function Info() {
                           <h6 className="mb-0">Address</h6>
                         </div>
                         <div className="col-sm-9 text-secondary">
-                          {profile.address}
+                          {info.address}
                         </div>
                       </div>
                       <hr />

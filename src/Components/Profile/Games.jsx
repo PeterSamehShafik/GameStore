@@ -1,9 +1,26 @@
+import axios from 'axios'
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Link, useOutletContext } from 'react-router-dom'
+import { baseURL } from './../../index.js';
 
 export default function Games() {
 
-  const [games, setGames] = useState([])
+  const [profile] = useOutletContext();
+  const [games, setGames] = useState(null)
+
+  const getGames = async() => {
+    const result = await axios.get(`${baseURL}/game/user/${profile?._id}`).catch(e=>
+      console.log(e)
+    )
+
+    setGames(result?.data?.games)
+  }
+
+  useEffect(() => {
+    getGames()
+  }, [])
+  
 
   return <>
   {
@@ -11,17 +28,21 @@ export default function Games() {
         games.length != 0?
           <div className="container game">
             <div className="row">
-              <div className="col-md-4">
-                <div className="card rounded-3 bg-grey">
-                  <img src='/default_game.jpg' className="card-img-top img-fluid" alt="..." />
+            {
+              games?.map((game, idx) => {
+                return <div className="col-md-4" key={idx}>
+                <div className="card rounded-3 bg-grey mb-3 text-center">
+                  <img src={game.mainPic.secure_url} className="card-img-top img-fluid" alt="..." />
                   <div className="card-body">
-                    <h5 className="card-title">Valorant</h5>
+                    <h5 className="card-title">{game.name}</h5>
                     <div className="ms-auto">
-                      <Link to="#" className="btn btn-primary">Go to game</Link>
+                      <Link to={`/details/${game.gameSlug}/${game._id}`} className="btn btn-primary">Go to game</Link>
                     </div>
                   </div>
                 </div>
               </div>
+              })
+            }
             </div>
           </div>
           :
