@@ -71,6 +71,7 @@ export default function CPanel({ removeUser }) {
             });
         if (result?.data?.message == "done") {
             if (result.data.user.role == roles.admin || result.data.user.role == roles.superAdmin) {
+                console.log(result.data.user)
                 setProfile(result.data.user);
                 if (result.data.user.role == roles.admin && location.pathname.includes("user")) {
                     setPathname("/cpanel")

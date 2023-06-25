@@ -37,3 +37,8 @@ main .card-footer{
 .col-md-6, .col-lg-4, .col-md-6, .col-lg-6{
     transition: all 0.2s;
 }
+
+.games img{
+    height: 250px;
+    object-fit: cover;
+}

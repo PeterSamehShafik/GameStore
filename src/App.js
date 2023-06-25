@@ -6,7 +6,6 @@ import { Routes, Route, useNavigate, Navigate, useLocation } from 'react-router-
 import Navbar from './Components/Navbar/Navbar';
 import Details from './Components/Details/Details';
 import Cart from './Components/Cart/Cart';
-import jwtDecode from 'jwt-decode'
 import Signup from './Components/SignUp/SignUp.jsx';
 import Login from './Components/Login/Login.jsx'
 import { baseURL, BEARERKEY } from './index.js'
@@ -155,7 +154,7 @@ function App() {
         />
       </Route>
 
-      <Route path='profile' element={<Profile />} >
+      <Route path='profile/:id' element={<Profile />} >
         <Route
           index
           element={<Info />}
