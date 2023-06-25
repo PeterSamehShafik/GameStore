@@ -1,9 +1,13 @@
+body .CPanel {
+    background-color: beige !important;
+}
 .CPanel {
     background-color: beige;
     color: black;
     font-size: 0.8rem !important;
     transition: all 0.2s;
 }
+
 
 #sideBarMenu,
 .barContent {
@@ -53,4 +57,13 @@
     height: 0.2rem !important;
     background-color: aliceblue !important;
     margin: 0.2rem 0 !important;
+}
+
+.right-arrow {
+    border: solid black;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
 }
