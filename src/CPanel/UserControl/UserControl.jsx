@@ -270,35 +270,40 @@ export default function UserControl() {
                             :
                             <button onClick={() => editUser(user._id)} className='btn btn-info m-1'> Edit </button>
                           }
-                          {user.isBlocked ?
-                            <button onClick={() => { unBlockUser(user._id) }} className='btn btn-warning m-1'> Unblock </button> :
-                            <button onClick={() => {
-                              callModal({
-                                isMainBtn: true,
-                                header: "Block User",
-                                body: "Are you sure?",
-                                mainBtnTxt: "Yes",
-                                mainBtnColor: "danger",
-                                mainBtnFunc: () => blockUser(user._id),
-                                closeBtnTxt: "No",
-                                closeBtnColor: "success",
-                              });
-                            }} className='btn btn-warning m-1'> Block </button>}
-                          
-                          {user.isDeleted ?
-                            <button onClick={() => { unDeleteUser(user._id) }} className='btn btn-danger m-1'> undelete </button> :
-                            <button onClick={() => {
-                              callModal({
-                                isMainBtn: true,
-                                header: "Delete User",
-                                body: "Are you sure?",
-                                mainBtnTxt: "Yes",
-                                mainBtnColor: "danger",
-                                mainBtnFunc: () => deleteUser(user._id),
-                                closeBtnTxt: "No",
-                                closeBtnColor: "success",
-                              });
-                            }} className='btn btn-danger m-1'> Delete </button>}
+
+                          {!user.isDeleted ?
+                            user.isBlocked ?
+                              <button onClick={() => { unBlockUser(user._id) }} className='btn btn-warning m-1'> Unblock </button> :
+                              <button onClick={() => {
+                                callModal({
+                                  isMainBtn: true,
+                                  header: "Block User",
+                                  body: "Are you sure?",
+                                  mainBtnTxt: "Yes",
+                                  mainBtnColor: "danger",
+                                  mainBtnFunc: () => blockUser(user._id),
+                                  closeBtnTxt: "No",
+                                  closeBtnColor: "success",
+                                });
+                              }} className='btn btn-warning m-1'> Block </button>
+                            : ""}
+
+                          {!user.isBlocked ?
+                            user.isDeleted ?
+                              <button onClick={() => { unDeleteUser(user._id) }} className='btn btn-danger m-1'> undelete </button> :
+                              <button onClick={() => {
+                                callModal({
+                                  isMainBtn: true,
+                                  header: "Delete User",
+                                  body: "Are you sure?",
+                                  mainBtnTxt: "Yes",
+                                  mainBtnColor: "danger",
+                                  mainBtnFunc: () => deleteUser(user._id),
+                                  closeBtnTxt: "No",
+                                  closeBtnColor: "success",
+                                });
+                              }} className='btn btn-danger m-1'> Delete </button>
+                            : ""}
                         </td>
                       }
                     </tr>
