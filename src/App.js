@@ -148,6 +148,10 @@ function App() {
           path="genres"
           element={<GenreControl />}
         />
+        <Route
+          path="*"
+          element={<Navigate to="/" />}
+        />
       </Route>
 
       <Route path='profile/:id' element={<Profile />} >

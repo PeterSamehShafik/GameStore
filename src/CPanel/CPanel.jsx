@@ -73,7 +73,11 @@ export default function CPanel({ removeUser }) {
             if (result.data.user.role == roles.admin || result.data.user.role == roles.superAdmin) {
                 console.log(result.data.user)
                 setProfile(result.data.user);
-                setPathname(location.pathname)
+                if (result.data.user.role == roles.admin && location.pathname.includes("user")) {
+                    setPathname("/cpanel")
+                } else{
+                    setPathname(location.pathname)
+                }
             } else {
                 navigate("/home")
             }
@@ -86,7 +90,7 @@ export default function CPanel({ removeUser }) {
     const toggleSideBar = () => {
         const sideBarMenu = document.getElementById("sideBarMenu")
         const currWidth = sideBarMenu.offsetWidth
-        if (currWidth > '120') {
+        if (currWidth > '80') {
             sideBarMenu.style.width = "4rem"
             const contents = document.querySelectorAll(".barContent")
             for (let i = 0; i < contents.length; i++) {
@@ -103,6 +107,8 @@ export default function CPanel({ removeUser }) {
     useEffect(() => {
         getProfile();
     }, []);
+
+
     return <>
 
         {profile === "Loading" ?
@@ -151,7 +157,8 @@ export default function CPanel({ removeUser }) {
                                     <hr className="barContent text-white bg-white m-0 mb-3 w-75 mx-auto" />
                                     <ul className="nav barContent nav-pills w-100 flex-column  align-items-center align-items-sm-start" id="menu">
 
-                                        <li className={pathName.toLowerCase() === "/cpanel" ? "nav-item active current-active" : "nav-item"}>
+                                        <li className={pathName.toLowerCase() === "/cpanel" || pathName.toLowerCase() === "/cpanel/" ?
+                                            "nav-item active current-active" : "nav-item"}>
                                             <Link to="/cpanel" onClick={() => setPathname("/cpanel")} className="nav-link  align-middle px-0 d-flex justify-content-between">
                                                 <span className="ms-1 ">Home</span>
                                                 <i className="fa-solid d-none d-sm-inline fa-gauge-high text-white opacity-75"></i>
@@ -164,14 +171,15 @@ export default function CPanel({ removeUser }) {
                                                 <i className="d-none d-sm-inline fa-solid fa-table-columns text-white opacity-75"></i>
                                             </a>
                                             <ul className="collapse show nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
-                                                <li className="w-100">
-                                                    <Link to="users" onClick={() => setPathname("/cpanel/users")}
-                                                        className={pathName.toLowerCase().includes("users") ? "nav-link d-flex justify-content-between px-0 current-active" : "nav-link d-flex justify-content-between px-0 "}>
-                                                        <span className="ms-2">Users</span>
-                                                        <i className="d-none d-sm-inline fa-solid fa-triangle-exclamation text-white opacity-75"></i>
+                                                {profile.role === roles.superAdmin ?
+                                                    <li className="w-100">
+                                                        <Link to="users" onClick={() => setPathname("/cpanel/users")}
+                                                            className={pathName.toLowerCase().includes("users") ? "nav-link d-flex justify-content-between px-0 current-active" : "nav-link d-flex justify-content-between px-0 "}>
+                                                            <span className="ms-2">Users</span>
+                                                            <i className="d-none d-sm-inline fa-solid fa-triangle-exclamation text-white opacity-75"></i>
 
-                                                    </Link>
-                                                </li>
+                                                        </Link>
+                                                    </li> : ""}
                                                 <li className="w-100">
                                                     <Link to="games" onClick={() => setPathname("/cpanel/games")}
                                                         className={pathName.toLowerCase().includes("games") ? "nav-link d-flex justify-content-between px-0 current-active" : "nav-link d-flex justify-content-between px-0 "}>
@@ -240,13 +248,28 @@ export default function CPanel({ removeUser }) {
 
                                 </div>
                             </div>
-                            <div className="col px-0 pb-3">
+                            <div className="col px-0 pb-3 bg-beige w-100">
                                 <header className='w-100 bg-primary p-2 d-flex align-items-center mb-0'>
                                     <Link to="/home">
                                         <i className="fa-solid fa-gamepad me-3 text-info fa-xl " ></i>
                                         <span className="fw-bolder text-white h5 mb-0">Game Store</span>
                                     </Link>
                                 </header>
+                                <section className='bg-beige ps-3 mb-4 p-4 shadow '>
+                                    <div className="d-flex align-items-center">
+                                        <span className="btn disabled button-53" >Control Panel</span>
+                                        {pathName.toLowerCase() === "/cpanel" || pathName.toLowerCase() === "/cpanel/" ? "" :
+                                            <>
+                                                <i className="fa-2xl mx-2 opacity-50 right-arrow"></i>
+
+                                                <span className="btn disabled button-53 text-capitalize" > {pathName.toLowerCase().split("/cpanel/")}</span></>
+                                        }
+
+                                    </div>
+                                    <h1 className='fw-bolder h3 mt-3 opacity-75'>Control Panel</h1>
+
+                                    <p className='text-muted opacity-75 fw-bolder h5 '>Hi {profile.firstName}, Welcome to GameStore Control Panel.</p>
+                                </section>
                                 <Outlet context={[profile, setProfile, pathName, setPathname]} />
 
                             </div>
