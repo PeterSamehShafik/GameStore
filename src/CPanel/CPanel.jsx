@@ -15,6 +15,7 @@ export default function CPanel({ removeUser }) {
     const location = useLocation()
     const [profile, setProfile] = useState("Loading");
     const [pathName, setPathname] = useState(null)
+    const [genres, setGenres] = useState("Loading")
 
     //modal
     const [showModal, setShowModal] = useState(false);
@@ -71,11 +72,11 @@ export default function CPanel({ removeUser }) {
             });
         if (result?.data?.message == "done") {
             if (result.data.user.role == roles.admin || result.data.user.role == roles.superAdmin) {
-                console.log(result.data.user)
+                // console.log(result.data.user)
                 setProfile(result.data.user);
                 if (result.data.user.role == roles.admin && location.pathname.includes("user")) {
                     setPathname("/cpanel")
-                } else{
+                } else {
                     setPathname(location.pathname)
                 }
             } else {
@@ -86,6 +87,21 @@ export default function CPanel({ removeUser }) {
             navigate("/login")
         }
     };
+
+    async function getGenre() {
+        const result = await axios.get(`${baseURL}/genre/all/view`).catch(function (error) {
+            if (error.response) {
+                console.log(error.response);
+                setGenres(null);
+            }
+        });
+
+        if (result?.data?.message == "done") {
+            setGenres(result.data.genres);
+            //   console.log(result.data)
+        }
+
+    }
 
     const toggleSideBar = () => {
         const sideBarMenu = document.getElementById("sideBarMenu")
@@ -106,6 +122,7 @@ export default function CPanel({ removeUser }) {
     }
     useEffect(() => {
         getProfile();
+        getGenre();
     }, []);
 
 
@@ -270,7 +287,7 @@ export default function CPanel({ removeUser }) {
 
                                     <p className='text-muted opacity-75 fw-bolder h5 '>Hi {profile.firstName}, Welcome to GameStore Control Panel.</p>
                                 </section>
-                                <Outlet context={[profile, setProfile, pathName, setPathname]} />
+                                <Outlet context={[profile, setProfile, pathName, setPathname, genres, setGenres, getGenre]} />
 
                             </div>
                         </div>
