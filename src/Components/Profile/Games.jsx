@@ -30,7 +30,7 @@ export default function Games() {
             <div className="row">
             {
               games?.map((game, idx) => {
-                return <div className="col-md-4" key={idx}>
+                return <div className="col-lg-4 col-sm-6" key={idx}>
                 <div className="card rounded-3 bg-grey mb-3 text-center">
                   <img src={game.mainPic.secure_url} className="card-img-top img-fluid" alt="..." />
                   <div className="card-body">

@@ -40,21 +40,18 @@ export default function Followers() {
                   {index < limit + 4 && index >= limit ? (
                     <div className="my-2 p-3 bg-grey rounded-2">
                       <div className=" hover-75 bg-transparent">
-                        <div className="following d-flex justify-content-between align-items-center">
-                          <div className="comment-details d-flex align-items-start">
+                        <div className="following d-sm-flex justify-content-sm-between justify-content-center mx-sm-auto align-items-center">
+                          <div className=" d-flex align-items-start ">
                             <img
                               alt="user"
                               className=" rounded-circle user-pic me-2"
                               src={person.profilePic?.secure_url}
                             />
                           </div>
-                          <div className="comment-body w-100">
-                            <h4 className="user-name fs-5">
+                          <div className=" w-100">
+                            <h4 className="user-name fs-5  mb-3">
                               {person.firstName} {person.lastName}
                             </h4>
-                            <h5 className="text-muted fs-6">
-                              {person.userName}
-                            </h5>
                           </div>
                           <button
                             className="btn btn-danger"
@@ -63,7 +60,7 @@ export default function Followers() {
                             }}
                           >
                             {" "}
-                            Remove{" "}
+                            Unfollow{" "}
                           </button>
                         </div>
                       </div>
