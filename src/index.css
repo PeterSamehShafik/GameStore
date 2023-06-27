@@ -40,7 +40,9 @@ a {
 .hover-75:hover {
     opacity: 75% !important;
 }
-
+.bg-beige{
+  background-color: beige !important;
+}
 
 /* Loading Screen */
 
@@ -124,10 +126,13 @@ a {
 .back-store h4 :hover{
   color: #8a2be2 !important;
 }
-.cursor-pointer{
-  cursor: pointer;
-}
+
+
+
 @media (min-width: 576px){
+  .w-sm-50{
+    width: 50% !important;
+  }
   .w-sm-100{
     width: 100% !important;
   }
