@@ -8,7 +8,6 @@ export default function Games() {
 
   const [profile] = useOutletContext();
   const [games, setGames] = useState(null)
-
   const getGames = async() => {
     const result = await axios.get(`${baseURL}/game/user/${profile?._id}`).catch(e=>
       console.log(e)
@@ -30,7 +29,7 @@ export default function Games() {
             <div className="row">
             {
               games?.map((game, idx) => {
-                return <div className="col-lg-4 col-sm-6" key={idx}>
+                return <div className="col-xl-4 col-sm-6" key={idx}>
                 <div className="card rounded-3 bg-grey mb-3 text-center">
                   <img src={game.mainPic.secure_url} className="card-img-top img-fluid" alt="..." />
                   <div className="card-body">

@@ -8,7 +8,6 @@ import Modal from "react-bootstrap/Modal";
 import jwtDecode from "jwt-decode";
 
 export default function Wishlist() {
-  const [limit, setLimit] = useState(0);
   //modal
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState({
@@ -46,12 +45,7 @@ export default function Wishlist() {
     modalData.mainBtnFunc();
     handleCloseModal();
   };
-  const prev = () => {
-    setLimit(limit - 4);
-  };
-  const next = () => {
-    setLimit(limit + 4);
-  };
+
   //end of modal
   const [wishList, setWishList] = useState(null);
 
@@ -102,88 +96,40 @@ export default function Wishlist() {
     <>
       {wishList ? (
         wishList.length != 0 ? (
-          <div className="row gutters-sm wishlist">
-            <div className="col-sm-12 mb-3">
-              <div className="card h-100 ">
-                <div className="card-body py-0 px-0">
-                  {wishList?.map((game, idx) =>
-                    idx < limit + 4 && idx >= limit ? (
-                      <div
-                        key={idx}
-                        className={
-                          idx != limit + 3
-                            ? "game-check text-white-50 d-flex justify-content-between align-items-center bg-dark mx-0 mb-3 rounded-3"
-                            : "game-check text-white-50 d-flex justify-content-between align-items-center bg-dark mx-0 rounded-3"
-                        }
-                      >
-                        <div className="d-flex my-0 px-0 align-items-center">
-                          <img
-                            src={game.mainPic?.secure_url}
-                            className="img-fluid rounded d-none d-sm-inline"
-                            width={100}
-                            height={100}
-                            alt=""
-                          />
-                          <Link
-                            to={`/details/${game.slug}/${game._id}`}
-                            className=" text-truncate p-3 p-sm-0"
-                          >
-                            <h6 className="game-name m-0 text-center p-0 p-sm-3">
-                              {game.name}
-                            </h6>
-                          </Link>
-                          <div className="lefted pe-2 d-flex">
-                            <span>${game.price}</span>
-                            <button
-                              className="close-btn rounded-circle bg-transparent text-white ms-3"
-                              onClick={() => {
-                                callModal({
-                                  isMainBtn: true,
-                                  header: "Are you sure?",
-                                  body: "You're going to delete this game from your wishlist.",
-                                  mainBtnTxt: "Yes",
-                                  mainBtnColor: "danger",
-                                  mainBtnFunc: () => {
-                                    removeFromWishList(game._id, idx);
-                                  },
-                                  closeBtnTxt: "No",
-                                  closeBtnColor: "success",
-                                });
-                              }}
-                            >
-                              <i className="fa-solid fa-xmark fa-xs"></i>
-                            </button>
-                          </div>
-                        </div>
+          <div className="container game">
+            <div className="row">
+              {wishList?.map((game, idx) =>
+                  <div className="col-xl-4 col-sm-6">
+                    <div className="card rounded-3 bg-grey text-center" key={idx}>
+                      <Link
+                          to={`/details/${game.slug}/${game._id}`}
+                        >
+                      <img src={game.mainPic?.secure_url} className="card-img-top img-fluid" alt="..." />
+                      <div className="card-body">
+                        <h5 className="card-title mx-0">
+                          {game.name}
+                        </h5>
+                        <span className="text-success fw-bold">${game.price}</span>
                       </div>
-                    ) : (
-                      ""
-                    )
-                  )}
-                  <nav aria-label="Page navigation example">
-                    <ul className="pagination bg-transparent d-flex justify-content-center my-2">
-                      {wishList.length - limit == 0 || limit <= 0 ? (
-                        ""
-                      ) : (
-                        <li className="page-item cursor-pointer">
-                          <span className="page-link" href="#" onClick={prev}>
-                            Previous
-                          </span>
-                        </li>
-                      )}
-                      {wishList.length - limit <= 4 || limit < 0 ? (
-                        ""
-                      ) : (
-                        <li className="page-item cursor-pointer">
-                          <span className="page-link" href="#" onClick={next}>
-                            Next
-                          </span>
-                        </li>
-                      )}
-                    </ul>
-                  </nav>
-                </div>
-              </div>
+                      </Link>
+                      <button className="btn btn-outline-danger w-100" onClick={() => {
+                            callModal({
+                              isMainBtn: true,
+                              header: "Are you sure?",
+                              body: "You're going to delete this game from your wishlist.",
+                              mainBtnTxt: "Yes",
+                              mainBtnColor: "danger",
+                              mainBtnFunc: () => {
+                                removeFromWishList(game._id, idx);
+                              },
+                              closeBtnTxt: "No",
+                              closeBtnColor: "success",
+                            });
+                          }}> Remove</button>
+                    </div>
+                  </div>
+              )}
+              
             </div>
             <Modal
               show={showModal}

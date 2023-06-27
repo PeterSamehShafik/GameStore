@@ -125,10 +125,10 @@ a {
 .bg-grey{
   background: #2c3035 !important;
 }
-.back-store h4 :hover{
-  color: #8a2be2 !important;
+.back-store:hover{
+  color: #892be0 !important;
+  transition: all 0.2s ease-in-out;
 }
-
 
 
 @media (min-width: 576px){

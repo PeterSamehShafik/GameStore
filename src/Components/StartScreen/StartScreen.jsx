@@ -1,8 +1,23 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import './StartScreen.css'
+import axios from 'axios'
+import { baseURL } from '../../index.js'
 
 function StartScreen() {
+    const [game, setGame] = useState({
+        slug:'',
+        _id:''
+    })
+    const getRandomGame = async() => {
+        const result = await axios.get(`${baseURL}/game/random`).catch((e) => {console.log(e)})
+        setGame(result.data.game)
+    }
+    useEffect(() => {
+        getRandomGame()
+    }, [])
+    
+
     return (<>
         <div className='myVideo'>
             <video autoPlay muted loop>
@@ -26,10 +41,12 @@ function StartScreen() {
                                         <span className="ms-2">Browse</span>
                                     </Link>
                                 </button>
-                                <button className='btn btn-light rounded-5 px-4 py-1'>
-                                    <i className="fa-solid fa-dice"></i>
-                                    <span className="ms-2">Play dice</span>
-                                </button>
+                                <Link to={`/details/${game.slug}/${game._id}`}>
+                                    <button className='btn btn-light rounded-5 px-4 py-1'>
+                                        <i className="fa-solid fa-dice"></i>
+                                        <span className="ms-2">Play dice</span>
+                                    </button>
+                                </Link>
                                 <button className='btn btn-light rounded-5 px-4 py-1'>
                                     <i className="fa-brands fa-github"></i>
                                     <span className="ms-2">Github</span>

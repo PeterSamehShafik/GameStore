@@ -154,9 +154,13 @@ function App() {
         />
       </Route>
 
-      <Route path='profile/:id' element={<Profile />} >
+      <Route path='profile' element={<Profile />} >
         <Route
           index
+          element={<Info />}
+        />
+        <Route
+          path="info/:id"
           element={<Info />}
         />
         <Route
