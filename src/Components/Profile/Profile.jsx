@@ -12,7 +12,10 @@ export default function Profile() {
   if(id){
     localStorage.setItem("userId", id);
   }
+  // crop Image
+  const [showCropper, setShowCropper] = useState(false)
   const [cropper, setCropper] = useState(null)
+
   const [profile, setProfile] = useState(null);
   const [pathname, setPathname] = useState("");
   const [file, setFile] = useState(null);
@@ -54,10 +57,10 @@ export default function Profile() {
       setFile(e.target.files[0]);
       let Profile = { ...profile };
       Profile.temp = URL.createObjectURL(e.target.files[0]);
+      setShowCropper(true)
       setProfile(Profile);
     }
   };
-
   const saveImage = async () => {
     if (!file) {
       return;
@@ -81,8 +84,7 @@ export default function Profile() {
         // handle the response
         if (response.data.message === "done") {
           let temp = { ...profile };
-          temp.profilePic.secure_url =
-            response.data.updatedUser.profilePic.secure_url;
+          temp.profilePic.secure_url = response.data.updatedUser.profilePic.secure_url;
           setProfile(temp);
           setFile(null);
         }
@@ -96,27 +98,26 @@ export default function Profile() {
     let temp = { ...profile };
     delete temp.temp;
     setProfile(temp);
+    setShowCropper(false)
     setFile(null);
   };
 
-  // const getCropData = async () => {
-  //   if (cropper) {
-  //     const file = await fetch(cropper.getCroppedCanvas().toDataURL())
-  //       .then((res) => res.blob())
-  //       .then((blob) => {
-  //         return new File([blob], "newAvatar.png", { type: "image/png" });
-  //       });
-  //     if (file) {
-  //       authService
-  //         .uploadAvatar(userId, file)
-  //         .then(() => {
-  //           refetchUser(userId);
-  //           cancelEdit();
-  //         })
-  //         .catch((e) => alert(e));
-  //     }
-  //   }
-  // };
+  const getCropData = async () => {
+    if (cropper) {
+      const file = await fetch(cropper.getCroppedCanvas().toDataURL())
+        .then((res) => res.blob())
+        .then((blob) => {
+          return new File([blob], "newAvatar.png", { type: "image/png" });
+        });
+      if (file) {
+        let Profile = { ...profile };
+        Profile.temp = URL.createObjectURL(file);
+        setFile(file)
+        setProfile(Profile);
+        setShowCropper(false)
+      }
+    }
+  };
   useEffect(() => {
     getProfile();
   }, []);
@@ -146,36 +147,47 @@ export default function Profile() {
                             <label htmlFor="file-input">
                               <i className="fa-regular fa-pen-to-square fa-lg"></i>
                             </label>
-                            <input id="file-input" type="file" onChange={inputImage} />
+                            <input id="file-input" type="file" onChange={inputImage}/>
                           </div>
                         }
-                          {/* <Cropper
-                            src={profile.temp}
-                            style={{ height: 400, width: 400 }}
-                            initialAspectRatio={4 / 3}
-                            minCropBoxHeight={100}
-                            maxCropBoxHeight={100}
-                            minCropBoxWidth={100}
-                            guides={false}
-                            checkOrientation={false}
-                            onInitialized={(instance) => {
-                              setCropper(instance);
-                            }}
-                          /> */}
-                          {/* <button onClick={getCropData}>Crop Image</button> */}
-                        <img
-                          src={
-                            profile.temp
-                              ? profile.temp
-                              : profile.profilePic?.secure_url
-                          }
-                          alt="Profile"
-                          className="rounded-circle img-fluid "
-                          width="150"
-                        />
+                        {
+                          showCropper?
+                          <div className="text-center">
+                            <Cropper
+                              id="cropperComp"
+                              src={profile.temp}
+                              initialAspectRatio={6 / 6}
+                              aspectRatio = {6/6}
+                              responsive = {true}
+                              minCropBoxHeight={100}
+                              minCropBoxWidth={100}
+                              guides={false}
+                              autoCropArea={0.9}
+                              movable={false}
+                              cropBoxResizable={false}
+                              checkOrientation={true}
+                              onInitialized={(instance) => {
+                                setCropper(instance);
+                              }}
+                              className="w-100 h-100"
+                            />
+                            <button onClick={getCropData} className="btn btn-outline-info mt-2">Crop Image</button>
+                          </div>
+                          :
+                          <img
+                            src={
+                              profile.temp
+                                ? profile.temp
+                                : profile.profilePic?.secure_url
+                            }
+                            alt="Profile"
+                            className="rounded-circle img-fluid "
+                            width="150"
+                          />
+                        }
                       </div>
                       <div className="save-image-buttons d-flex justify-content-between">
-                        {file ? (
+                        {file && !showCropper? (
                           <div className="mt-2">
                             <button
                               className="btn btn-success btn-sm me-2"
