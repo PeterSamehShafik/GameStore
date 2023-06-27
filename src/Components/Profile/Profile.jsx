@@ -3,9 +3,13 @@ import "./Profile.css";
 import { Link, Outlet, useParams } from "react-router-dom";
 import axios from "axios";
 import { baseURL, BEARERKEY } from "./../../index.js";
+import Cropper from "react-cropper";
+import "cropperjs/dist/cropper.css";
+
 
 export default function Profile() {
   const { id } = useParams();
+  const [cropper, setCropper] = useState(null)
   const [profile, setProfile] = useState(null);
   const [pathname, setPathname] = useState("");
   const [file, setFile] = useState(null);
@@ -29,7 +33,7 @@ export default function Profile() {
   function modifyButtons(e) {
     setPathname(e.target.id);
   }
-  const test = (e) => {
+  const inputImage = (e) => {
     if (e.target.files) {
       setFile(e.target.files[0]);
       let Profile = { ...profile };
@@ -79,6 +83,24 @@ export default function Profile() {
     setFile(null);
   };
 
+  // const getCropData = async () => {
+  //   if (cropper) {
+  //     const file = await fetch(cropper.getCroppedCanvas().toDataURL())
+  //       .then((res) => res.blob())
+  //       .then((blob) => {
+  //         return new File([blob], "newAvatar.png", { type: "image/png" });
+  //       });
+  //     if (file) {
+  //       authService
+  //         .uploadAvatar(userId, file)
+  //         .then(() => {
+  //           refetchUser(userId);
+  //           cancelEdit();
+  //         })
+  //         .catch((e) => alert(e));
+  //     }
+  //   }
+  // };
   useEffect(() => {
     getProfile();
   }, []);
@@ -104,8 +126,22 @@ export default function Profile() {
                           <label htmlFor="file-input">
                             <i className="fa-regular fa-pen-to-square fa-lg"></i>
                           </label>
-                          <input id="file-input" type="file" onChange={test} />
+                          <input id="file-input" type="file" onChange={inputImage} />
                         </div>
+                        <Cropper
+                          src={profile.temp}
+                          style={{ height: 400, width: 400 }}
+                          initialAspectRatio={4 / 3}
+                          minCropBoxHeight={100}
+                          maxCropBoxHeight={100}
+                          minCropBoxWidth={100}
+                          guides={false}
+                          checkOrientation={false}
+                          onInitialized={(instance) => {
+                            setCropper(instance);
+                          }}
+                        />
+                          {/* <button onClick={getCropData}>Crop Image</button> */}
                         <img
                           src={
                             profile.temp

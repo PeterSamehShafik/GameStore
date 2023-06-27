@@ -106,8 +106,8 @@ export default function Wishlist() {
             <div className="col-sm-12 mb-3">
               <div className="card h-100 ">
                 <div className="card-body py-0 px-0">
-                  {wishList?.map((game, idx) => (
-                    idx < limit + 4 && idx >= limit ?
+                  {wishList?.map((game, idx) =>
+                    idx < limit + 4 && idx >= limit ? (
                       <div
                         key={idx}
                         className={
@@ -119,42 +119,47 @@ export default function Wishlist() {
                         <div className="d-flex my-0 px-0 align-items-center">
                           <img
                             src={game.mainPic?.secure_url}
-                            className="img-fluid rounded"
+                            className="img-fluid rounded d-none d-sm-inline"
                             width={100}
                             height={100}
                             alt=""
                           />
-                          <Link to={`/details/${game.slug}/${game._id}`}>
-                            <h6 className="game-name m-0 text-center p-3">
+                          <Link
+                            to={`/details/${game.slug}/${game._id}`}
+                            className=" text-truncate p-3 p-sm-0"
+                          >
+                            <h6 className="game-name m-0 text-center p-0 p-sm-3">
                               {game.name}
                             </h6>
                           </Link>
-                        </div>
-                        <div className="lefted pe-2">
-                          <span>${game.price}</span>
-                          <button
-                            className="close-btn rounded-circle bg-transparent text-white ms-3"
-                            onClick={() => {
-                              callModal({
-                                isMainBtn: true,
-                                header: "Are you sure?",
-                                body: "You're going to delete this game from your wishlist.",
-                                mainBtnTxt: "Yes",
-                                mainBtnColor: "danger",
-                                mainBtnFunc: () => { removeFromWishList(game._id, idx) },
-                                closeBtnTxt: "No",
-                                closeBtnColor: "success",
-                              });
-
-                            }}
-                          >
-                            <i className="fa-solid fa-xmark fa-xs"></i>
-                          </button>
+                          <div className="lefted pe-2 d-flex">
+                            <span>${game.price}</span>
+                            <button
+                              className="close-btn rounded-circle bg-transparent text-white ms-3"
+                              onClick={() => {
+                                callModal({
+                                  isMainBtn: true,
+                                  header: "Are you sure?",
+                                  body: "You're going to delete this game from your wishlist.",
+                                  mainBtnTxt: "Yes",
+                                  mainBtnColor: "danger",
+                                  mainBtnFunc: () => {
+                                    removeFromWishList(game._id, idx);
+                                  },
+                                  closeBtnTxt: "No",
+                                  closeBtnColor: "success",
+                                });
+                              }}
+                            >
+                              <i className="fa-solid fa-xmark fa-xs"></i>
+                            </button>
+                          </div>
                         </div>
                       </div>
-                    :
-                      ''
-                  ))}
+                    ) : (
+                      ""
+                    )
+                  )}
                   <nav aria-label="Page navigation example">
                     <ul className="pagination bg-transparent d-flex justify-content-center my-2">
                       {wishList.length - limit == 0 || limit <= 0 ? (
