@@ -90,7 +90,7 @@ display: none;
   
 .game img {
     height: 200px;
-
+    
     object-fit: cover;
 }
 .wishlist img, .following img {

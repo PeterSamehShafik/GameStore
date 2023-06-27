@@ -159,7 +159,12 @@ export default function Info() {
                   </form> 
                 :
                   <div className="profileData position-relative">
-                    <i className="fa-regular fa-pen-to-square fa-lg position-absolute top-0 end-0" onClick={()=>{setEdit(true)}}></i>
+                    {
+                      localStorage.getItem("userId")?
+                      ''
+                      :
+                      <i className="fa-regular fa-pen-to-square fa-lg position-absolute top-0 end-0" onClick={()=>{setEdit(true)}}></i>
+                    }
                       <div className="row">
                         <div className="col-sm-3">
                           <h6 className="mb-0">First Name</h6>

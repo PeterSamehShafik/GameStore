@@ -1,24 +1,22 @@
 import React, { useState } from 'react'
 import "./CPNav.css"
 import { Link, useOutletContext } from "react-router-dom";
+import { roles } from '../../index.js';
 
 export default function CPNav() {
     const [profile, setProfile, pathName, setPathname] = useOutletContext();
     return (
         <div className="cpnav">
-            <section className='ps-3 mb-4 p-4 shadow-sm '>
-                <span className="btn disabled button-53" >Control Panel</span>
-                <h1 className='fw-bolder h3 mt-3 opacity-75'>Control Panel</h1>
-                <p className='text-muted opacity-75 fw-bolder h5 '>Hi {profile.firstName}, Welcome to GameStore Control Panel.</p>
-            </section>
             <main className="container nav-main ps-3 h-100">
                 <div className="row g-2">
-                    <div className="col-lg-3 col-md-4 col-md-6">
-                        <Link to='users' onClick={() => setPathname("/cpanel/users")} className="panel shadow bg-one px-0 py-5 text-center d-flex flex-column justify-content-center align-items-center">
-                            <i className="fa-solid fa-triangle-exclamation display-3 mb-3 rounded-circle text-white opacity-75"></i>
-                            <h2 className='text-white fw-bolder h4'>Users Control</h2>
-                        </Link>
-                    </div>
+                    {profile.role === roles.superAdmin ?
+                        <div className="col-lg-3 col-md-4 col-md-6">
+                            <Link to='users' onClick={() => setPathname("/cpanel/users")} className="panel shadow bg-one px-0 py-5 text-center d-flex flex-column justify-content-center align-items-center">
+                                <i className="fa-solid fa-triangle-exclamation display-3 mb-3 rounded-circle text-white opacity-75"></i>
+                                <h2 className='text-white fw-bolder h4'>Users Control</h2>
+                            </Link>
+                        </div>
+                        : ""}
                     <div className="col-lg-3 col-md-4 col-md-6">
                         <Link to='games' onClick={() => setPathname("/cpanel/games")} className="panel shadow bg-two px-0 py-5 text-center d-flex flex-column justify-content-center align-items-center">
                             <i className="fa-solid fa-gamepad display-3 mb-3 rounded-circle text-white opacity-75"></i>

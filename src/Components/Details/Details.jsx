@@ -8,11 +8,11 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a lo
 import { Carousel } from "react-responsive-carousel";
 import Rating from "@mui/material/Rating";
 import Cart from "../Cart/Cart.jsx";
+import jwtDecode from "jwt-decode";
 
 //modal
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import jwtDecode from "jwt-decode";
 
 function Details({ currentUser, getCart, cart }) {
   let navigate = useNavigate();
@@ -466,7 +466,7 @@ function Details({ currentUser, getCart, cart }) {
                                 {game.genreId ? "Genre: " : ""}
                                 {game.genreId?.name}{" "}
                               </li>
-                              <Link to={`/profile/${game.createdBy._id}`}>
+                              <Link to={`/profile/info/${game.createdBy._id}`}>
                                 <li className="text-white-50">
                                   Publisher: {game.createdBy.firstName}{" "}
                                   {game.createdBy.lastName}{" "}

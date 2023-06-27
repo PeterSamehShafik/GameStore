@@ -1,10 +1,10 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { useOutletContext } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 import { BEARERKEY, baseURL } from "../../index.js";
 
 export default function Followers() {
-  const [profile, setProfile] = useOutletContext();
+  const [profile, setProfile, id] = useOutletContext();
   const [limit, setLimit] = useState(0);
   const removeFollowing = async (userId, index) => {
     const config = {
@@ -49,19 +49,26 @@ export default function Followers() {
                             />
                           </div>
                           <div className=" w-100">
-                            <h4 className="user-name fs-5  mb-3">
-                              {person.firstName} {person.lastName}
-                            </h4>
+                            <Link to={`/profile/info/${person._id}`} onClick={()=>setLimit(0)}>
+                              <h4 className="user-name fs-5  mb-3">
+                                {person.firstName} {person.lastName}
+                              </h4>
+                            </Link>
                           </div>
-                          <button
-                            className="btn btn-danger"
-                            onClick={() => {
-                              removeFollowing(person._id, index);
-                            }}
-                          >
-                            {" "}
-                            Unfollow{" "}
-                          </button>
+                          {
+                            localStorage.getItem("userId")?
+                            ''
+                            :
+                            <button
+                              className="btn btn-danger"
+                              onClick={() => {
+                                removeFollowing(person._id, index);
+                              }}
+                            >
+                              {" "}
+                              Unfollow{" "}
+                            </button>
+                          }
                         </div>
                       </div>
                     </div>

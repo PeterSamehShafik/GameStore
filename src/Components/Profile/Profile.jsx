@@ -9,6 +9,9 @@ import "cropperjs/dist/cropper.css";
 
 export default function Profile() {
   const { id } = useParams();
+  if(id){
+    localStorage.setItem("userId", id);
+  }
   const [cropper, setCropper] = useState(null)
   const [profile, setProfile] = useState(null);
   const [pathname, setPathname] = useState("");
@@ -19,15 +22,28 @@ export default function Profile() {
         authorization: BEARERKEY + localStorage.getItem("token"),
       },
     };
-    const result = await axios
-      .get(`${baseURL}/user/profile`, config)
-      .catch(function (error) {
-        if (error.response) {
-          console.log(error.response);
-        }
-      });
-    if (result?.data?.message === "done") {
-      setProfile(result.data.user);
+    if (id) {
+      const result = await axios
+        .get(`${baseURL}/user/profile/${id}`, config)
+        .catch(function (error) {
+          if (error.response) {
+            console.log(error.response);
+          }
+        });
+      if (result?.data?.message === "done") {
+        setProfile(result.data.user);
+      }
+    } else {
+      const result = await axios
+        .get(`${baseURL}/user/profile`, config)
+        .catch(function (error) {
+          if (error.response) {
+            console.log(error.response);
+          }
+        });
+      if (result?.data?.message === "done") {
+        setProfile(result.data.user);
+      }
     }
   };
   function modifyButtons(e) {
@@ -110,7 +126,7 @@ export default function Profile() {
       {profile ? (
         <div className="container profile">
           <header className="d-flex justify-content-between align-items-center mb-2">
-            <Link to="/home" className="back-store h4 fw-bolder">
+            <Link to="/home" className="back-store h4 fw-bolder text-white">
               <i className="fa-solid fa-arrow-left me-2"></i>
               <strong>Store</strong>
             </Link>
@@ -122,25 +138,30 @@ export default function Profile() {
                   <div className="card-body">
                     <div className="d-flex flex-column align-items-center">
                       <div className="profile-img position-relative">
-                        <div className="image-upload position-absolute top-0 end-0">
-                          <label htmlFor="file-input">
-                            <i className="fa-regular fa-pen-to-square fa-lg"></i>
-                          </label>
-                          <input id="file-input" type="file" onChange={inputImage} />
-                        </div>
-                        <Cropper
-                          src={profile.temp}
-                          style={{ height: 400, width: 400 }}
-                          initialAspectRatio={4 / 3}
-                          minCropBoxHeight={100}
-                          maxCropBoxHeight={100}
-                          minCropBoxWidth={100}
-                          guides={false}
-                          checkOrientation={false}
-                          onInitialized={(instance) => {
-                            setCropper(instance);
-                          }}
-                        />
+                        {
+                          localStorage.getItem("userId")?
+                          ''
+                          :
+                          <div className="image-upload position-absolute top-0 end-0">
+                            <label htmlFor="file-input">
+                              <i className="fa-regular fa-pen-to-square fa-lg"></i>
+                            </label>
+                            <input id="file-input" type="file" onChange={inputImage} />
+                          </div>
+                        }
+                          {/* <Cropper
+                            src={profile.temp}
+                            style={{ height: 400, width: 400 }}
+                            initialAspectRatio={4 / 3}
+                            minCropBoxHeight={100}
+                            maxCropBoxHeight={100}
+                            minCropBoxWidth={100}
+                            guides={false}
+                            checkOrientation={false}
+                            onInitialized={(instance) => {
+                              setCropper(instance);
+                            }}
+                          /> */}
                           {/* <button onClick={getCropData}>Crop Image</button> */}
                         <img
                           src={
@@ -234,20 +255,26 @@ export default function Profile() {
                               Activity
                             </Link>
                           </li>
-                          <li
-                            className="nav-item me-lg-5 me-sm-3"
-                            onClick={modifyButtons}
-                          >
-                            <Link
-                              className={
-                                pathname === "wishlist" ? "text-violet" : ""
-                              }
-                              to="wishlist"
-                              id="wishlist"
+                          {
+                            localStorage.getItem("userId")?
+                            ''
+                            :
+                            <li
+                              className="nav-item me-lg-5 me-sm-3"
+                              onClick={modifyButtons}
                             >
-                              Wishlist
-                            </Link>
-                          </li>
+                              
+                              <Link
+                                className={
+                                  pathname === "wishlist" ? "text-violet" : ""
+                                }
+                                to="wishlist"
+                                id="wishlist"
+                              >
+                                Wishlist
+                              </Link>
+                            </li>
+                          }
                           <li
                             className="nav-item me-lg-5 me-sm-3"
                             onClick={modifyButtons}
