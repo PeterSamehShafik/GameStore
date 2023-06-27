@@ -77,7 +77,7 @@ function Navbar({ currentUser, removeUser, cart }) {
                     >
                       <Link to="/profile/info" onClick={removeVisitorId}>
                           <img src={currentUser.profilePic.secure_url} className="img-fluid rounded-circle" />
-                        <span className="ms-3">{currentUser?.firstName}</span>
+                        <span className="ms-2">{currentUser?.firstName}</span>
                       </Link>
                     </div>
                   </li>

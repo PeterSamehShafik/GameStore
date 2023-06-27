@@ -15,7 +15,6 @@ export default function GameControl() {
   const [editMode, setEditMode] = useState({})
   const [file, setFile] = useState(null);
 
-
   //modal
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState({
@@ -81,6 +80,7 @@ export default function GameControl() {
       });
 
     }
+
 
 
     if (result?.data?.message == "done") {
@@ -176,6 +176,7 @@ export default function GameControl() {
           });
         }
       });
+      console.log(result)
       if (result?.data?.message == "done") {
         handleCloseModal()
         callModal({ header: "Success!", body: "Video uploaded successfully", isMainBtn: false, closeBtnTxt: "Close", closeBtnColor: "success" })
@@ -501,12 +502,12 @@ export default function GameControl() {
                               <source src={gameVideo.secure_url} type="video/mp4" />
                             </video>
                             <input id="changeVideo" type="file" className='d-none' onChange={addNewVideo} />
-                            <label htmlhtmlFor='changeVideo' className='btn btn-primary mt-2'> Change Video </label>
+                            <label htmlFor='changeVideo' className='btn btn-primary mt-2'> Change Video </label>
                           </div>
                           :
                           <div className="col-md-3 d-flex flex-column justify-content-center">
                             <input id="addVideo" type="file" className='d-none' onChange={addNewVideo} />
-                            <label htmlhtmlFor='addVideo' className='btn btn-primary mt-2'> Add Video </label>
+                            <label htmlFor='addVideo' className='btn btn-primary mt-2'> Add Video </label>
                           </div>
                         }
                         {gamePics?.map((pic, idx) =>
@@ -518,7 +519,7 @@ export default function GameControl() {
                         )}
 
                         <input id="addImages" type="file" multiple className='d-none' onChange={addNewImages} />
-                        <label htmlhtmlFor='addImages' className='btn btn-primary'> Add Images </label>
+                        <label htmlFor='addImages' className='btn btn-primary'> Add Images </label>
 
                       </div>
                     </div>
@@ -555,7 +556,7 @@ export default function GameControl() {
                       <td className='gamePic w-25 w-sm-15 position-relative'>
                         {editMode.mode === "edit" && editMode.id == game._id ?
                           <>
-                            <label htmlhtmlFor={`gamePic${game._id}`} className='position-absolute top-0 end-0'>
+                            <label htmlFor={`gamePic${game._id}`} className='position-absolute top-0 end-0'>
                               <i className="fa-regular fa-pen-to-square fa-2xl cursor-pointer hover-50"></i>
                             </label>
                             <input id={`gamePic${game._id}`} type="file" className='d-none' onChange={viewPic} />
