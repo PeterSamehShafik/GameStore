@@ -45,21 +45,21 @@ export default function Followers({crrUser}) {
                             <img
                               alt="user"
                               className=" rounded-circle user-pic me-2"
-                              src={person.profilePic?.secure_url}
+                              src={person?.profilePic?.secure_url}
                             />
                           </div>
                           <div className=" w-100">
                             {
-                              person._id === crrUser._id?
-                              <Link to={`/profile/info/${person._id}`} onClick={()=>{localStorage.setItem("userId", 'user')}}>
+                              person?._id === crrUser?._id?
+                              <Link to={`/profile/info/${person?._id}`} onClick={()=>{localStorage.setItem("userId", 'user')}}>
                                 <h4 className="user-name fs-5  mb-3 text-success">
-                                    {person.firstName} {person.lastName}
+                                    {person?.firstName} {person?.lastName}
                                 </h4>
                               </Link>
                               :
-                              <Link to={`/profile/info/${person._id}`} onClick={()=>{localStorage.setItem("userId", 'user')}}>
+                              <Link to={`/profile/info/${person?._id}`} onClick={()=>{localStorage.setItem("userId", 'user')}}>
                                 <h4 className="user-name fs-5  mb-3">
-                                  {person.firstName} {person.lastName}
+                                  {person?.firstName} {person?.lastName}
                                 </h4>
                               </Link>
                             }
@@ -71,7 +71,7 @@ export default function Followers({crrUser}) {
                             <button
                               className="btn btn-danger"
                               onClick={() => {
-                                removeFollowing(person._id, index);
+                                removeFollowing(person?._id, index);
                               }}
                             >
                               {" "}
