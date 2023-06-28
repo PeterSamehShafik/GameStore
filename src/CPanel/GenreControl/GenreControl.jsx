@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { useOutletContext } from 'react-router-dom';
 import { BEARERKEY, baseURL, roles } from './../../index';
 import axios from 'axios';
+import Cropper from "react-cropper";
+import "cropperjs/dist/cropper.css";
+
 //modal
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
@@ -56,6 +59,10 @@ export default function GenreControl() {
   };
   //end of modal
 
+  //crop
+  const [showCropper, setShowCropper] = useState(false)
+  const [cropper, setCropper] = useState(null)
+
 
   const editGenre = (genreId) => {
     setEditMode({ id: genreId, mode: "edit" })
@@ -67,8 +74,27 @@ export default function GenreControl() {
       let editModeTemp = { ...editMode }
       editModeTemp.pic = URL.createObjectURL(e.target.files[0])
       setEditMode(editModeTemp)
+      setShowCropper(true)
+
     }
   }
+
+  const getCropData = async () => {
+    if (cropper) {
+      const file = await fetch(cropper.getCroppedCanvas().toDataURL())
+        .then((res) => res.blob())
+        .then((blob) => {
+          return new File([blob], "newAvatar.png", { type: "image/png" });
+        });
+      if (file) {
+
+        editMode.pic = URL.createObjectURL(file);
+        setFile(file)
+        // setProfile(Profile);
+        setShowCropper(false)
+      }
+    }
+  };
 
 
   // const deleteImg = async (publicId) => {
@@ -111,7 +137,7 @@ export default function GenreControl() {
 
     if (result?.data?.message == "done") {
       setGenres(result.data.genres);
-        console.log(result.data)
+      // console.log(result.data)
     }
 
   }
@@ -177,7 +203,7 @@ export default function GenreControl() {
 
     body.append("name", document.getElementById("newGenreName").value);
     body.append("desc", document.getElementById("newGenreDesc").value);
-    if(document.getElementById("newGenreImage").files[0]){
+    if (document.getElementById("newGenreImage").files[0]) {
       body.append("image", document.getElementById("newGenreImage").files[0]);
     }
 
@@ -296,80 +322,122 @@ export default function GenreControl() {
                   <i className="fa-solid fa-plus me-2"></i>
                   Add New genre</button>
               </div>
-              <table className="table table-striped table-bordered table-hover bg-white border ">
-                <caption>List of genres</caption>
-                <thead>
-                  <tr>
-                    <th className='opacity-75 ' scope="col">Picture</th>
-                    <th className='opacity-75 ' scope="col">Name</th>
-                    <th className='opacity-75' scope="col">Description</th>
-                    <th className='opacity-75' scope="col">Manage</th>
+              <div className="table-responsive">
+                <table className="table table-striped table-bordered table-hover bg-white border ">
+                  <caption>List of genres</caption>
+                  <thead>
+                    <tr>
+                      <th className='opacity-75 ' scope="col">Picture</th>
+                      <th className='opacity-75 ' scope="col">Name</th>
+                      <th className='opacity-75' scope="col">Description</th>
+                      <th className='opacity-75' scope="col">Manage</th>
 
-                  </tr>
-                </thead>
-                <tbody className="table-group-divider">
-                  {genres?.map((genre) =>
-                    <tr key={genre._id} >
-                      <td className='genrePic w-25 w-sm-15 position-relative'>
-                        {editMode.mode === "edit" && editMode.id == genre._id ?
-                          <>
-                            <label htmlFor={`genrePic${genre._id}`} className='position-absolute top-0 end-0'>
-                              <i className="fa-regular fa-pen-to-square fa-2xl cursor-pointer hover-50"></i>
-                            </label>
-                            <input id={`genrePic${genre._id}`} type="file" className='d-none' onChange={viewPic} />
-                          </>
-                          :
-                          ""
-                        }
-                        {editMode.mode === "edit" && editMode.id == genre._id && editMode.pic ?
+                    </tr>
+                  </thead>
+                  <tbody className="table-group-divider">
+                    {genres?.map((genre) =>
+                      <tr key={genre._id} >
+                        <td className='genrePic w-25 w-sm-15 position-relative'>
+                          {editMode.mode === "edit" && editMode.id == genre._id ?
+                            <>
+                              <label htmlFor={`genrePic${genre._id}`} className='position-absolute top-0 end-0'>
+                                <i className="fa-regular fa-pen-to-square fa-2xl cursor-pointer hover-50"></i>
+                              </label>
+                              <input id={`genrePic${genre._id}`} type="file" className='d-none' onChange={viewPic} />
+                            </>
+                            :
+                            ""
+                          }
+                          {/* {editMode.mode === "edit" && editMode.id == genre._id && editMode.pic ?
                           <img src={editMode.pic} alt={genre.slug} className='img-fluid rounded-circle ' name="genreImg" />
                           :
                           <img src={genre.image?.secure_url} alt={genre.slug} className='img-fluid rounded-circle ' name="genreImg" />
-                        }
-                      </td>
-                      <td className='genre-name-t '>
-                        {editMode.mode === "edit" && editMode.id == genre._id ?
-                          <textarea type="text" className='form-control' defaultValue={genre.name} name='genreName' />
-                          :
-                          <span className='text-capitalize'> {genre.name}</span>}
-                      </td>
-                      <td className='desc-div'>
-                        {editMode.mode === "edit" && editMode.id == genre._id ?
-                          <textarea type="text" className='form-control ' defaultValue={genre.desc} name='genreDesc' />
-                          :
-                          <span> {genre.desc}</span>
-                        }
-                      </td>
-                      <td className="mange">
-                        {editMode.mode === "edit" && editMode.id == genre._id ?
-                          <>
-                            <button onClick={() => saveGenre(genre._id)} className='btn btn-success m-1 '> Save </button>
-                            <button onClick={() => setEditMode({ id: 0, mode: "view" })} className='btn btn-secondary m-1 '> Cancel </button>
-                          </>
-                          :
-                          <>
-                            {editMode.mode === "editImg" && editMode.id == genre._id ? "" : <button onClick={() => editGenre(genre._id)} className='btn btn-info m-1'> Edit </button>}
-                            {editMode.mode === "editImg" && editMode.id == genre._id ? "" : <button onClick={() => {
-                              callModal({
-                                isMainBtn: true,
-                                header: "Delete genre",
-                                body: "Are you sure? any game with this genre will be deleted !",
-                                mainBtnTxt: "Yes",
-                                mainBtnColor: "danger",
-                                mainBtnFunc: () => deleteGenre(genre._id),
-                                closeBtnTxt: "No",
-                                closeBtnColor: "success",
-                              });
-                            }} className='btn btn-danger m-1'> Delete </button>}
-                          </>
-                        }
-                      </td>
+                        } */}
+                          {editMode.mode === "edit" && editMode.id == genre._id && editMode.pic ?
+                            showCropper ?
+                              <div className="text-center">
+                                <Cropper
+                                  id="cropperComp"
+                                  name="genreImg"
+                                  src={editMode.pic}
+                                  initialAspectRatio={6 / 6}
+                                  aspectRatio={6 / 6}
+                                  responsive={true}
+                                  minCropBoxHeight={100}
+                                  minCropBoxWidth={100}
+                                  guides={false}
+                                  autoCropArea={0.9}
+                                  movable={false}
+                                  checkOrientation={true}
+                                  onInitialized={(instance) => {
+                                    setCropper(instance);
+                                  }}
+                                  className="w-100 h-100"
+                                />
+                                <button onClick={getCropData} className="btn btn-outline-info mt-2">Crop Image</button>
+                              </div>
+                              :
+                              <img
+                                src={editMode.pic}
+                                alt={genre.slug}
+                                className="rounded-circle img-fluid "
+                                width="150"
+                                name="genreImg"
+                              /> :
+                            <img
+                              src={genre.image?.secure_url}
+                              alt={genre.slug}
+                              className="rounded-circle img-fluid "
+                              width="150"
+                              name="genreImg"
+                            />
+                          }
+                        </td>
+                        <td className='genre-name-t '>
+                          {editMode.mode === "edit" && editMode.id == genre._id ?
+                            <textarea type="text" className='form-control' defaultValue={genre.name} name='genreName' />
+                            :
+                            <span className='text-capitalize'> {genre.name}</span>}
+                        </td>
+                        <td className='desc-div'>
+                          {editMode.mode === "edit" && editMode.id == genre._id ?
+                            <textarea type="text" className='form-control ' defaultValue={genre.desc} name='genreDesc' />
+                            :
+                            <span> {genre.desc}</span>
+                          }
+                        </td>
+                        <td className="mange">
+                          {editMode.mode === "edit" && editMode.id == genre._id ?
+                            <>
+                              {showCropper ? "" : <button onClick={() => saveGenre(genre._id)} className='btn btn-success m-1 '> Save </button>}
+                              <button onClick={() => setEditMode({ id: 0, mode: "view" })} className='btn btn-secondary m-1 '> Cancel </button>
+                            </>
+                            :
+                            <>
+                              {editMode.mode === "editImg" && editMode.id == genre._id ? "" : <button onClick={() => editGenre(genre._id)} className='btn btn-info m-1'> Edit </button>}
+                              {editMode.mode === "editImg" && editMode.id == genre._id ? "" : <button onClick={() => {
+                                callModal({
+                                  isMainBtn: true,
+                                  header: "Delete genre",
+                                  body: "Are you sure? any game with this genre will be deleted !",
+                                  mainBtnTxt: "Yes",
+                                  mainBtnColor: "danger",
+                                  mainBtnFunc: () => deleteGenre(genre._id),
+                                  closeBtnTxt: "No",
+                                  closeBtnColor: "success",
+                                });
+                              }} className='btn btn-danger m-1'> Delete </button>}
+                            </>
+                          }
+                        </td>
 
-                    </tr>
-                  )}
+                      </tr>
+                    )}
 
-                </tbody>
-              </table>
+                  </tbody>
+                </table>
+
+              </div>
 
               <Modal
                 show={showModal}

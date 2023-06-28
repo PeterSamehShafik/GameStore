@@ -79,3 +79,8 @@
 .dropdown-menu, .dropdown{
     transition: all 0.2s ease-in-out;
 }
+
+.game-rating{
+    width:4rem !important;
+    height:4rem !important;
+}

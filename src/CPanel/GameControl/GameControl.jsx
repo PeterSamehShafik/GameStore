@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { useOutletContext } from 'react-router-dom';
 import { BEARERKEY, baseURL, roles } from './../../index';
 import axios from 'axios';
+import Cropper from "react-cropper";
+import "cropperjs/dist/cropper.css";
+
 //modal
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
@@ -14,6 +17,9 @@ export default function GameControl() {
   const [gameVideo, setGameVideo] = useState(null)
   const [editMode, setEditMode] = useState({})
   const [file, setFile] = useState(null);
+  //crop
+  const [showCropper, setShowCropper] = useState(false)
+  const [cropper, setCropper] = useState(null)
 
   //modal
   const [showModal, setShowModal] = useState(false);
@@ -100,8 +106,26 @@ export default function GameControl() {
       let editModeTemp = { ...editMode }
       editModeTemp.pic = URL.createObjectURL(e.target.files[0])
       setEditMode(editModeTemp)
+      setShowCropper(true)
     }
   }
+
+  const getCropData = async () => {
+    if (cropper) {
+      const file = await fetch(cropper.getCroppedCanvas().toDataURL())
+        .then((res) => res.blob())
+        .then((blob) => {
+          return new File([blob], "newAvatar.png", { type: "image/png" });
+        });
+      if (file) {
+
+        editMode.pic = URL.createObjectURL(file);
+        setFile(file)
+        // setProfile(Profile);
+        setShowCropper(false)
+      }
+    }
+  };
 
   const addNewImages = async (e) => {
     if (e.target.files) {
@@ -536,123 +560,160 @@ export default function GameControl() {
                   <i className="fa-solid fa-plus me-2"></i>
                   Add New Game</button>
               </div>
-              <table className="table table-striped table-bordered table-hover bg-white border ">
-                <caption>List of games</caption>
-                <thead>
-                  <tr>
-                    <th className='opacity-75 ' scope="col">Picture</th>
-                    <th className='opacity-75 ' scope="col">Name</th>
-                    <th className='opacity-75' scope="col">Description</th>
-                    <th className='opacity-75' scope="col">Price</th>
-                    <th className='opacity-75' scope="col">Platform</th>
-                    <th className='opacity-75' scope="col">Genre</th>
-                    <th className='opacity-75' scope="col">Manage</th>
-
-                  </tr>
-                </thead>
-                <tbody className="table-group-divider">
-                  {games?.map((game) =>
-                    <tr key={game._id} >
-                      <td className='gamePic w-25 w-sm-15 position-relative'>
-                        {editMode.mode === "edit" && editMode.id == game._id ?
-                          <>
-                            <label htmlFor={`gamePic${game._id}`} className='position-absolute top-0 end-0'>
-                              <i className="fa-regular fa-pen-to-square fa-2xl cursor-pointer hover-50"></i>
-                            </label>
-                            <input id={`gamePic${game._id}`} type="file" className='d-none' onChange={viewPic} />
-                          </>
-                          :
-                          ""
-                        }
-                        {editMode.mode === "edit" && editMode.id == game._id && editMode.pic ?
-                          <img src={editMode.pic} alt={game.slug} className='img-fluid rounded-circle ' name="gameImg" />
-                          :
-                          <img src={game.mainPic?.secure_url} alt={game.slug} className='img-fluid rounded-circle ' name="gameImg" />
-                        }
-                      </td>
-                      <td className='game-name-t '>
-                        {editMode.mode === "edit" && editMode.id == game._id ?
-                          <textarea type="text" className='form-control' defaultValue={game.name} name='gameName' />
-                          :
-                          <span> {game.name}</span>}
-                      </td>
-                      <td className='desc-div'>
-                        {editMode.mode === "edit" && editMode.id == game._id ?
-                          <textarea type="text" className='form-control ' defaultValue={game.desc} name='gameDesc' />
-                          :
-                          <span> {game.desc}</span>
-                        }
-                      </td>
-                      <td className='price-div'>
-                        {editMode.mode === "edit" && editMode.id == game._id ?
-                          <textarea type="number" className='form-control' defaultValue={game.price} name="gamePrice" />
-                          :
-                          <span> {game.price}</span>
-                        }
-                      </td>
-                      <td className='platform-div'>
-                        {editMode.mode === "edit" && editMode.id == game._id ?
-                          <span className="h3">hi</span>
-                          // <select id={game._id} className="form-select" aria-label="Default select example">
-                          //   <option defaultValue disabled>Choose the role</option>
-                          //   <option value={roles.superAdmin}>superAdmin</option>
-                          //   <option value={roles.admin}>Admin</option>
-                          //   <option value={roles.game}>game</option>
-                          // </select> 
-                          :
-                          game.platform.map((e, idx) => <span key={idx} className='text-capitalize'> {e + " "}</span>)
-                        }
-                      </td>
-                      <td className='genre-div'>
-                        {editMode.mode === "edit" && editMode.id == game._id ?
-                          <select name='gameGenre' className="form-select" aria-label="Default select example">
-                            <option defaultValue disabled>Choose the Genre</option>
-                            {genres?.map((genre) =>
-                              <option key={genre._id} value={genre._id} className='text-capitalize'>{genre.name}</option>
-                            )}
-                          </select>
-                          :
-                          <span> {game.genreId?.name}</span>
-                        }
-                      </td>
-                      <td className="mange">
-                        {editMode.mode === "edit" && editMode.id == game._id ?
-                          <>
-                            <button onClick={() => saveGame(game._id)} className='btn btn-success m-1 '> Save </button>
-                            <button onClick={() => setEditMode({ id: 0, mode: "view" })} className='btn btn-secondary m-1 '> Cancel </button>
-                          </>
-                          :
-                          <>
-
-                            {game.isDeleted ?
-                              editMode.mode === "editImg" && editMode.id == game._id ? "" : <button onClick={() => { unDeleteGame(game._id) }} className='btn btn-danger m-1'> undelete </button>
-                              :
-                              <>
-                                {editMode.mode === "editImg" && editMode.id == game._id ? "" : game.createdBy._id === profile._id ? <button onClick={() => editGame(game._id)} className='btn btn-info m-1'> Edit </button> : ""}
-                                {game.createdBy._id === profile._id ? <button onClick={() => editImgs(game._id)} className='btn btn-primary m-1'> Imgs </button> : ""}
-                                {editMode.mode === "editImg" && editMode.id == game._id ? "" : <button onClick={() => {
-                                  callModal({
-                                    isMainBtn: true,
-                                    header: "Delete game",
-                                    body: "Are you sure?",
-                                    mainBtnTxt: "Yes",
-                                    mainBtnColor: "danger",
-                                    mainBtnFunc: () => deleteGame(game._id),
-                                    closeBtnTxt: "No",
-                                    closeBtnColor: "success",
-                                  });
-                                }} className='btn btn-danger m-1'> Delete </button>}
-                              </>
-                            }
-                          </>
-                        }
-                      </td>
+              <div className="table-responsive">
+                <table className="table table-striped table-bordered table-hover bg-white border ">
+                  <caption>List of games</caption>
+                  <thead>
+                    <tr>
+                      <th className='opacity-75 ' scope="col">Picture</th>
+                      <th className='opacity-75 ' scope="col">Name</th>
+                      <th className='opacity-75' scope="col">Description</th>
+                      <th className='opacity-75' scope="col">Price</th>
+                      <th className='opacity-75' scope="col">Platform</th>
+                      <th className='opacity-75' scope="col">Genre</th>
+                      <th className='opacity-75' scope="col">Manage</th>
 
                     </tr>
-                  )}
+                  </thead>
+                  <tbody className="table-group-divider">
+                    {games?.map((game) =>
+                      <tr key={game._id} >
+                        <td className='gamePic w-25 w-sm-15 position-relative'>
+                          {editMode.mode === "edit" && editMode.id == game._id ?
+                            <>
+                              <label htmlFor={`gamePic${game._id}`} className='position-absolute top-0 end-0'>
+                                <i className="fa-regular fa-pen-to-square fa-2xl cursor-pointer hover-50"></i>
+                              </label>
+                              <input id={`gamePic${game._id}`} type="file" className='d-none' onChange={viewPic} />
+                            </>
+                            :
+                            ""
+                          }
+                          {editMode.mode === "edit" && editMode.id == game._id && editMode.pic ?
+                            showCropper ?
+                              <div className="text-center">
+                                <Cropper
+                                  id="cropperComp"
+                                  name="gameImg"
+                                  src={editMode.pic}
+                                  initialAspectRatio={6 / 6}
+                                  aspectRatio={6 / 6}
+                                  responsive={true}
+                                  minCropBoxHeight={100}
+                                  minCropBoxWidth={100}
+                                  guides={false}
+                                  autoCropArea={0.9}
+                                  movable={false}
+                                  checkOrientation={true}
+                                  onInitialized={(instance) => {
+                                    setCropper(instance);
+                                  }}
+                                  className="w-100 h-100"
+                                />
+                                <button onClick={getCropData} className="btn btn-outline-info mt-2">Crop Image</button>
+                              </div>
+                              :
+                              <img
+                                src={editMode.pic}
+                                alt={game.slug}
+                                className="rounded-circle img-fluid "
+                                width="150"
+                                name="gameImg"
+                              /> :
+                            <img
+                              src={game.mainPic?.secure_url}
+                              alt={game.slug}
+                              className="rounded-circle img-fluid "
+                              width="150"
+                              name="gameImg"
+                            />
+                          }
+                        </td>
+                        <td className='game-name-t '>
+                          {editMode.mode === "edit" && editMode.id == game._id ?
+                            <textarea type="text" className='form-control' defaultValue={game.name} name='gameName' />
+                            :
+                            <span> {game.name}</span>}
+                        </td>
+                        <td className='desc-div w-50 w-sm-100'>
+                          {editMode.mode === "edit" && editMode.id == game._id ?
+                            <textarea type="text" className='form-control ' defaultValue={game.desc} name='gameDesc' />
+                            :
+                            <span>  {game.desc}</span>
+                          }
+                        </td>
+                        <td className='price-div'>
+                          {editMode.mode === "edit" && editMode.id == game._id ?
+                            <textarea type="number" className='form-control' defaultValue={game.price} name="gamePrice" />
+                            :
+                            <span> {game.price}</span>
+                          }
+                        </td>
+                        <td className='platform-div'>
+                          {editMode.mode === "edit" && editMode.id == game._id ?
+                            <span className="h3">hi</span>
+                            // <select id={game._id} className="form-select" aria-label="Default select example">
+                            //   <option defaultValue disabled>Choose the role</option>
+                            //   <option value={roles.superAdmin}>superAdmin</option>
+                            //   <option value={roles.admin}>Admin</option>
+                            //   <option value={roles.game}>game</option>
+                            // </select> 
+                            :
+                            game.platform.map((e, idx) => <span key={idx} className='text-capitalize'> {e + " "}</span>)
+                          }
+                        </td>
+                        <td className='genre-div'>
+                          {editMode.mode === "edit" && editMode.id == game._id ?
+                            <select name='gameGenre' className="form-select" aria-label="Default select example">
+                              <option defaultValue disabled>Choose the Genre</option>
+                              {genres?.map((genre) =>
+                                <option key={genre._id} value={genre._id} className='text-capitalize'>{genre.name}</option>
+                              )}
+                            </select>
+                            :
+                            <span> {game.genreId?.name}</span>
+                          }
+                        </td>
+                        <td className="mange">
+                          {editMode.mode === "edit" && editMode.id == game._id ?
+                            <>
+                              {showCropper ? "" : <button onClick={() => saveGame(game._id)} className={'btn btn-success m-1 '}> Save </button>}
+                              <button onClick={() => setEditMode({ id: 0, mode: "view" })} className='btn btn-secondary m-1 '> Cancel </button>
+                            </>
+                            :
+                            <>
 
-                </tbody>
-              </table>
+                              {game.isDeleted ?
+                                editMode.mode === "editImg" && editMode.id == game._id ? "" : <button onClick={() => { unDeleteGame(game._id) }} className='btn btn-danger m-1'> undelete </button>
+                                :
+                                <>
+                                  {editMode.mode === "editImg" && editMode.id == game._id ? "" : game.createdBy._id === profile._id ? <button onClick={() => editGame(game._id)} className='btn btn-info m-1'> Edit </button> : ""}
+                                  {game.createdBy._id === profile._id ? <button onClick={() => editImgs(game._id)} className='btn btn-primary m-1'> Imgs </button> : ""}
+                                  {editMode.mode === "editImg" && editMode.id == game._id ? "" : <button onClick={() => {
+                                    callModal({
+                                      isMainBtn: true,
+                                      header: "Delete game",
+                                      body: "Are you sure?",
+                                      mainBtnTxt: "Yes",
+                                      mainBtnColor: "danger",
+                                      mainBtnFunc: () => deleteGame(game._id),
+                                      closeBtnTxt: "No",
+                                      closeBtnColor: "success",
+                                    });
+                                  }} className='btn btn-danger m-1'> Delete </button>}
+                                </>
+                              }
+                            </>
+                          }
+                        </td>
+
+                      </tr>
+                    )}
+
+                  </tbody>
+                </table>
+
+              </div>
 
               <Modal
                 show={showModal}

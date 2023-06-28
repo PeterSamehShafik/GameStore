@@ -5,8 +5,11 @@ import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { roles } from './../../index';
 
-function Navbar({ currentUser, removeUser, cart }) {
+function Navbar({ currentUser, removeUser, cart, setSearch }) {
   const location = useLocation();
+  const handleSearch = (e) => {
+    setSearch(e.target.value)
+  }
   const games = [];
   return (
     <>
@@ -31,18 +34,19 @@ function Navbar({ currentUser, removeUser, cart }) {
             {location.pathname === "/" ? (
               ""
             ) : (
-              <form
+              <div
                 className="d-flex align-items-center m-auto ms-lg-auto w-50"
                 role="search"
               >
                 <input
-                  className="form-control me-2 search"
+                  className="form-control me-2 search text-white"
                   type="search"
                   placeholder="Search games..."
                   aria-label="Search"
+                  onChange={handleSearch}
                 />
-                <i className="fa-solid fa-magnifying-glass"></i>
-              </form>
+                <i className="fa-solid fa-magnifying-glass close-search "></i>
+              </div>
             )}
             <ul className="navbar-nav">
               {location.pathname === "/" ? (
@@ -72,8 +76,8 @@ function Navbar({ currentUser, removeUser, cart }) {
                       className="nav-link text-white fw-bolder ms-2"
                       aria-current="page"
                     >
-                      <Link to={`/profile/info/${currentUser._id}`} onClick={()=>{localStorage.setItem("userId", 'owner')}}>
-                          <img src={currentUser.profilePic.secure_url} className="img-fluid rounded-circle" />
+                      <Link to={`/profile/info/${currentUser._id}`} onClick={() => { localStorage.setItem("userId", 'owner') }}>
+                        <img src={currentUser.profilePic.secure_url} className="img-fluid rounded-circle" />
                         <span className="ms-2">{currentUser?.firstName}</span>
                       </Link>
                     </div>

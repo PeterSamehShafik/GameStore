@@ -111,13 +111,17 @@ function App() {
 
   }
 
+  //search
+  const [search, setSearch] = useState('');
+
+
   useEffect(() => {
     if (localStorage.getItem("token")) {
       currentUser();
     }
   }, [])
   return <>
-    {location.pathname.toLowerCase().includes("cpanel") ? "" : <Navbar currentUser={crrUser} removeUser={removeUser} cart={cart} />}
+    {location.pathname.toLowerCase().includes("cpanel") ? "" : <Navbar currentUser={crrUser} removeUser={removeUser} cart={cart} setSearch={setSearch} />}
 
     {
       crrUser ?
@@ -128,7 +132,7 @@ function App() {
     <Routes>
 
       <Route path='' element={<StartScreen />} />
-      <Route path='home' element={<Home />} />
+      <Route path='home' element={<Home search={search} setSearch={setSearch} />} />
 
       <Route path='cpanel' element={<CPanel removeUser={removeUser} />}>
         <Route
@@ -153,7 +157,7 @@ function App() {
         />
       </Route>
 
-      <Route path='profile' element={<Profile crrUser = {crrUser} currentUser = {currentUser} />} >
+      <Route path='profile' element={<Profile crrUser={crrUser} currentUser={currentUser} />} >
         <Route
           index
           element={<Info />}
