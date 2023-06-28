@@ -225,92 +225,95 @@ export default function UserControl() {
             </div>
             :
             <>
-              <table className="table table-striped table-bordered table-hover bg-white border ">
-                <caption>List of users</caption>
-                <thead>
-                  <tr>
-                    <th className='opacity-75 ' scope="col">Contact</th>
-                    <th className='opacity-75' scope="col">Role</th>
-                    <th className='opacity-75' scope="col">Manage</th>
+              <div className="table-responsive">
+                <table className="table table-striped table-bordered table-hover bg-white border ">
+                  <caption>List of users</caption>
+                  <thead>
+                    <tr>
+                      <th className='opacity-75 ' scope="col">Contact</th>
+                      <th className='opacity-75' scope="col">Role</th>
+                      <th className='opacity-75' scope="col">Manage</th>
 
-                  </tr>
-                </thead>
-                <tbody className="table-group-divider">
-                  {users?.map((user) =>
-                    <tr key={user._id} className={user._id === profile._id ? "table-success" : ""}>
-                      <td className='user-info w-sm-50 w-25 '>
-                        <div className="row align-items-center">
-                          <div className="col-2 d-none d-md-inline">
-                            <img src={user.profilePic?.secure_url} alt={user.firstName} className='img-fluid rounded-circle' />
-                          </div>
-                          <div className="col-5">
-                            <span className='text-muted'>{user.userName}</span>
-                            <h3 className='h6'> {user.email}</h3>
-                            <span class="badge text-bg-secondary opacity-75 text-capitalize fw-bold">{user.accountType}</span>
-                          </div>
-                        </div>
-
-                      </td>
-                      <td className='role-div'>
-                        {editMode.mode === "edit" && editMode.id == user._id ?
-                          <select id={user._id} className="form-select" aria-label="Default select example">
-                            <option defaultValue disabled>Choose the role</option>
-                            <option value={roles.superAdmin}>superAdmin</option>
-                            <option value={roles.admin}>Admin</option>
-                            <option value={roles.user}>User</option>
-                          </select> :
-                          <span> {user.role}</span>
-                        }
-                      </td>
-                      {user._id === profile._id ?
-                        <td>ME</td> :
-                        <td className="mange">
-                          {editMode.mode === "edit" && editMode.id == user._id ?
-                            <button onClick={() => saveUser(user._id)} className='btn btn-success m-1 '> Save </button>
-                            :
-                            <button onClick={() => editUser(user._id)} className='btn btn-info m-1'> Edit </button>
-                          }
-
-                          {!user.isDeleted ?
-                            user.isBlocked ?
-                              <button onClick={() => { unBlockUser(user._id) }} className='btn btn-warning m-1'> Unblock </button> :
-                              <button onClick={() => {
-                                callModal({
-                                  isMainBtn: true,
-                                  header: "Block User",
-                                  body: "Are you sure?",
-                                  mainBtnTxt: "Yes",
-                                  mainBtnColor: "danger",
-                                  mainBtnFunc: () => blockUser(user._id),
-                                  closeBtnTxt: "No",
-                                  closeBtnColor: "success",
-                                });
-                              }} className='btn btn-warning m-1'> Block </button>
-                            : ""}
-
-                          {!user.isBlocked ?
-                            user.isDeleted ?
-                              <button onClick={() => { unDeleteUser(user._id) }} className='btn btn-danger m-1'> undelete </button> :
-                              <button onClick={() => {
-                                callModal({
-                                  isMainBtn: true,
-                                  header: "Delete User",
-                                  body: "Are you sure?",
-                                  mainBtnTxt: "Yes",
-                                  mainBtnColor: "danger",
-                                  mainBtnFunc: () => deleteUser(user._id),
-                                  closeBtnTxt: "No",
-                                  closeBtnColor: "success",
-                                });
-                              }} className='btn btn-danger m-1'> Delete </button>
-                            : ""}
-                        </td>
-                      }
                     </tr>
-                  )}
+                  </thead>
+                  <tbody className="table-group-divider">
+                    {users?.map((user) =>
+                      <tr key={user._id} className={user._id === profile._id ? "table-success" : ""}>
+                        <td className='user-info w-sm-50 w-25 '>
+                          <div className="row align-items-center">
+                            <div className="col-2 d-none d-md-inline">
+                              <img src={user.profilePic?.secure_url} alt={user.firstName} className='img-fluid rounded-circle' />
+                            </div>
+                            <div className="col-5">
+                              <span className='text-muted'>{user.userName}</span>
+                              <h3 className='h6'> {user.email}</h3>
+                              <span class="badge text-bg-secondary opacity-75 text-capitalize fw-bold">{user.accountType}</span>
+                            </div>
+                          </div>
 
-                </tbody>
-              </table>
+                        </td>
+                        <td className='role-div'>
+                          {editMode.mode === "edit" && editMode.id == user._id ?
+                            <select id={user._id} className="form-select" aria-label="Default select example">
+                              <option defaultValue disabled>Choose the role</option>
+                              <option value={roles.superAdmin}>superAdmin</option>
+                              <option value={roles.admin}>Admin</option>
+                              <option value={roles.user}>User</option>
+                            </select> :
+                            <span> {user.role}</span>
+                          }
+                        </td>
+                        {user._id === profile._id ?
+                          <td>ME</td> :
+                          <td className="mange">
+                            {editMode.mode === "edit" && editMode.id == user._id ?
+                              <button onClick={() => saveUser(user._id)} className='btn btn-success m-1 '> Save </button>
+                              :
+                              <button onClick={() => editUser(user._id)} className='btn btn-info m-1'> Edit </button>
+                            }
+
+                            {!user.isDeleted ?
+                              user.isBlocked ?
+                                <button onClick={() => { unBlockUser(user._id) }} className='btn btn-warning m-1'> Unblock </button> :
+                                <button onClick={() => {
+                                  callModal({
+                                    isMainBtn: true,
+                                    header: "Block User",
+                                    body: "Are you sure?",
+                                    mainBtnTxt: "Yes",
+                                    mainBtnColor: "danger",
+                                    mainBtnFunc: () => blockUser(user._id),
+                                    closeBtnTxt: "No",
+                                    closeBtnColor: "success",
+                                  });
+                                }} className='btn btn-warning m-1'> Block </button>
+                              : ""}
+
+                            {!user.isBlocked ?
+                              user.isDeleted ?
+                                <button onClick={() => { unDeleteUser(user._id) }} className='btn btn-danger m-1'> undelete </button> :
+                                <button onClick={() => {
+                                  callModal({
+                                    isMainBtn: true,
+                                    header: "Delete User",
+                                    body: "Are you sure?",
+                                    mainBtnTxt: "Yes",
+                                    mainBtnColor: "danger",
+                                    mainBtnFunc: () => deleteUser(user._id),
+                                    closeBtnTxt: "No",
+                                    closeBtnColor: "success",
+                                  });
+                                }} className='btn btn-danger m-1'> Delete </button>
+                              : ""}
+                          </td>
+                        }
+                      </tr>
+                    )}
+
+                  </tbody>
+                </table>
+
+              </div>
               <Modal
                 show={showModal}
                 onHide={handleCloseModal}

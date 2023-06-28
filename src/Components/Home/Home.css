@@ -1,44 +1,49 @@
-
-main .card{
+main .card {
     cursor: pointer !important;
     transition: all 0.4s !important;
     min-height: 18rem !important;
 }
 
 
-main .card:hover{
+main .card:hover {
     background-color: #383636 !important;
     transform: scale(1.03) !important;
 }
-main .card .img{
+
+main .card .img {
     overflow: hidden !important;
 }
 
-.cart{
+.cart {
     transition: all 0.4s;
     cursor: pointer;
 }
-.cart:hover{
+
+.cart:hover {
     color: blueviolet !important;
 }
 
-main .card-footer{
+main .card-footer {
     border-top: none !important;
 }
 
-.fav{
+.fav {
     transition: all 0.4s;
     cursor: pointer;
 }
-.fav:hover{
+
+.fav:hover {
     color: red !important;
 }
 
-.col-md-6, .col-lg-4, .col-md-6, .col-lg-6{
+.col-md-6,
+.col-lg-4,
+.col-md-6,
+.col-lg-6 {
     transition: all 0.2s;
 }
 
-.games img{
+.games img {
     height: 250px;
     object-fit: cover;
 }
@@ -56,9 +61,9 @@ main .card-footer{
     left: -40px;
     top: 5px;
     color: #fff;
-  }
-  
-  .my-badge::before {
+}
+
+.my-badge::before {
     content: "";
     border-bottom: 11px solid #2d6824;
     border-left: 11px solid transparent;
@@ -66,8 +71,9 @@ main .card-footer{
     left: -27px;
     top: 24px;
     position: absolute;
-  }
-  .my-badge::after {
+}
+
+.my-badge::after {
     content: "";
     border-bottom: 11px solid #2d6824;
     border-left: 11px solid transparent;
@@ -75,5 +81,27 @@ main .card-footer{
     left: 76px;
     top: 24px;
     position: absolute;
-  }
-  
+}
+
+
+/* rate on card */
+.card-rate {
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: yellow !important;
+
+}
+
+
+/* active genre */
+.genres .active {
+    transition: all 0.2s;
+}
+.genres .nav-item.active {
+    border-left: 5px solid rgb(53, 255, 53) !important;
+    background-color: #16490e !important;
+    padding: 0.7rem;
+}

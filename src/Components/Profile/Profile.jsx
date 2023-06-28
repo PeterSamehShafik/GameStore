@@ -16,6 +16,7 @@ export default function Profile({ crrUser, currentUser }) {
   // crop Image
   const [showCropper, setShowCropper] = useState(false)
   const [cropper, setCropper] = useState(null)
+  //end of crop
   const [isFollowed, setIsFollowed] = useState(false)
   const [profile, setProfile] = useState(null);
   const [pathname, setPathname] = useState("");
@@ -157,6 +158,7 @@ export default function Profile({ crrUser, currentUser }) {
           temp.profilePic.secure_url = response.data.updatedUser.profilePic.secure_url;
           setProfile(temp);
           setFile(null);
+          currentUser()
         }
       })
       .catch((error) => {
@@ -293,7 +295,7 @@ export default function Profile({ crrUser, currentUser }) {
                                 guides={false}
                                 autoCropArea={0.9}
                                 movable={false}
-                                cropBoxResizable={false}
+                                
                                 checkOrientation={true}
                                 onInitialized={(instance) => {
                                   setCropper(instance);

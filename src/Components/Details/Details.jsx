@@ -297,23 +297,23 @@ function Details({ currentUser, getCart, cart }) {
     // const localWishlist = JSON.parse(localStorage.getItem("wishlist"));
     // const res = localWishlist?.find(e => e == game.id);
     // if (!res) {
-      const config = {
-        headers: {
-          authorization: BEARERKEY + localStorage.getItem("token"),
-        },
-      };
-      const result = await axios
-        .patch(`${baseURL}/user/wishlist/add/${game._id}`, {}, config)
-        .catch((error) => {
-          console.log(error);
-        });
-      if (result?.data?.message == "done") {
-        console.log(JSON.stringify(result?.data?.update?.wishList))
-        localStorage.setItem("wishlist", JSON.stringify(result?.data?.update?.wishList))
-        setIsInWishlist(true);
-      } else {
-        alert("Failed to add game to wishlist");
-      }
+    const config = {
+      headers: {
+        authorization: BEARERKEY + localStorage.getItem("token"),
+      },
+    };
+    const result = await axios
+      .patch(`${baseURL}/user/wishlist/add/${game._id}`, {}, config)
+      .catch((error) => {
+        console.log(error);
+      });
+    if (result?.data?.message == "done") {
+      console.log(JSON.stringify(result?.data?.update?.wishList))
+      localStorage.setItem("wishlist", JSON.stringify(result?.data?.update?.wishList))
+      setIsInWishlist(true);
+    } else {
+      alert("Failed to add game to wishlist");
+    }
     // } 
   };
   // const checkWishList = () => {
@@ -358,13 +358,15 @@ function Details({ currentUser, getCart, cart }) {
           </div>
         </div>
       ) : game ? (
-        <div className="container-fluid px-5 ">
-          <header className="d-flex justify-content-between align-items-center mb-2">
-            <Link to="/home" className="back-store h4 fw-bolder">
-              <i className="fa-solid fa-arrow-left me-2"></i>
-              <strong>Store</strong>
-            </Link>
-          </header>
+        <div className="container-fluid px-sm-5 p-1 ">
+          <div className="row">
+            <header className="d-flex justify-content-between align-items-center mb-2">
+              <Link to="/home" className="back-store h4 fw-bolder">
+                <i className="fa-solid fa-arrow-left me-2"></i>
+                <strong>Store</strong>
+              </Link>
+            </header>
+          </div>
           <div className="row">
             <div className=" col-lg-4 ">
               <div className="game-pic-vid d-flex flex-column align-items-center">
@@ -405,8 +407,8 @@ function Details({ currentUser, getCart, cart }) {
                 </div>
                 <div className="rating mx-auto d-flex flex-column align-items-center mt-3">
                   {game.avgRate ? (
-                    <div className="game-rating d-flex ">
-                      <span className="fs-1 bg-warning px-4 rounded-circle fw-bold d-flex justify-content-center align-items-center">
+                    <div className=" d-flex ">
+                      <span className=" game-rating  rounded-circle fa-2xl bg-warning fw-bold d-flex justify-content-center align-items-center">
                         {game.avgRate}
                       </span>
                       <div className="rate-info ms-2">
@@ -466,14 +468,14 @@ function Details({ currentUser, getCart, cart }) {
                                 {game.genreId ? "Genre: " : ""}
                                 {game.genreId?.name}{" "}
                               </li>
-                              <Link to={`/profile/info/${game.createdBy._id}`} onClick={()=>{localStorage.setItem("userId", 'user')}}>
+                              <Link to={`/profile/info/${game.createdBy._id}`} onClick={() => { localStorage.setItem("userId", 'user') }}>
                                 <li className="text-white-50">
                                   {
-                                    game?.createdBy._id === currentUser?._id?
-                                    ''
-                                    :
-                                    <span> Publisher: <span className="publisher">{game.createdBy.firstName}{" "}
-                                    {game.createdBy.lastName}</span> </span>
+                                    game?.createdBy._id === currentUser?._id ?
+                                      ''
+                                      :
+                                      <span> Publisher: <span className="publisher">{game.createdBy.firstName}{" "}
+                                        {game.createdBy.lastName}</span> </span>
                                   }
                                 </li>
                               </Link>
@@ -498,10 +500,10 @@ function Details({ currentUser, getCart, cart }) {
                   </div>
                 </div>
               </div>
-              <div className="game-carousal mt-2">
+              <div className="game-carousal mt-2 w-100">
                 {game?.pics[0]?.secure_url ? (
                   <>
-                    <h2>Game Images:</h2> <hr />
+                    <h2 className="ps-2">Game Images:</h2> <hr />
                     <Carousel infiniteLoop showStatus={false}>
                       {game.pics.map((image, idx) => {
                         return (
@@ -523,22 +525,22 @@ function Details({ currentUser, getCart, cart }) {
                 <div className="price-lv h5 text-muted">
                   <span className="fw-bolder m-0 me-2">${game.price}</span>
                   <span
-                      className="fav ms-auto h4 disabled"
-                      onClick={addToWishList}
-                    >
-                      {
-                        isInWishlist?
+                    className="fav ms-auto h4 disabled"
+                    onClick={addToWishList}
+                  >
+                    {
+                      isInWishlist ?
                         <i className="fa-solid fa-heart"></i>
                         :
                         ''
-                      }
-                      {
-                        !isInWishlist?
+                    }
+                    {
+                      !isInWishlist ?
                         <i className="fa-regular fa-heart"></i>
                         :
                         ''
-                      }
-                    </span>
+                    }
+                  </span>
                 </div>
                 {game.createdBy?._id == currentUser?._id ? (
                   <span className="fw-bolder text-success pe-2">Creator</span>
@@ -655,8 +657,8 @@ function Details({ currentUser, getCart, cart }) {
                                 </div>
                               </div>
                               {comment?.createdBy?._id == currentUser?._id ||
-                              currentUser?.role == "superAdmin" ||
-                              game?.createdBy?._id == currentUser?._id ? (
+                                currentUser?.role == "superAdmin" ||
+                                game?.createdBy?._id == currentUser?._id ? (
                                 <div className="dropdownmenu ms-auto">
                                   <div className="dropdown">
                                     <button
@@ -674,7 +676,7 @@ function Details({ currentUser, getCart, cart }) {
                                       aria-labelledby="dropdownMenuButton1"
                                     >
                                       {comment?.createdBy?._id ==
-                                      currentUser?._id ? (
+                                        currentUser?._id ? (
                                         <>
                                           <span
                                             onClick={() => {
@@ -691,8 +693,8 @@ function Details({ currentUser, getCart, cart }) {
                                       )}
                                       {comment?.createdBy?._id ==
                                         currentUser?._id ||
-                                      currentUser?.role == "superAdmin" ||
-                                      game?.createdBy?._id ==
+                                        currentUser?.role == "superAdmin" ||
+                                        game?.createdBy?._id ==
                                         currentUser?._id ? (
                                         <span
                                           className="cursor-pointer text-danger hover-75 dropdown-item"
