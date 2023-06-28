@@ -42,3 +42,38 @@ main .card-footer{
     height: 250px;
     object-fit: cover;
 }
+
+/* Badge */
+.my-badge {
+    position: absolute;
+    border-bottom: 30px solid #4d9c40;
+    border-left: 30px solid transparent;
+    border-right: 30px solid transparent;
+    height: 0;
+    width: 120px;
+    text-align: center;
+    transform: rotate(-45deg);
+    left: -40px;
+    top: 5px;
+    color: #fff;
+  }
+  
+  .my-badge::before {
+    content: "";
+    border-bottom: 11px solid #2d6824;
+    border-left: 11px solid transparent;
+    transform: rotate(45deg);
+    left: -27px;
+    top: 24px;
+    position: absolute;
+  }
+  .my-badge::after {
+    content: "";
+    border-bottom: 11px solid #2d6824;
+    border-left: 11px solid transparent;
+    transform: rotate(45deg);
+    left: 76px;
+    top: 24px;
+    position: absolute;
+  }
+  

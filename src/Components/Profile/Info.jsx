@@ -66,7 +66,6 @@ export default function Info() {
           console.log(error.response);
         }
       });
-      console.log(result)
       if (result?.data?.message === "done") {
         setRegFlag(false);
         setInfo(result.data.updatedUser)

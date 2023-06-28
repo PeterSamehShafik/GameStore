@@ -100,7 +100,7 @@ export default function Wishlist() {
             <div className="row">
               {wishList?.map((game, idx) =>
                   <div className="col-xl-4 col-sm-6" key={idx}>
-                    <div className="card rounded-3 bg-grey text-center mb-3">
+                    <div className="card rounded-3 bg-grey text-center mb-3 hover-50">
                       <Link
                           to={`/details/${game.slug}/${game._id}`}
                         >

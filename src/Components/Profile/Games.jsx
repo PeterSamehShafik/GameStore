@@ -30,12 +30,12 @@ export default function Games() {
             {
               games?.map((game, idx) => {
                 return <div className="col-xl-4 col-sm-6" key={idx}>
-                <div className="card rounded-3 bg-grey mb-3 text-center">
+                <div className="card rounded-3 bg-grey mb-3 text-center hover-50">
                   <img src={game.mainPic.secure_url} className="card-img-top img-fluid" alt="..." />
-                  <div className="card-body">
+                  <div className="card-body pb-0 px-0">
                     <h5 className="card-title text-truncate">{game.name}</h5>
-                    <div className="ms-auto">
-                      <Link to={`/details/${game.gameSlug}/${game._id}`} className="btn btn-primary">Go to game</Link>
+                    <div className="mt-3">
+                      <Link to={`/details/${game.gameSlug}/${game._id}`} className="btn btn-outline-primary w-100">Go to game</Link>
                     </div>
                   </div>
                 </div>

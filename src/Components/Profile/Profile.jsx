@@ -5,7 +5,8 @@ import axios from "axios";
 import { baseURL, BEARERKEY } from "./../../index.js";
 import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
-
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 
 export default function Profile({ crrUser, currentUser }) {
   const { id } = useParams();
@@ -20,6 +21,49 @@ export default function Profile({ crrUser, currentUser }) {
   const [pathname, setPathname] = useState("");
   const [file, setFile] = useState(null);
   const [reload, setReload] = useState(false)
+
+  //modal
+  const [showModal, setShowModal] = useState(false);
+  const [modalData, setModalData] = useState({
+    header: "",
+    body: "",
+    isMainBtn: true,
+  });
+  const handleCloseModal = () => setShowModal(false);
+  const handleShowModal = () => setShowModal(true);
+
+  const callModal = ({
+    header = "Are you sure?",
+    body,
+    closeBtnColor = "secondary",
+    closeBtnTxt = "Close",
+    mainBtnColor = "primary",
+    mainBtnTxt,
+    mainBtnFunc,
+    isMainBtn = true,
+    isCloseBtn = true,
+    isStatic = false
+  } = {}) => {
+    setModalData({
+      ...modalData,
+      header,
+      body,
+      closeBtnColor,
+      closeBtnTxt,
+      mainBtnColor,
+      mainBtnTxt,
+      mainBtnFunc,
+      isMainBtn,
+      isCloseBtn,
+      isStatic
+    });
+    handleShowModal();
+  };
+  const applyCloseModel = () => {
+    modalData.mainBtnFunc();
+    handleCloseModal();
+  };
+  //end of modal
 
   const navigate = useNavigate();
 
@@ -82,6 +126,13 @@ export default function Profile({ crrUser, currentUser }) {
     if (!file) {
       return;
     }
+    callModal({
+      header: "Loading",
+      body: "Please wait....",
+      isMainBtn: false,
+      isCloseBtn: false,
+      isStatic: true
+    });
     const formData = new FormData();
     formData.append("image", file);
     await axios
@@ -100,6 +151,8 @@ export default function Profile({ crrUser, currentUser }) {
       .then((response) => {
         // handle the response
         if (response.data.message === "done") {
+          handleCloseModal();
+          callModal({ header: "Success!", body: "The profile picture updated successfully", isMainBtn: false, closeBtnTxt: "Close", closeBtnColor: "success" })
           let temp = { ...profile };
           temp.profilePic.secure_url = response.data.updatedUser.profilePic.secure_url;
           setProfile(temp);
@@ -108,7 +161,13 @@ export default function Profile({ crrUser, currentUser }) {
       })
       .catch((error) => {
         // handle errors
-        console.log(error);
+        console.log(error)
+        callModal({
+          header: "Error",
+          body: "Something went wrong, please try again",
+          isMainBtn: false,
+          closeBtnTxt: "OK",
+        });
       });
   };
   const removePic = () => {
@@ -182,9 +241,11 @@ export default function Profile({ crrUser, currentUser }) {
   useEffect(() => {
     getProfile();
   }, []);
+  
   useEffect(() => {
     checkIsFollowed();
   }, [crrUser]);
+
   useEffect(() => {
     getProfile();
   }, [localStorage.getItem('id')]);
@@ -192,217 +253,256 @@ export default function Profile({ crrUser, currentUser }) {
   return (
     <>
       {profile && !reload ? (
-        <div className="container profile">
-          <header className="d-flex justify-content-between align-items-center mb-2">
-            <Link to="/home" className="back-store h4 fw-bolder text-white">
-              <i className="fa-solid fa-arrow-left me-2"></i>
-              <strong>Store</strong>
-            </Link>
-          </header>
-          <div className="main-body">
-            <div className="row">
-              <div className="col-md-4">
-                <div className="card ">
-                  <div className="card-body">
-                    <div className="d-flex flex-column align-items-center">
-                      <div className="profile-img position-relative">
-                        {
-                          localStorage.getItem("userId") === "user"?
-                          ''
-                          :
-                          <div className="image-upload position-absolute top-0 end-0">
-                            <label htmlFor="file-input">
-                              <i className="fa-regular fa-pen-to-square fa-lg"></i>
-                            </label>
-                            <input id="file-input" type="file" onChange={inputImage}/>
-                          </div>
-                        }
-                        {
-                          showCropper?
-                          <div className="text-center">
-                            <Cropper
-                              id="cropperComp"
-                              src={profile.temp}
-                              initialAspectRatio={6 / 6}
-                              aspectRatio = {6/6}
-                              responsive = {true}
-                              minCropBoxHeight={100}
-                              minCropBoxWidth={100}
-                              guides={false}
-                              autoCropArea={0.9}
-                              movable={false}
-                              cropBoxResizable={false}
-                              checkOrientation={true}
-                              onInitialized={(instance) => {
-                                setCropper(instance);
-                              }}
-                              className="w-100 h-100"
-                            />
-                            <button onClick={getCropData} className="btn btn-outline-info mt-2">Crop Image</button>
-                          </div>
-                          :
-                          <img
-                            src={
-                              profile.temp
-                                ? profile.temp
-                                : profile.profilePic?.secure_url
-                            }
-                            alt="Profile"
-                            className="rounded-circle img-fluid "
-                            width="150"
-                          />
-                        }
-                      </div>
-                      <div className="save-image-buttons d-flex justify-content-between">
-                        {file && !showCropper? (
-                          <div className="mt-2">
-                            <button
-                              className="btn btn-success btn-sm me-2"
-                              onClick={saveImage}
-                            >
-                              {" "}
-                              Save{" "}
-                            </button>
-                            <button
-                              className="btn btn-danger btn-sm"
-                              onClick={removePic}
-                            >
-                              {" "}
-                              Cancel{" "}
-                            </button>
-                          </div>
-                        ) : (
-                          ""
-                        )}
-                      </div>
-                      <div className="mt-3 text-center">
-                        <h4>
-                          {profile.firstName} {profile.lastName}
-                        </h4>
-                        <h6 className="text-muted text-center">
-                          username: {profile.userName}
-                        </h6>
-                        {
-                          localStorage.getItem("userId") === "owner"?
-                          ''
-                          :
-                          isFollowed?
-                          <button className="btn btn-info mt-2" onClick ={removeFollowing}> Unfollow  </button>
-                          :
-                          <button className="btn btn-outline-info mt-2" onClick={addFollowing}> Follow </button>
-                        }
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-8">
-                <div className="card mb-3">
-                  <nav className="navbar navbar-expand-sm navbar-light bg-dark-grey">
-                    <div className="">
-                      <div className="ms-auto">
-                        <button
-                          className="navbar-toggler"
-                          type="button"
-                          data-bs-toggle="collapse"
-                          data-bs-target="#navbarNav"
-                          aria-controls="navbarNav"
-                          aria-expanded="false"
-                          aria-label="Toggle navigation"
-                        >
-                          <span className="navbar-toggler-icon"></span>
-                        </button>
-                      </div>
-                      <div className="collapse navbar-collapse" id="navbarNav">
-                        <ul className="fs-6 py-2 px-4 mb-0 rounded-2 navbar-nav">
-                          <li
-                            className="nav-item me-lg-5 me-sm-3"
-                            onClick={modifyButtons}
-                          >
-                            <Link
-                              className={
-                                pathname === "info" ? "text-violet" : ""
-                              }
-                              to="info"
-                              id="info"
-                            >
-                              Info
-                            </Link>
-                          </li>
+        <>
+          <div className="container profile">
+            <header className="d-flex justify-content-between align-items-center mb-2">
+              <Link to="/home" className="back-store h4 fw-bolder text-white">
+                <i className="fa-solid fa-arrow-left me-2"></i>
+                <strong>Store</strong>
+              </Link>
+            </header>
+            <div className="main-body">
+              <div className="row">
+                <div className="col-md-4">
+                  <div className="card ">
+                    <div className="card-body">
+                      <div className="d-flex flex-column align-items-center">
+                        <div className="profile-img position-relative">
                           {
                             localStorage.getItem("userId") === "user"?
                             ''
                             :
-                            <>
+                            <div className="image-upload position-absolute top-0 end-0">
+                              <label htmlFor="file-input">
+                                <i className="fa-regular fa-pen-to-square fa-lg"></i>
+                              </label>
+                              <input id="file-input" type="file" onChange={inputImage}/>
+                            </div>
+                          }
+                          {
+                            showCropper?
+                            <div className="text-center">
+                              <Cropper
+                                id="cropperComp"
+                                src={profile.temp}
+                                initialAspectRatio={6 / 6}
+                                aspectRatio = {6/6}
+                                responsive = {true}
+                                minCropBoxHeight={100}
+                                minCropBoxWidth={100}
+                                guides={false}
+                                autoCropArea={0.9}
+                                movable={false}
+                                cropBoxResizable={false}
+                                checkOrientation={true}
+                                onInitialized={(instance) => {
+                                  setCropper(instance);
+                                }}
+                                className="w-100 h-100"
+                              />
+                              <button onClick={getCropData} className="btn btn-outline-info mt-2">Crop Image</button>
+                            </div>
+                            :
+                            <img
+                              src={
+                                profile.temp
+                                  ? profile.temp
+                                  : profile.profilePic?.secure_url
+                              }
+                              alt="Profile"
+                              className="rounded-circle img-fluid "
+                              width="150"
+                            />
+                          }
+                        </div>
+                        <div className="save-image-buttons d-flex justify-content-between">
+                          {file && !showCropper? (
+                            <div className="mt-2">
+                              <button
+                                className="btn btn-success btn-sm me-2"
+                                onClick={saveImage}
+                              >
+                                {" "}
+                                Save{" "}
+                              </button>
+                              <button
+                                className="btn btn-danger btn-sm"
+                                onClick={removePic}
+                              >
+                                {" "}
+                                Cancel{" "}
+                              </button>
+                            </div>
+                          ) : (
+                            ""
+                          )}
+                        </div>
+                        <div className="mt-3 text-center">
+                          <h4>
+                            {profile.firstName} {profile.lastName}
+                          </h4>
+                          <h6 className="text-muted text-center">
+                            username: {profile.userName}
+                          </h6>
+                          {
+                            localStorage.getItem("userId") === "owner"?
+                            ''
+                            :
+                            isFollowed?
+                            <button className="btn btn-info mt-2" onClick ={removeFollowing}> Unfollow  </button>
+                            :
+                            <button className="btn btn-outline-info mt-2" onClick={addFollowing}> Follow </button>
+                          }
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-8">
+                  <div className="card mb-3">
+                    <nav className="navbar navbar-expand-sm navbar-light bg-dark-grey">
+                      <div className="">
+                        <div className="ms-auto">
+                          <button
+                            className="navbar-toggler"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#navbarNav"
+                            aria-controls="navbarNav"
+                            aria-expanded="false"
+                            aria-label="Toggle navigation"
+                          >
+                            <span className="navbar-toggler-icon"></span>
+                          </button>
+                        </div>
+                        <div className="collapse navbar-collapse" id="navbarNav">
+                          <ul className="fs-6 py-2 px-4 mb-0 rounded-2 navbar-nav">
                             <li
-                              className="nav-item me-lg-5 me-sm-3 "
+                              className="nav-item me-lg-5 me-sm-3"
                               onClick={modifyButtons}
                             >
                               <Link
                                 className={
-                                  pathname === "activity" ? "text-violet" : ""
+                                  pathname === "info" ? "text-violet" : ""
                                 }
-                                to="activity"
-                                id="activity"
+                                to="info"
+                                id="info"
                               >
-                                Activity
+                                Info
+                              </Link>
+                            </li>
+                            {
+                              localStorage.getItem("userId") === "user"?
+                              ''
+                              :
+                              <>
+                              <li
+                                className="nav-item me-lg-5 me-sm-3 "
+                                onClick={modifyButtons}
+                              >
+                                <Link
+                                  className={
+                                    pathname === "activity" ? "text-violet" : ""
+                                  }
+                                  to="activity"
+                                  id="activity"
+                                >
+                                  Activity
+                                </Link>
+                              </li>
+                              <li
+                                className="nav-item me-lg-5 me-sm-3"
+                                onClick={modifyButtons}
+                              >
+                                
+                                <Link
+                                  className={
+                                    pathname === "wishlist" ? "text-violet" : ""
+                                  }
+                                  to="wishlist"
+                                  id="wishlist"
+                                >
+                                  Wishlist
+                                </Link>
+                              </li>
+                              </>
+                            }
+                            <li
+                              className="nav-item me-lg-5 me-sm-3"
+                              onClick={modifyButtons}
+                            >
+                              <Link
+                                className={
+                                  pathname === "following" ? "text-violet" : ""
+                                }
+                                to="following"
+                                id="following"
+                              >
+                                Followers
                               </Link>
                             </li>
                             <li
                               className="nav-item me-lg-5 me-sm-3"
                               onClick={modifyButtons}
                             >
-                              
                               <Link
                                 className={
-                                  pathname === "wishlist" ? "text-violet" : ""
+                                  pathname === "games" ? "text-violet" : ""
                                 }
-                                to="wishlist"
-                                id="wishlist"
+                                to="games"
+                                id="games"
                               >
-                                Wishlist
+                                Games
                               </Link>
                             </li>
-                            </>
-                          }
-                          <li
-                            className="nav-item me-lg-5 me-sm-3"
-                            onClick={modifyButtons}
-                          >
-                            <Link
-                              className={
-                                pathname === "following" ? "text-violet" : ""
-                              }
-                              to="following"
-                              id="following"
-                            >
-                              Followers
-                            </Link>
-                          </li>
-                          <li
-                            className="nav-item me-lg-5 me-sm-3"
-                            onClick={modifyButtons}
-                          >
-                            <Link
-                              className={
-                                pathname === "games" ? "text-violet" : ""
-                              }
-                              to="games"
-                              id="games"
-                            >
-                              Games
-                            </Link>
-                          </li>
-                        </ul>
+                          </ul>
+                        </div>
                       </div>
-                    </div>
-                  </nav>
+                    </nav>
+                  </div>
+                  <Outlet context={[profile, setProfile, getProfile]} />
                 </div>
-                <Outlet context={[profile, setProfile, getProfile]} />
               </div>
             </div>
           </div>
-        </div>
+          <Modal
+                show={showModal}
+                onHide={handleCloseModal}
+                className="text-white"
+                backdrop={modalData.isStatic ? "static" : true}
+                keyboard={modalData.isStatic ? false : true}
+              >
+                {modalData.isStatic ?
+                  <Modal.Header >
+                    <Modal.Title>{modalData.header}</Modal.Title>
+                  </Modal.Header> :
+                  <Modal.Header closeButton>
+                    <Modal.Title>{modalData.header}</Modal.Title>
+                  </Modal.Header>}
+
+                <Modal.Body>{modalData.body}</Modal.Body>
+                <Modal.Footer>
+                  {modalData.isCloseBtn == true ?
+                    <Button
+                      variant={modalData.closeBtnColor}
+                      onClick={handleCloseModal}
+                    >
+                      {modalData.closeBtnTxt}
+                    </Button> : ""}
+                  {modalData.isMainBtn == true ? (
+                    <Button
+                      variant={modalData.mainBtnColor}
+                      onClick={applyCloseModel}
+                    >
+                      {modalData.mainBtnTxt}
+                    </Button>
+                  ) : (
+                    ""
+                  )}
+                </Modal.Footer>
+              </Modal>
+        </>
+      
       ) : (
         <div className="w-100 vh-100 d-flex justify-content-center align-items-center position-absolute top-0">
           <div className="sk-chase">
