@@ -105,31 +105,31 @@ function Details({ currentUser, getCart, cart }) {
         },
       };
     }
-    const { data } = await axios
+    const result = await axios
       .get(`${baseURL}/game/${id}`, config)
       .catch(function (error) {
         if (error.response) {
           setGame(null);
         }
       });
-    if (data.message == "done") {
-      setGame(data.game);
-      setUserRate(data.game.userRate);
+    if (result?.data?.message == "done") {
+      setGame(result.data.game);
+      setUserRate(result.data.game.userRate);
     } else {
       setGame(null);
     }
   };
   const getGameComment = async () => {
-    const { data } = await axios
+    const result = await axios
       .get(`${baseURL}/game/${id}/comment`)
       .catch(function (error) {
         if (error.response) {
           setComments(null);
         }
       });
-    if (data.message == "done") {
-      data.comments.reverse();
-      setComments(data.comments);
+    if (result?.data?.message == "done") {
+      result.data.comments.reverse();
+      setComments(result.data.comments);
     } else {
       setComments(null);
     }
@@ -466,10 +466,15 @@ function Details({ currentUser, getCart, cart }) {
                                 {game.genreId ? "Genre: " : ""}
                                 {game.genreId?.name}{" "}
                               </li>
-                              <Link to={`/profile/info/${game.createdBy._id}`}>
+                              <Link to={`/profile/info/${game.createdBy._id}`} onClick={()=>{localStorage.setItem("userId", 'user')}}>
                                 <li className="text-white-50">
-                                  Publisher: {game.createdBy.firstName}{" "}
-                                  {game.createdBy.lastName}{" "}
+                                  {
+                                    game?.createdBy._id === currentUser?._id?
+                                    ''
+                                    :
+                                    <span> Publisher: <span className="publisher">{game.createdBy.firstName}{" "}
+                                    {game.createdBy.lastName}</span> </span>
+                                  }
                                 </li>
                               </Link>
                             </ul>
@@ -782,7 +787,7 @@ function Details({ currentUser, getCart, cart }) {
         </div>
       ) : (
         <div className="m-auto d-flex flex-column align-items-center mt-5">
-          <img src="/error?.png" className="img-fluid w-25" alt="" srcset="" />
+          <img src="/error?.png" className="img-fluid w-25" alt="" srcSet="" />
           <p className="fs-1 mx-auto">Something went wrong....</p>
           <p className="fs-1 mx-auto">Please try again</p>
         </div>

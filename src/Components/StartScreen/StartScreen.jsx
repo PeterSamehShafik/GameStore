@@ -11,7 +11,9 @@ function StartScreen() {
     })
     const getRandomGame = async() => {
         const result = await axios.get(`${baseURL}/game/random`).catch((e) => {console.log(e)})
-        setGame(result.data.game)
+        if(result?.data?.message === "done"){
+            setGame(result?.data?.game)
+        }
     }
     useEffect(() => {
         getRandomGame()

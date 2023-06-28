@@ -8,9 +8,6 @@ import { roles } from './../../index';
 function Navbar({ currentUser, removeUser, cart }) {
   const location = useLocation();
   const games = [];
-  const removeVisitorId = () => {
-      localStorage.removeItem("userId")
-  }
   return (
     <>
       <nav className="navbar top-nav navbar-expand-lg navbar-dark text-white position-sticky ">
@@ -75,7 +72,7 @@ function Navbar({ currentUser, removeUser, cart }) {
                       className="nav-link text-white fw-bolder ms-2"
                       aria-current="page"
                     >
-                      <Link to="/profile/info" onClick={removeVisitorId}>
+                      <Link to={`/profile/info/${currentUser._id}`} onClick={()=>{localStorage.setItem("userId", 'owner')}}>
                           <img src={currentUser.profilePic.secure_url} className="img-fluid rounded-circle" />
                         <span className="ms-2">{currentUser?.firstName}</span>
                       </Link>

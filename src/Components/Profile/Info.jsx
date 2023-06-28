@@ -160,7 +160,7 @@ export default function Info() {
                 :
                   <div className="profileData position-relative">
                     {
-                      localStorage.getItem("userId")?
+                      localStorage.getItem("userId") === "user"?
                       ''
                       :
                       <i className="fa-regular fa-pen-to-square fa-lg position-absolute top-0 end-0" onClick={()=>{setEdit(true)}}></i>

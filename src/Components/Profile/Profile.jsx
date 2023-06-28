@@ -1,25 +1,30 @@
 import React, { useEffect, useState } from "react";
 import "./Profile.css";
-import { Link, Outlet, useParams } from "react-router-dom";
+import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { baseURL, BEARERKEY } from "./../../index.js";
 import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
 
 
-export default function Profile() {
+export default function Profile({ crrUser, currentUser }) {
   const { id } = useParams();
   if(id){
-    localStorage.setItem("userId", id);
+    localStorage.setItem('id', id)
   }
   // crop Image
   const [showCropper, setShowCropper] = useState(false)
   const [cropper, setCropper] = useState(null)
-
+  const [isFollowed, setIsFollowed] = useState(false)
   const [profile, setProfile] = useState(null);
   const [pathname, setPathname] = useState("");
   const [file, setFile] = useState(null);
+  const [reload, setReload] = useState(false)
+
+  const navigate = useNavigate();
+
   const getProfile = async () => {
+    setReload(true);
     const config = {
       headers: {
         authorization: BEARERKEY + localStorage.getItem("token"),
@@ -32,10 +37,15 @@ export default function Profile() {
           if (error.response) {
             console.log(error.response);
           }
+          if(error.response?.data?.message === "JsonWebTokenError: jwt malformed"){
+            navigate("/login");
+          }
         });
-      if (result?.data?.message === "done") {
+        if (result?.data?.message === "done") {
         setProfile(result.data.user);
+        setReload(false);
       }
+
     } else {
       const result = await axios
         .get(`${baseURL}/user/profile`, config)
@@ -43,15 +53,22 @@ export default function Profile() {
           if (error.response) {
             console.log(error.response);
           }
+          if(error.response?.data?.message === "JsonWebTokenError: jwt malformed"){
+            navigate("/login");
+          }
         });
       if (result?.data?.message === "done") {
         setProfile(result.data.user);
+        setReload(false);
       }
     }
+    checkIsFollowed();
   };
   function modifyButtons(e) {
     setPathname(e.target.id);
   }
+
+  //Edit Image
   const inputImage = (e) => {
     if (e.target.files) {
       setFile(e.target.files[0]);
@@ -101,7 +118,6 @@ export default function Profile() {
     setShowCropper(false)
     setFile(null);
   };
-
   const getCropData = async () => {
     if (cropper) {
       const file = await fetch(cropper.getCroppedCanvas().toDataURL())
@@ -118,13 +134,64 @@ export default function Profile() {
       }
     }
   };
+
+  //Following
+  const checkIsFollowed = () => {
+    let checkId = localStorage.getItem("id")
+    if(crrUser){
+      const check = crrUser?.following.find(person=>person._id === checkId)
+      if (check) {
+        setIsFollowed(true)
+      } else {
+        setIsFollowed(false)
+      }
+    }
+  }
+  const removeFollowing = async () => {
+    const config = {
+      headers: {
+        authorization: BEARERKEY + localStorage.getItem("token"),
+      },
+    };
+    const result = await axios
+      .patch(`${baseURL}/user/following/remove/${id}`,{body:""}, config)
+      .catch((e) => {
+        console.log(e);
+      });
+    if (result?.data?.message === "done") {
+      setIsFollowed(false);
+      currentUser();
+    }
+  };
+  const addFollowing = async() => {
+    const config = {
+      headers: {
+        authorization: BEARERKEY + localStorage.getItem("token"),
+      },
+    };
+    const result = await axios
+      .patch(`${baseURL}/user/following/add/${id}`,{body:""}, config)
+      .catch((e) => {
+        console.log(e);
+      });
+    if (result?.data?.message === "done") {
+      setIsFollowed(true);
+      currentUser()
+    }
+  }
   useEffect(() => {
     getProfile();
   }, []);
+  useEffect(() => {
+    checkIsFollowed();
+  }, [crrUser]);
+  useEffect(() => {
+    getProfile();
+  }, [localStorage.getItem('id')]);
 
   return (
     <>
-      {profile ? (
+      {profile && !reload ? (
         <div className="container profile">
           <header className="d-flex justify-content-between align-items-center mb-2">
             <Link to="/home" className="back-store h4 fw-bolder text-white">
@@ -140,7 +207,7 @@ export default function Profile() {
                     <div className="d-flex flex-column align-items-center">
                       <div className="profile-img position-relative">
                         {
-                          localStorage.getItem("userId")?
+                          localStorage.getItem("userId") === "user"?
                           ''
                           :
                           <div className="image-upload position-absolute top-0 end-0">
@@ -208,13 +275,22 @@ export default function Profile() {
                           ""
                         )}
                       </div>
-                      <div className="mt-3">
+                      <div className="mt-3 text-center">
                         <h4>
                           {profile.firstName} {profile.lastName}
                         </h4>
                         <h6 className="text-muted text-center">
                           username: {profile.userName}
                         </h6>
+                        {
+                          localStorage.getItem("userId") === "owner"?
+                          ''
+                          :
+                          isFollowed?
+                          <button className="btn btn-info mt-2" onClick ={removeFollowing}> Unfollow  </button>
+                          :
+                          <button className="btn btn-outline-info mt-2" onClick={addFollowing}> Follow </button>
+                        }
                       </div>
                     </div>
                   </div>
@@ -253,24 +329,25 @@ export default function Profile() {
                               Info
                             </Link>
                           </li>
-                          <li
-                            className="nav-item me-lg-5 me-sm-3 "
-                            onClick={modifyButtons}
-                          >
-                            <Link
-                              className={
-                                pathname === "activity" ? "text-violet" : ""
-                              }
-                              to="activity"
-                              id="activity"
-                            >
-                              Activity
-                            </Link>
-                          </li>
                           {
-                            localStorage.getItem("userId")?
+                            localStorage.getItem("userId") === "user"?
                             ''
                             :
+                            <>
+                            <li
+                              className="nav-item me-lg-5 me-sm-3 "
+                              onClick={modifyButtons}
+                            >
+                              <Link
+                                className={
+                                  pathname === "activity" ? "text-violet" : ""
+                                }
+                                to="activity"
+                                id="activity"
+                              >
+                                Activity
+                              </Link>
+                            </li>
                             <li
                               className="nav-item me-lg-5 me-sm-3"
                               onClick={modifyButtons}
@@ -286,6 +363,7 @@ export default function Profile() {
                                 Wishlist
                               </Link>
                             </li>
+                            </>
                           }
                           <li
                             className="nav-item me-lg-5 me-sm-3"
@@ -320,7 +398,7 @@ export default function Profile() {
                     </div>
                   </nav>
                 </div>
-                <Outlet context={[profile, setProfile]} />
+                <Outlet context={[profile, setProfile, getProfile]} />
               </div>
             </div>
           </div>
