@@ -33,7 +33,7 @@ export default function Games() {
                 <div className="card rounded-3 bg-grey mb-3 text-center">
                   <img src={game.mainPic.secure_url} className="card-img-top img-fluid" alt="..." />
                   <div className="card-body">
-                    <h5 className="card-title">{game.name}</h5>
+                    <h5 className="card-title text-truncate">{game.name}</h5>
                     <div className="ms-auto">
                       <Link to={`/details/${game.gameSlug}/${game._id}`} className="btn btn-primary">Go to game</Link>
                     </div>

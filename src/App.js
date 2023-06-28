@@ -70,8 +70,7 @@ function App() {
     }
   }
   let navigate = useNavigate();
-  const [crrUser, setCrrrUser] = useState(null);
-
+  const [crrUser, setCrrUser] = useState(null);
   async function currentUser() {
     const config = {
       headers: {
@@ -84,10 +83,10 @@ function App() {
       }
     });
     if (result?.data?.message == "done") {
-      setCrrrUser(result.data.user);
+      setCrrUser(result.data.user);
     } else {
       localStorage.removeItem("token");
-      setCrrrUser(null);
+      setCrrUser(null);
     }
 
   }
@@ -105,7 +104,7 @@ function App() {
     if (result?.data?.message == "done") {
       localStorage.removeItem("token");
       navigate('/login');
-      setCrrrUser(null);
+      setCrrUser(null);
     } else {
       alert("Failed to log out")
     }
@@ -154,7 +153,7 @@ function App() {
         />
       </Route>
 
-      <Route path='profile' element={<Profile />} >
+      <Route path='profile' element={<Profile crrUser = {crrUser} currentUser = {currentUser} />} >
         <Route
           index
           element={<Info />}
@@ -177,7 +176,7 @@ function App() {
         />
         <Route
           path="following"
-          element={<Followers />}
+          element={<Followers crrUser={crrUser} />}
         />
         <Route
           path="games"

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Link, useOutletContext } from "react-router-dom";
 import { BEARERKEY, baseURL } from "../../index.js";
 
-export default function Followers() {
+export default function Followers({crrUser}) {
   const [profile, setProfile, id] = useOutletContext();
   const [limit, setLimit] = useState(0);
   const removeFollowing = async (userId, index) => {
@@ -49,14 +49,23 @@ export default function Followers() {
                             />
                           </div>
                           <div className=" w-100">
-                            <Link to={`/profile/info/${person._id}`} onClick={()=>setLimit(0)}>
-                              <h4 className="user-name fs-5  mb-3">
-                                {person.firstName} {person.lastName}
-                              </h4>
-                            </Link>
+                            {
+                              person._id === crrUser._id?
+                              <Link to={`/profile/info/${person._id}`} onClick={()=>{localStorage.setItem("userId", 'user')}}>
+                                <h4 className="user-name fs-5  mb-3 text-success">
+                                    {person.firstName} {person.lastName}
+                                </h4>
+                              </Link>
+                              :
+                              <Link to={`/profile/info/${person._id}`} onClick={()=>{localStorage.setItem("userId", 'user')}}>
+                                <h4 className="user-name fs-5  mb-3">
+                                  {person.firstName} {person.lastName}
+                                </h4>
+                              </Link>
+                            }
                           </div>
                           {
-                            localStorage.getItem("userId")?
+                            localStorage.getItem("userId") === "user"?
                             ''
                             :
                             <button

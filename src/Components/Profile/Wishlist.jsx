@@ -99,14 +99,14 @@ export default function Wishlist() {
           <div className="container game">
             <div className="row">
               {wishList?.map((game, idx) =>
-                  <div className="col-xl-4 col-sm-6">
-                    <div className="card rounded-3 bg-grey text-center mb-3" key={idx}>
+                  <div className="col-xl-4 col-sm-6" key={idx}>
+                    <div className="card rounded-3 bg-grey text-center mb-3">
                       <Link
                           to={`/details/${game.slug}/${game._id}`}
                         >
                       <img src={game.mainPic?.secure_url} className="card-img-top img-fluid" alt="..." />
                       <div className="card-body">
-                        <h5 className="card-title mx-0">
+                        <h5 className="card-title mx-0 text-truncate">
                           {game.name}
                         </h5>
                         <span className="text-success fw-bold">${game.price}</span>

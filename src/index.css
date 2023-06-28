@@ -125,7 +125,7 @@ a {
 .bg-grey{
   background: #2c3035 !important;
 }
-.back-store:hover{
+.back-store:hover, .publisher{
   color: #892be0 !important;
   transition: all 0.2s ease-in-out;
 }

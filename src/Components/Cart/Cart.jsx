@@ -5,11 +5,12 @@ import { BEARERKEY, baseURL } from '../../index.js';
 //modal
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { Link, useNavigate } from 'react-router-dom';
 
 // import { useSelector, useDispatch } from 'react-redux';
 // import { removeFromCart } from '../Redux/StoreSlices';
 function Cart({ getCart, cart, setCart }) {
-    
+    const navigate = useNavigate()
     // const {games,totalPrice} = useSelector(state=>state.currentCart)
     // const dispatch = useDispatch()
     //modal
@@ -30,6 +31,9 @@ function Cart({ getCart, cart, setCart }) {
     const applyCloseModel = () => {
         modalData.mainBtnFunc()
         handleCloseModal()
+    }
+    const navigateToGame = (gameSlug, gameId) => {
+        navigate(`/details/${gameSlug}/${gameId}`)
     }
     //end of modal
     const totalPrice = 0;
@@ -76,7 +80,7 @@ function Cart({ getCart, cart, setCart }) {
                         cart?.games?.length != 0 && cart.length != 0 ?
                             cart.games?.map((game, idx) =>
                                 <div key={idx} className="game-check my-2 p-3 rounded-4 text-white-50 d-flex justify-content-between align-items-center">
-                                    <h6 className="game-name m-0">{game.name}</h6>
+                                    <h6 className="game-name m-0" onClick={()=>{navigateToGame(game.slug, game._id)}}>{game.name}</h6>
                                     <div className="lefted">
                                         <span>${game.price}</span>
                                         <button onClick={() => { callModal({header:"Warning!", body:"Are you sure?", mainBtnFunc:()=>{removeGame(game._id, idx)},mainBtnTxt:"Yes", mainBtnColor:"danger",closeBtnTxt:"No", closeBtnColor:"success" }) }}
@@ -84,7 +88,6 @@ function Cart({ getCart, cart, setCart }) {
                                     </div>
                                 </div>
                             )
-
                             :
                             <>
                                 <div className='text-center mb-3'>
