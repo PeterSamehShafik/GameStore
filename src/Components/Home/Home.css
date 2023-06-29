@@ -51,6 +51,7 @@ main .card-footer {
 /* Badge */
 .my-badge {
     position: absolute;
+    z-index: 100;
     border-bottom: 30px solid #4d9c40;
     border-left: 30px solid transparent;
     border-right: 30px solid transparent;
@@ -74,6 +75,7 @@ main .card-footer {
 }
 
 .my-badge::after {
+    
     content: "";
     border-bottom: 11px solid #2d6824;
     border-left: 11px solid transparent;
@@ -94,7 +96,9 @@ main .card-footer {
     color: yellow !important;
 
 }
-
+.game-rate-card{
+    z-index: 100;
+}
 
 /* active genre */
 .genres .active {

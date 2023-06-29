@@ -129,7 +129,10 @@ a {
   color: #892be0 !important;
   transition: all 0.2s ease-in-out;
 }
-
+.line-grey{
+  background-color: #313030;
+  height: 1px;
+}
 
 @media (min-width: 576px){
   .w-sm-50{

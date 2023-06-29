@@ -52,7 +52,9 @@
     color: #fff !important;
     resize: none !important;
 }
-
+.comment-body p{
+    font-size: 1rem;
+}
 .user-comment {
     transition: all 0.2s ease-in-out;
     background-color: rgb(0, 0, 0, 0.9);
@@ -83,4 +85,28 @@
 .game-rating{
     width:4rem !important;
     height:4rem !important;
+}
+.comments-section{
+    width: 75%;
+}
+
+@media (max-width: 768px) {
+    .user-pic {
+        width: 4rem !important;
+        height: auto !important;
+    }
+    .comments-section{
+        width: 90% ;
+    }
+}
+@media (max-width: 450px) {
+    .edit-comment-section{
+        display: block !important;
+    }
+}
+@media (max-width: 380px) {
+    .game-rating {
+        font-size: 25px !important;
+        height: 50px !important;
+    }
 }
