@@ -7,7 +7,6 @@ import HoverVideoPlayer from "react-hover-video-player";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
 import Rating from "@mui/material/Rating";
-import Cart from "../Cart/Cart.jsx";
 import jwtDecode from "jwt-decode";
 
 //modal
@@ -178,7 +177,9 @@ function Details({ currentUser, getCart, cart }) {
     let textArea = editSection.children[0];
     text.classList.add("d-none");
     editSection.classList.remove("d-none");
-    textArea.value = text.innerHTML;
+    editSection.classList.add("d-sm-flex");
+    let val = text.innerHTML.trimStart();
+    textArea.value = val;
   };
   const saveEditComment = async (commentID) => {
     let editSection = document.getElementById(commentID);
@@ -203,6 +204,7 @@ function Details({ currentUser, getCart, cart }) {
       if (result?.data?.message == "done") {
         text.classList.remove("d-none");
         editSection.classList.add("d-none");
+        editSection.classList.remove("d-sm-flex");
         text.innerHTML = textArea.value;
       } else {
         callModal({
@@ -308,13 +310,16 @@ function Details({ currentUser, getCart, cart }) {
         console.log(error);
       });
     if (result?.data?.message == "done") {
-      console.log(JSON.stringify(result?.data?.update?.wishList))
-      localStorage.setItem("wishlist", JSON.stringify(result?.data?.update?.wishList))
+      console.log(JSON.stringify(result?.data?.update?.wishList));
+      localStorage.setItem(
+        "wishlist",
+        JSON.stringify(result?.data?.update?.wishList)
+      );
       setIsInWishlist(true);
     } else {
       alert("Failed to add game to wishlist");
     }
-    // } 
+    // }
   };
   // const checkWishList = () => {
   //   const localWishlist = JSON.parse(localStorage.getItem("wishlist"));
@@ -343,7 +348,6 @@ function Details({ currentUser, getCart, cart }) {
     checkCart();
   }, [cart]);
 
-
   return (
     <>
       {game === "Loading" ? (
@@ -358,7 +362,7 @@ function Details({ currentUser, getCart, cart }) {
           </div>
         </div>
       ) : game ? (
-        <div className="container-fluid px-sm-5 p-1 ">
+        <div className="container-fluid px-sm-5 ">
           <div className="row">
             <header className="d-flex justify-content-between align-items-center mb-2">
               <Link to="/home" className="back-store h4 fw-bolder">
@@ -405,7 +409,7 @@ function Details({ currentUser, getCart, cart }) {
                     {game.name}
                   </h2>
                 </div>
-                <div className="rating mx-auto d-flex flex-column align-items-center mt-3">
+                <div className="rating mx-auto d-flex flex-lg-column flex-sm-row flex-column align-items-center mt-3 mb-4">
                   {game.avgRate ? (
                     <div className=" d-flex ">
                       <span className=" game-rating  rounded-circle fa-2xl bg-warning fw-bold d-flex justify-content-center align-items-center">
@@ -419,7 +423,7 @@ function Details({ currentUser, getCart, cart }) {
                   ) : (
                     ""
                   )}
-                  <div className="rate-game my-2 bg-secondary p-2 rounded-3 w-auto">
+                  <div className="rate-game my-2 bg-secondary p-2 rounded-3 w-auto ms-4">
                     <Rating
                       name="simple-controlled"
                       value={userRate}
@@ -468,15 +472,25 @@ function Details({ currentUser, getCart, cart }) {
                                 {game.genreId ? "Genre: " : ""}
                                 {game.genreId?.name}{" "}
                               </li>
-                              <Link to={`/profile/info/${game.createdBy._id}`} onClick={() => { localStorage.setItem("userId", 'user') }}>
+                              <Link
+                                to={`/profile/info/${game.createdBy._id}`}
+                                onClick={() => {
+                                  localStorage.setItem("userId", "user");
+                                }}
+                              >
                                 <li className="text-white-50">
-                                  {
-                                    game?.createdBy._id === currentUser?._id ?
-                                      ''
-                                      :
-                                      <span> Publisher: <span className="publisher">{game.createdBy.firstName}{" "}
-                                        {game.createdBy.lastName}</span> </span>
-                                  }
+                                  {game?.createdBy._id === currentUser?._id ? (
+                                    ""
+                                  ) : (
+                                    <span>
+                                      {" "}
+                                      Publisher:{" "}
+                                      <span className="publisher">
+                                        {game.createdBy.firstName}{" "}
+                                        {game.createdBy.lastName}
+                                      </span>{" "}
+                                    </span>
+                                  )}
                                 </li>
                               </Link>
                             </ul>
@@ -528,18 +542,12 @@ function Details({ currentUser, getCart, cart }) {
                     className="fav ms-auto h4 disabled"
                     onClick={addToWishList}
                   >
-                    {
-                      isInWishlist ?
-                        <i className="fa-solid fa-heart"></i>
-                        :
-                        ''
-                    }
-                    {
-                      !isInWishlist ?
-                        <i className="fa-regular fa-heart"></i>
-                        :
-                        ''
-                    }
+                    {isInWishlist ? <i className="fa-solid fa-heart"></i> : ""}
+                    {!isInWishlist ? (
+                      <i className="fa-regular fa-heart"></i>
+                    ) : (
+                      ""
+                    )}
                   </span>
                 </div>
                 {game.createdBy?._id == currentUser?._id ? (
@@ -580,7 +588,7 @@ function Details({ currentUser, getCart, cart }) {
           </div>
           <div className="row mt-2 mb-4">
             <div className="container">
-              <div className="comments-section w-75 m-auto">
+              <div className="comments-section m-auto">
                 <div className="comments-header">
                   <h2>Comments:</h2> <hr />
                 </div>
@@ -626,28 +634,105 @@ function Details({ currentUser, getCart, cart }) {
                       return (
                         <div key={comment._id} className="comments-show my-2">
                           <div className="user-comment hover-75 p-3 shadow rounded-5">
-                            <div className="comment-details d-flex align-items-start">
-                              <img
-                                alt="user"
-                                className="img-fluid rounded-circle user-pic me-2"
-                                src={comment.createdBy?.profilePic?.secure_url}
-                              />
-                              <div className="comment-body w-100">
-                                <h4 className="user-name fw-bolder">
-                                  {comment?.createdBy?.firstName}{" "}
-                                  {comment?.createdBy?.lastName}
-                                </h4>
+                            <div className="comment-details">
+                              <div className="d-flex align-items-start">
+                                <div className="d-flex align-items-center">
+                                  <img
+                                    alt="user"
+                                    className="img-fluid rounded-circle user-pic me-2"
+                                    src={
+                                      comment.createdBy?.profilePic?.secure_url
+                                    }
+                                  />
+                                  <h4 className="user-name fw-bolder">
+                                    {comment?.createdBy?.firstName}{" "}
+                                    {comment?.createdBy?.lastName}
+                                  </h4>
+                                </div>
+                                {comment?.createdBy?._id == currentUser?._id ||
+                                currentUser?.role == "superAdmin" ||
+                                game?.createdBy?._id == currentUser?._id ? (
+                                  <div className="dropdownmenu ms-auto">
+                                    <div className="dropdown">
+                                      <button
+                                        className="btn btn-transparent text-white dropdown-toggle"
+                                        type="button"
+                                        id="dropdownMenuButton1"
+                                        data-bs-toggle="dropdown"
+                                        aria-expanded="false"
+                                      >
+                                        <i className="fa-solid fa-ellipsis-vertical"></i>
+                                      </button>
+
+                                      <ul
+                                        className="dropdown-menu"
+                                        aria-labelledby="dropdownMenuButton1"
+                                      >
+                                        {comment?.createdBy?._id ==
+                                        currentUser?._id ? (
+                                          <>
+                                            <span
+                                              onClick={() => {
+                                                editComment(comment._id);
+                                              }}
+                                              className="cursor-pointer text-success me-2 hover-75 dropdown-item"
+                                            >
+                                              <i className="fa-solid fa-pen-to-square fa-lg"></i>
+                                              <span className="ps-2">Edit</span>
+                                            </span>
+                                          </>
+                                        ) : (
+                                          ""
+                                        )}
+                                        {comment?.createdBy?._id ==
+                                          currentUser?._id ||
+                                        currentUser?.role == "superAdmin" ||
+                                        game?.createdBy?._id ==
+                                          currentUser?._id ? (
+                                          <span
+                                            className="cursor-pointer text-danger hover-75 dropdown-item"
+                                            onClick={() => {
+                                              callModal({
+                                                isMainBtn: true,
+                                                header: "Delete Comment",
+                                                body: "Are you sure?",
+                                                mainBtnTxt: "Yes",
+                                                mainBtnColor: "danger",
+                                                mainBtnFunc: () =>
+                                                  deleteComment(
+                                                    comment._id,
+                                                    index
+                                                  ),
+                                                closeBtnTxt: "No",
+                                                closeBtnColor: "success",
+                                              });
+                                            }}
+                                          >
+                                            <i className="fa-solid fa-trash-can fa-lg"></i>{" "}
+                                            <span className="ps-2">Delete</span>
+                                          </span>
+                                        ) : (
+                                          ""
+                                        )}
+                                      </ul>
+                                    </div>
+                                  </div>
+                                ) : (
+                                  ""
+                                )}
+                              </div>
+                              <div className="comment-body w-100 mt-2">
                                 <p className=""> {comment.body} </p>
                                 <div
-                                  className="edit-comment-section d-flex d-none"
+                                  className="edit-comment-section d-none"
                                   id={comment._id}
                                 >
                                   <textarea
-                                    className="form-control bg-transparent text-white w-100 h-50"
+                                    className="form-control bg-transparent text-white w-100 h-50 mb-2"
                                     type="text"
                                   />
                                   <button
-                                    className="btn btn-outline-success d-block ms-2 h-50"
+                                    className="btn btn-outline-success d-block ms-sm-2 h-50 "
                                     onClick={() => {
                                       saveEditComment(comment._id);
                                     }}
@@ -656,77 +741,6 @@ function Details({ currentUser, getCart, cart }) {
                                   </button>
                                 </div>
                               </div>
-                              {comment?.createdBy?._id == currentUser?._id ||
-                                currentUser?.role == "superAdmin" ||
-                                game?.createdBy?._id == currentUser?._id ? (
-                                <div className="dropdownmenu ms-auto">
-                                  <div className="dropdown">
-                                    <button
-                                      className="btn btn-transparent text-white dropdown-toggle"
-                                      type="button"
-                                      id="dropdownMenuButton1"
-                                      data-bs-toggle="dropdown"
-                                      aria-expanded="false"
-                                    >
-                                      <i className="fa-solid fa-ellipsis-vertical"></i>
-                                    </button>
-
-                                    <ul
-                                      className="dropdown-menu"
-                                      aria-labelledby="dropdownMenuButton1"
-                                    >
-                                      {comment?.createdBy?._id ==
-                                        currentUser?._id ? (
-                                        <>
-                                          <span
-                                            onClick={() => {
-                                              editComment(comment._id);
-                                            }}
-                                            className="cursor-pointer text-success me-2 hover-75 dropdown-item"
-                                          >
-                                            <i className="fa-solid fa-pen-to-square fa-lg"></i>
-                                            <span className="ps-2">Edit</span>
-                                          </span>
-                                        </>
-                                      ) : (
-                                        ""
-                                      )}
-                                      {comment?.createdBy?._id ==
-                                        currentUser?._id ||
-                                        currentUser?.role == "superAdmin" ||
-                                        game?.createdBy?._id ==
-                                        currentUser?._id ? (
-                                        <span
-                                          className="cursor-pointer text-danger hover-75 dropdown-item"
-                                          onClick={() => {
-                                            callModal({
-                                              isMainBtn: true,
-                                              header: "Delete Comment",
-                                              body: "Are you sure?",
-                                              mainBtnTxt: "Yes",
-                                              mainBtnColor: "danger",
-                                              mainBtnFunc: () =>
-                                                deleteComment(
-                                                  comment._id,
-                                                  index
-                                                ),
-                                              closeBtnTxt: "No",
-                                              closeBtnColor: "success",
-                                            });
-                                          }}
-                                        >
-                                          <i className="fa-solid fa-trash-can fa-lg"></i>{" "}
-                                          <span className="ps-2">Delete</span>
-                                        </span>
-                                      ) : (
-                                        ""
-                                      )}
-                                    </ul>
-                                  </div>
-                                </div>
-                              ) : (
-                                ""
-                              )}
                             </div>
                             <hr className="my-2" />
                             <div className="comment-footer d-flex justify-content-between align-items-center">

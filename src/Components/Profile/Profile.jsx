@@ -10,18 +10,18 @@ import Modal from "react-bootstrap/Modal";
 
 export default function Profile({ crrUser, currentUser }) {
   const { id } = useParams();
-  if(id){
-    localStorage.setItem('id', id)
+  if (id) {
+    localStorage.setItem("id", id);
   }
   // crop Image
-  const [showCropper, setShowCropper] = useState(false)
-  const [cropper, setCropper] = useState(null)
+  const [showCropper, setShowCropper] = useState(false);
+  const [cropper, setCropper] = useState(null);
   //end of crop
-  const [isFollowed, setIsFollowed] = useState(false)
+  const [isFollowed, setIsFollowed] = useState(false);
   const [profile, setProfile] = useState(null);
   const [pathname, setPathname] = useState("");
   const [file, setFile] = useState(null);
-  const [reload, setReload] = useState(false)
+  const [reload, setReload] = useState(false);
 
   //modal
   const [showModal, setShowModal] = useState(false);
@@ -43,7 +43,7 @@ export default function Profile({ crrUser, currentUser }) {
     mainBtnFunc,
     isMainBtn = true,
     isCloseBtn = true,
-    isStatic = false
+    isStatic = false,
   } = {}) => {
     setModalData({
       ...modalData,
@@ -56,7 +56,7 @@ export default function Profile({ crrUser, currentUser }) {
       mainBtnFunc,
       isMainBtn,
       isCloseBtn,
-      isStatic
+      isStatic,
     });
     handleShowModal();
   };
@@ -82,15 +82,16 @@ export default function Profile({ crrUser, currentUser }) {
           if (error.response) {
             console.log(error.response);
           }
-          if(error.response?.data?.message === "JsonWebTokenError: jwt malformed"){
+          if (
+            error.response?.data?.message === "JsonWebTokenError: jwt malformed"
+          ) {
             navigate("/login");
           }
         });
-        if (result?.data?.message === "done") {
+      if (result?.data?.message === "done") {
         setProfile(result.data.user);
         setReload(false);
       }
-
     } else {
       const result = await axios
         .get(`${baseURL}/user/profile`, config)
@@ -98,7 +99,9 @@ export default function Profile({ crrUser, currentUser }) {
           if (error.response) {
             console.log(error.response);
           }
-          if(error.response?.data?.message === "JsonWebTokenError: jwt malformed"){
+          if (
+            error.response?.data?.message === "JsonWebTokenError: jwt malformed"
+          ) {
             navigate("/login");
           }
         });
@@ -119,7 +122,7 @@ export default function Profile({ crrUser, currentUser }) {
       setFile(e.target.files[0]);
       let Profile = { ...profile };
       Profile.temp = URL.createObjectURL(e.target.files[0]);
-      setShowCropper(true)
+      setShowCropper(true);
       setProfile(Profile);
     }
   };
@@ -132,7 +135,7 @@ export default function Profile({ crrUser, currentUser }) {
       body: "Please wait....",
       isMainBtn: false,
       isCloseBtn: false,
-      isStatic: true
+      isStatic: true,
     });
     const formData = new FormData();
     formData.append("image", file);
@@ -153,17 +156,24 @@ export default function Profile({ crrUser, currentUser }) {
         // handle the response
         if (response.data.message === "done") {
           handleCloseModal();
-          callModal({ header: "Success!", body: "The profile picture updated successfully", isMainBtn: false, closeBtnTxt: "Close", closeBtnColor: "success" })
+          callModal({
+            header: "Success!",
+            body: "The profile picture updated successfully",
+            isMainBtn: false,
+            closeBtnTxt: "Close",
+            closeBtnColor: "success",
+          });
           let temp = { ...profile };
-          temp.profilePic.secure_url = response.data.updatedUser.profilePic.secure_url;
+          temp.profilePic.secure_url =
+            response.data.updatedUser.profilePic.secure_url;
           setProfile(temp);
           setFile(null);
-          currentUser()
+          currentUser();
         }
       })
       .catch((error) => {
         // handle errors
-        console.log(error)
+        console.log(error);
         callModal({
           header: "Error",
           body: "Something went wrong, please try again",
@@ -176,7 +186,7 @@ export default function Profile({ crrUser, currentUser }) {
     let temp = { ...profile };
     delete temp.temp;
     setProfile(temp);
-    setShowCropper(false)
+    setShowCropper(false);
     setFile(null);
   };
   const getCropData = async () => {
@@ -189,25 +199,28 @@ export default function Profile({ crrUser, currentUser }) {
       if (file) {
         let Profile = { ...profile };
         Profile.temp = URL.createObjectURL(file);
-        setFile(file)
+        setFile(file);
         setProfile(Profile);
-        setShowCropper(false)
+        setShowCropper(false);
       }
     }
   };
 
   //Following
   const checkIsFollowed = () => {
-    let checkId = localStorage.getItem("id")
-    if(crrUser){
-      const check = crrUser?.following.find(person=>person._id === checkId)
+    if (localStorage.getItem("id") === crrUser?._id) {
+      localStorage.setItem("userId", "owner");
+    }
+    let checkId = localStorage.getItem("id");
+    if (crrUser) {
+      const check = crrUser?.following.find((person) => person._id === checkId);
       if (check) {
-        setIsFollowed(true)
+        setIsFollowed(true);
       } else {
-        setIsFollowed(false)
+        setIsFollowed(false);
       }
     }
-  }
+  };
   const removeFollowing = async () => {
     const config = {
       headers: {
@@ -215,7 +228,7 @@ export default function Profile({ crrUser, currentUser }) {
       },
     };
     const result = await axios
-      .patch(`${baseURL}/user/following/remove/${id}`,{body:""}, config)
+      .patch(`${baseURL}/user/following/remove/${id}`, { body: "" }, config)
       .catch((e) => {
         console.log(e);
       });
@@ -224,33 +237,33 @@ export default function Profile({ crrUser, currentUser }) {
       currentUser();
     }
   };
-  const addFollowing = async() => {
+  const addFollowing = async () => {
     const config = {
       headers: {
         authorization: BEARERKEY + localStorage.getItem("token"),
       },
     };
     const result = await axios
-      .patch(`${baseURL}/user/following/add/${id}`,{body:""}, config)
+      .patch(`${baseURL}/user/following/add/${id}`, { body: "" }, config)
       .catch((e) => {
         console.log(e);
       });
     if (result?.data?.message === "done") {
       setIsFollowed(true);
-      currentUser()
+      currentUser();
     }
-  }
+  };
   useEffect(() => {
     getProfile();
   }, []);
-  
+
   useEffect(() => {
     checkIsFollowed();
   }, [crrUser]);
 
   useEffect(() => {
     getProfile();
-  }, [localStorage.getItem('id')]);
+  }, [localStorage.getItem("id")]);
 
   return (
     <>
@@ -270,41 +283,47 @@ export default function Profile({ crrUser, currentUser }) {
                     <div className="card-body">
                       <div className="d-flex flex-column align-items-center">
                         <div className="profile-img position-relative">
-                          {
-                            localStorage.getItem("userId") === "user"?
-                            ''
-                            :
+                          {localStorage.getItem("userId") === "user" ? (
+                            ""
+                          ) : (
                             <div className="image-upload position-absolute top-0 end-0">
                               <label htmlFor="file-input">
                                 <i className="fa-regular fa-pen-to-square fa-lg"></i>
                               </label>
-                              <input id="file-input" type="file" onChange={inputImage}/>
+                              <input
+                                id="file-input"
+                                type="file"
+                                onChange={inputImage}
+                              />
                             </div>
-                          }
-                          {
-                            showCropper?
+                          )}
+                          {showCropper ? (
                             <div className="text-center">
                               <Cropper
                                 id="cropperComp"
                                 src={profile.temp}
                                 initialAspectRatio={6 / 6}
-                                aspectRatio = {6/6}
-                                responsive = {true}
+                                aspectRatio={6 / 6}
+                                responsive={true}
                                 minCropBoxHeight={100}
                                 minCropBoxWidth={100}
                                 guides={false}
                                 autoCropArea={0.9}
                                 movable={false}
-                                
                                 checkOrientation={true}
                                 onInitialized={(instance) => {
                                   setCropper(instance);
                                 }}
                                 className="w-100 h-100"
                               />
-                              <button onClick={getCropData} className="btn btn-outline-info mt-2">Crop Image</button>
+                              <button
+                                onClick={getCropData}
+                                className="btn btn-outline-info mt-2"
+                              >
+                                Crop Image
+                              </button>
                             </div>
-                            :
+                          ) : (
                             <img
                               src={
                                 profile.temp
@@ -315,10 +334,10 @@ export default function Profile({ crrUser, currentUser }) {
                               className="rounded-circle img-fluid "
                               width="150"
                             />
-                          }
+                          )}
                         </div>
                         <div className="save-image-buttons d-flex justify-content-between">
-                          {file && !showCropper? (
+                          {file && !showCropper ? (
                             <div className="mt-2">
                               <button
                                 className="btn btn-success btn-sm me-2"
@@ -346,25 +365,35 @@ export default function Profile({ crrUser, currentUser }) {
                           <h6 className="text-muted text-center">
                             username: {profile.userName}
                           </h6>
-                          {
-                            localStorage.getItem("userId") === "owner"?
-                            ''
-                            :
-                            isFollowed?
-                            <button className="btn btn-info mt-2" onClick ={removeFollowing}> Unfollow  </button>
-                            :
-                            <button className="btn btn-outline-info mt-2" onClick={addFollowing}> Follow </button>
-                          }
+                          {localStorage.getItem("userId") === "owner" ? (
+                            ""
+                          ) : isFollowed ? (
+                            <button
+                              className="btn btn-info mt-2"
+                              onClick={removeFollowing}
+                            >
+                              {" "}
+                              Unfollow{" "}
+                            </button>
+                          ) : (
+                            <button
+                              className="btn btn-outline-info mt-2"
+                              onClick={addFollowing}
+                            >
+                              {" "}
+                              Follow{" "}
+                            </button>
+                          )}
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div className="col-md-8">
-                  <div className="card mb-3">
-                    <nav className="navbar navbar-expand-sm navbar-light bg-dark-grey">
-                      <div className="">
-                        <div className="ms-auto">
+                  <div className="mb-3">
+                    <nav className="navbar navbar-expand-sm navbar-light bg-dark-grey ">
+                      <div className="container-fluid ">
+                        <div className="">
                           <button
                             className="navbar-toggler"
                             type="button"
@@ -374,15 +403,16 @@ export default function Profile({ crrUser, currentUser }) {
                             aria-expanded="false"
                             aria-label="Toggle navigation"
                           >
-                            <span className="navbar-toggler-icon"></span>
+                            {/* <span className="navbar-toggler-icon text-white"></span> */}
+                            <i class="fa-solid fa-bars toggler-icon"></i>
                           </button>
                         </div>
-                        <div className="collapse navbar-collapse" id="navbarNav">
-                          <ul className="fs-6 py-2 px-4 mb-0 rounded-2 navbar-nav">
-                            <li
-                              className="nav-item me-lg-5 me-sm-3"
-                              onClick={modifyButtons}
-                            >
+                        <div
+                          className="collapse navbar-collapse text-center"
+                          id="navbarNav"
+                        >
+                          <ul className="fs-6 py-2  mb-0 rounded-2 navbar-nav mx-auto mt-sm-0 mt-2 w-100 d-flex justify-content-around">
+                            <li className="nav-item" onClick={modifyButtons}>
                               <Link
                                 className={
                                   pathname === "info" ? "text-violet" : ""
@@ -393,46 +423,48 @@ export default function Profile({ crrUser, currentUser }) {
                                 Info
                               </Link>
                             </li>
-                            {
-                              localStorage.getItem("userId") === "user"?
-                              ''
-                              :
+                            <div className="line-grey d-block d-sm-none my-1"></div>
+                            {localStorage.getItem("userId") === "user" ? (
+                              ""
+                            ) : (
                               <>
-                              <li
-                                className="nav-item me-lg-5 me-sm-3 "
-                                onClick={modifyButtons}
-                              >
-                                <Link
-                                  className={
-                                    pathname === "activity" ? "text-violet" : ""
-                                  }
-                                  to="activity"
-                                  id="activity"
+                                <li
+                                  className="nav-item "
+                                  onClick={modifyButtons}
                                 >
-                                  Activity
-                                </Link>
-                              </li>
-                              <li
-                                className="nav-item me-lg-5 me-sm-3"
-                                onClick={modifyButtons}
-                              >
-                                
-                                <Link
-                                  className={
-                                    pathname === "wishlist" ? "text-violet" : ""
-                                  }
-                                  to="wishlist"
-                                  id="wishlist"
+                                  <Link
+                                    className={
+                                      pathname === "activity"
+                                        ? "text-violet"
+                                        : ""
+                                    }
+                                    to="activity"
+                                    id="activity"
+                                  >
+                                    Activity
+                                  </Link>
+                                </li>
+                                <div className="line-grey w-100 d-block d-sm-none my-1"></div>
+                                <li
+                                  className="nav-item"
+                                  onClick={modifyButtons}
                                 >
-                                  Wishlist
-                                </Link>
-                              </li>
+                                  <Link
+                                    className={
+                                      pathname === "wishlist"
+                                        ? "text-violet"
+                                        : ""
+                                    }
+                                    to="wishlist"
+                                    id="wishlist"
+                                  >
+                                    Wishlist
+                                  </Link>
+                                </li>
+                                <div className="line-grey w-100 d-block d-sm-none my-1"></div>
                               </>
-                            }
-                            <li
-                              className="nav-item me-lg-5 me-sm-3"
-                              onClick={modifyButtons}
-                            >
+                            )}
+                            <li className="nav-item" onClick={modifyButtons}>
                               <Link
                                 className={
                                   pathname === "following" ? "text-violet" : ""
@@ -443,10 +475,8 @@ export default function Profile({ crrUser, currentUser }) {
                                 Followers
                               </Link>
                             </li>
-                            <li
-                              className="nav-item me-lg-5 me-sm-3"
-                              onClick={modifyButtons}
-                            >
+                            <div className="line-grey w-100 d-block d-sm-none my-1"></div>
+                            <li className="nav-item" onClick={modifyButtons}>
                               <Link
                                 className={
                                   pathname === "games" ? "text-violet" : ""
@@ -468,43 +498,47 @@ export default function Profile({ crrUser, currentUser }) {
             </div>
           </div>
           <Modal
-                show={showModal}
-                onHide={handleCloseModal}
-                className="text-white"
-                backdrop={modalData.isStatic ? "static" : true}
-                keyboard={modalData.isStatic ? false : true}
-              >
-                {modalData.isStatic ?
-                  <Modal.Header >
-                    <Modal.Title>{modalData.header}</Modal.Title>
-                  </Modal.Header> :
-                  <Modal.Header closeButton>
-                    <Modal.Title>{modalData.header}</Modal.Title>
-                  </Modal.Header>}
+            show={showModal}
+            onHide={handleCloseModal}
+            className="text-white"
+            backdrop={modalData.isStatic ? "static" : true}
+            keyboard={modalData.isStatic ? false : true}
+          >
+            {modalData.isStatic ? (
+              <Modal.Header>
+                <Modal.Title>{modalData.header}</Modal.Title>
+              </Modal.Header>
+            ) : (
+              <Modal.Header closeButton>
+                <Modal.Title>{modalData.header}</Modal.Title>
+              </Modal.Header>
+            )}
 
-                <Modal.Body>{modalData.body}</Modal.Body>
-                <Modal.Footer>
-                  {modalData.isCloseBtn == true ?
-                    <Button
-                      variant={modalData.closeBtnColor}
-                      onClick={handleCloseModal}
-                    >
-                      {modalData.closeBtnTxt}
-                    </Button> : ""}
-                  {modalData.isMainBtn == true ? (
-                    <Button
-                      variant={modalData.mainBtnColor}
-                      onClick={applyCloseModel}
-                    >
-                      {modalData.mainBtnTxt}
-                    </Button>
-                  ) : (
-                    ""
-                  )}
-                </Modal.Footer>
-              </Modal>
+            <Modal.Body>{modalData.body}</Modal.Body>
+            <Modal.Footer>
+              {modalData.isCloseBtn == true ? (
+                <Button
+                  variant={modalData.closeBtnColor}
+                  onClick={handleCloseModal}
+                >
+                  {modalData.closeBtnTxt}
+                </Button>
+              ) : (
+                ""
+              )}
+              {modalData.isMainBtn == true ? (
+                <Button
+                  variant={modalData.mainBtnColor}
+                  onClick={applyCloseModel}
+                >
+                  {modalData.mainBtnTxt}
+                </Button>
+              ) : (
+                ""
+              )}
+            </Modal.Footer>
+          </Modal>
         </>
-      
       ) : (
         <div className="w-100 vh-100 d-flex justify-content-center align-items-center position-absolute top-0">
           <div className="sk-chase">

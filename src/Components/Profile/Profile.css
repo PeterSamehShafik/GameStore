@@ -97,3 +97,10 @@ display: none;
     height: 6rem;
     object-fit: cover;
 }
+.toggler-icon{
+    color: #8c8c8c;
+}
+nav {
+    --bs-bg-opacity: 1;
+    background-color: transparent;
+}
