@@ -2,6 +2,9 @@ body {
     background-color: #0f1011;
     color: white;
 }
+.bg-main{
+  background-color: #0f1011;
+}
 .reset {
   all: revert;
 }

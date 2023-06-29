@@ -54,7 +54,7 @@ function Cart({ getCart, cart, setCart }) {
                 }
             });
         if (result?.data?.message == "done") {
-            callModal({header:"Success!", body:"The game removed successfully", isMainBtn:false, closeBtnTxt:"Close", closeBtnColor:"success"})
+            callModal({ header: "Success!", body: "The game removed successfully", isMainBtn: false, closeBtnTxt: "Close", closeBtnColor: "success" })
             const newCart = { ...cart };
             newCart.total -= newCart.games[index].price;
             newCart.games.splice(index, 1);
@@ -69,62 +69,64 @@ function Cart({ getCart, cart, setCart }) {
     }, []);
     return <>
 
-        <div className="offcanvas text-bg-dark offcanvas-end" tabIndex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-            <div className="offcanvas-header">
-                <h5 className="offcanvas-title" id="offcanvasExampleLabel">My Cart</h5>
-                <button type="button" className="text-bg-dark close-btn" data-bs-dismiss="offcanvas" aria-label="Close">X</button>
-            </div>
-            <div className="offcanvas-body d-flex flex-column justify-content-between">
-                <div className="games-list">
-                    {
-                        cart?.games?.length != 0 && cart.length != 0 ?
-                            cart.games?.map((game, idx) =>
-                                <div key={idx} className="game-check my-2 p-3 rounded-4 text-white-50 d-flex justify-content-between align-items-center">
-                                    <h6 className="game-name m-0" onClick={()=>{navigateToGame(game.slug, game._id)}}>{game.name}</h6>
-                                    <div className="lefted">
-                                        <span>${game.price}</span>
-                                        <button onClick={() => { callModal({header:"Warning!", body:"Are you sure?", mainBtnFunc:()=>{removeGame(game._id, idx)},mainBtnTxt:"Yes", mainBtnColor:"danger",closeBtnTxt:"No", closeBtnColor:"success" }) }}
-                                         className='close-btn rounded-circle bg-transparent text-white ms-3'>X</button>
+        <div className="cart">
+            <div className="offcanvas text-bg-dark offcanvas-end" tabIndex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+                <div className="offcanvas-header">
+                    <h5 className="offcanvas-title" id="offcanvasExampleLabel">My Cart</h5>
+                    <button type="button" className="text-bg-dark close-btn" data-bs-dismiss="offcanvas" aria-label="Close">X</button>
+                </div>
+                <div className="offcanvas-body d-flex flex-column justify-content-between">
+                    <div className="games-list">
+                        {
+                            cart?.games?.length != 0 && cart.length != 0 ?
+                                cart.games?.map((game, idx) =>
+                                    <div key={idx} className="game-check my-2 p-3 rounded-4 text-white-50 d-flex justify-content-between align-items-center">
+                                        <h6 className="game-name m-0" onClick={() => { navigateToGame(game.slug, game._id) }}>{game.name}</h6>
+                                        <div className="lefted">
+                                            <span>${game.price}</span>
+                                            <button onClick={() => { callModal({ header: "Warning!", body: "Are you sure?", mainBtnFunc: () => { removeGame(game._id, idx) }, mainBtnTxt: "Yes", mainBtnColor: "danger", closeBtnTxt: "No", closeBtnColor: "success" }) }}
+                                                className='close-btn rounded-circle bg-transparent text-white ms-3'>X</button>
+                                        </div>
                                     </div>
-                                </div>
-                            )
-                            :
-                            <>
-                                <div className='text-center mb-3'>
-                                    <img src='/cart.png' height={300} alt="" />
-                                </div>
+                                )
+                                :
+                                <>
+                                    <div className='text-center mb-3'>
+                                        <img src='/cart.png' height={300} alt="" />
+                                    </div>
                                     <p className='fs-4'>Cart is empty.....</p>
-                            </>
-                    }
+                                </>
+                        }
+
+                    </div>
+
+                    <div className="checkout d-flex justify-content-between align-items-center">
+
+                        <h5 className=" fw-bolder m-0">Total: ${cart.total}</h5>
+                        <span className="cart text-muted fw-bolder">Checkout <strong>✚</strong></span>
+
+                    </div>
 
                 </div>
-
-                <div className="checkout d-flex justify-content-between align-items-center">
-
-                    <h5 className=" fw-bolder m-0">Total: ${cart.total}</h5>
-                    <span className="cart text-muted fw-bolder">Checkout <strong>✚</strong></span>
-
-                </div>
-
-            </div>
-            <Modal show={showModal} onHide={handleCloseModal} className="text-white" >
-                <Modal.Header closeButton>
-                    <Modal.Title>{modalData.header}</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>{modalData.body}</Modal.Body>
-                <Modal.Footer>
-                    <Button variant={modalData.closeBtnColor} onClick={handleCloseModal}>
-                        {modalData.closeBtnTxt}
-                    </Button>
-                    {modalData.isMainBtn == true ?
-                        <Button variant={modalData.mainBtnColor} onClick={applyCloseModel}>
-                            {modalData.mainBtnTxt}
+                <Modal show={showModal} onHide={handleCloseModal} className="text-white" >
+                    <Modal.Header closeButton>
+                        <Modal.Title>{modalData.header}</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>{modalData.body}</Modal.Body>
+                    <Modal.Footer>
+                        <Button variant={modalData.closeBtnColor} onClick={handleCloseModal}>
+                            {modalData.closeBtnTxt}
                         </Button>
-                        : ""
-                    }
+                        {modalData.isMainBtn == true ?
+                            <Button variant={modalData.mainBtnColor} onClick={applyCloseModel}>
+                                {modalData.mainBtnTxt}
+                            </Button>
+                            : ""
+                        }
 
-                </Modal.Footer>
-            </Modal>
+                    </Modal.Footer>
+                </Modal>
+            </div>
         </div>
 
     </>

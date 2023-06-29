@@ -651,13 +651,7 @@ export default function GameControl() {
                         </td>
                         <td className='platform-div'>
                           {editMode.mode === "edit" && editMode.id == game._id ?
-                            <span className="h3">hi</span>
-                            // <select id={game._id} className="form-select" aria-label="Default select example">
-                            //   <option defaultValue disabled>Choose the role</option>
-                            //   <option value={roles.superAdmin}>superAdmin</option>
-                            //   <option value={roles.admin}>Admin</option>
-                            //   <option value={roles.game}>game</option>
-                            // </select> 
+                            game.platform.map((e, idx) => <span key={idx} className='text-capitalize'> {e + " "}</span>)
                             :
                             game.platform.map((e, idx) => <span key={idx} className='text-capitalize'> {e + " "}</span>)
                           }

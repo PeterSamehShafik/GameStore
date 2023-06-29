@@ -104,3 +104,7 @@ nav {
     --bs-bg-opacity: 1;
     background-color: transparent;
 }
+
+.z-minus{
+    z-index: 0;
+}

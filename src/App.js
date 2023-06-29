@@ -26,6 +26,7 @@ import UserControl from './CPanel/UserControl/UserControl.jsx';
 // import { Provider } from 'react-redux';
 // import { CartStore } from './Components/Redux/CartStore.js';
 import GenreControl from './CPanel/GenreControl/GenreControl';
+import NotFound from './Components/NotFound/NotFound.jsx';
 
 function App() {
   const location = useLocation()
@@ -114,12 +115,16 @@ function App() {
   //search
   const [search, setSearch] = useState('');
 
+  //game pagination
+  const [gamePage, setGamePage] = useState(1);
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
       currentUser();
     }
   }, [])
+
+
   return <>
     {location.pathname.toLowerCase().includes("cpanel") ? "" : <Navbar currentUser={crrUser} removeUser={removeUser} cart={cart} setSearch={setSearch} />}
 
@@ -129,69 +134,71 @@ function App() {
         :
         ''
     }
-    <Routes>
+    <div className={location.pathname.toLowerCase().includes("cpanel") ? "app" : 'app pt-5 mt-5'}>
+      <Routes>
+        <Route path='' element={<StartScreen />} />
+        <Route path='home' element={<Home search={search} setSearch={setSearch} page={gamePage} setPage={setGamePage} />} />
 
-      <Route path='' element={<StartScreen />} />
-      <Route path='home' element={<Home search={search} setSearch={setSearch} />} />
+        <Route path='cpanel' element={<CPanel removeUser={removeUser} />}>
+          <Route
+            index
+            element={<CPNav />}
+          />
+          <Route
+            path="games"
+            element={<GameControl />}
+          />
+          <Route
+            path="users"
+            element={<UserControl />}
+          />
+          <Route
+            path="genres"
+            element={<GenreControl />}
+          />
+          <Route
+            path="*"
+            element={<Navigate to="/" />}
+          />
+        </Route>
 
-      <Route path='cpanel' element={<CPanel removeUser={removeUser} />}>
-        <Route
-          index
-          element={<CPNav />}
-        />
-        <Route
-          path="games"
-          element={<GameControl />}
-        />
-        <Route
-          path="users"
-          element={<UserControl />}
-        />
-        <Route
-          path="genres"
-          element={<GenreControl />}
-        />
-        <Route
-          path="*"
-          element={<Navigate to="/" />}
-        />
-      </Route>
+        <Route path='profile' element={<Profile crrUser={crrUser} currentUser={currentUser} />} >
+          <Route
+            index
+            element={<Info />}
+          />
+          <Route
+            path="info/:id"
+            element={<Info />}
+          />
+          <Route
+            path="info"
+            element={<Info />}
+          />
+          <Route
+            path="wishlist"
+            element={<Wishlist />}
+          />
+          <Route
+            path="activity"
+            element={<Activity />}
+          />
+          <Route
+            path="following"
+            element={<Followers crrUser={crrUser} />}
+          />
+          <Route
+            path="games"
+            element={<Games />}
+          />
+        </Route>
+        <Route path='details/:slug/:id' element={<Details currentUser={crrUser} getCart={getCart} cart={cart} />} />
+        <Route path='login' element={<ProtectedLogin> <Login currentUser={currentUser} /> </ProtectedLogin>} />
+        <Route path='signup' element={<ProtectedLogin> <Signup /> </ProtectedLogin>} />
+        <Route path='*' element={<NotFound />} />
 
-      <Route path='profile' element={<Profile crrUser={crrUser} currentUser={currentUser} />} >
-        <Route
-          index
-          element={<Info />}
-        />
-        <Route
-          path="info/:id"
-          element={<Info />}
-        />
-        <Route
-          path="info"
-          element={<Info />}
-        />
-        <Route
-          path="wishlist"
-          element={<Wishlist />}
-        />
-        <Route
-          path="activity"
-          element={<Activity />}
-        />
-        <Route
-          path="following"
-          element={<Followers crrUser={crrUser} />}
-        />
-        <Route
-          path="games"
-          element={<Games />}
-        />
-      </Route>
-      <Route path='details/:slug/:id' element={<Details currentUser={crrUser} getCart={getCart} cart={cart} />} />
-      <Route path='login' element={<ProtectedLogin> <Login currentUser={currentUser} /> </ProtectedLogin>} />
-      <Route path='signup' element={<ProtectedLogin> <Signup /> </ProtectedLogin>} />
-
-    </Routes>
+      </Routes>
+    </div>
 
     {/* </Provider> */}
 

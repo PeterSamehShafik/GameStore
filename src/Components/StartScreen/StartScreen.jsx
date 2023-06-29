@@ -6,19 +6,19 @@ import { baseURL } from '../../index.js'
 
 function StartScreen() {
     const [game, setGame] = useState({
-        slug:'',
-        _id:''
+        slug: '',
+        _id: ''
     })
-    const getRandomGame = async() => {
-        const result = await axios.get(`${baseURL}/game/random`).catch((e) => {console.log(e)})
-        if(result?.data?.message === "done"){
+    const getRandomGame = async () => {
+        const result = await axios.get(`${baseURL}/game/random`).catch((e) => { console.log(e) })
+        if (result?.data?.message === "done") {
             setGame(result?.data?.game)
         }
     }
     useEffect(() => {
         getRandomGame()
     }, [])
-    
+
 
     return (<>
         <div className='myVideo'>
@@ -27,42 +27,60 @@ function StartScreen() {
             </video>
         </div>
 
-        <div className="mt-5 start-screen d-flex align-items-center">
+        <div className="start-screen d-flex align-items-center">
             <div className="container-fluid ">
-                <div className="row gy-4 mt-3">
-                    <div className="col-lg-6 d-flex align-content-center align-self-end ">
-                        <div className="first-row ms-lg-3 mt-lg-auto mt-5">
-                            <div className="info p-3 bg-blur d-flex flex-column text-center">
+                <div className="row g-3">
+                    <div className="col-lg-6">
+                        <div className="first-row ">
+                            <div className="info p-3 bg-blur d-flex flex-column text-center rounded-top border-info border-bottom ">
                                 <h1 className='display-1 fw-bolder'>Game Store</h1>
                                 <p>The best destination to buy new games to competitive prices. 24 hour support, "best price" guarantee and a flawless UX. Wish for more? Tell us below — or check out our careers.</p>
                             </div>
-                            <div className="app-route bg-blur mt-4 py-3 px-2 d-flex justify-content-between">
-                                <button className='btn btn-info rounded-5 px-4 py-1'>
-                                    <i className="fa-solid fa-arrow-right-to-bracket"></i>
-                                    <Link to='/home'>
-                                        <span className="ms-2">Browse</span>
-                                    </Link>
-                                </button>
-                                <Link to={`/details/${game.slug}/${game._id}`}>
-                                    <button className='btn btn-light rounded-5 px-4 py-1'>
-                                        <i className="fa-solid fa-dice"></i>
-                                        <span className="ms-2">Play dice</span>
-                                    </button>
-                                </Link>
-                                <button className='btn btn-light rounded-5 px-4 py-1'>
-                                    <i className="fa-brands fa-github"></i>
-                                    <span className="ms-2">Github</span>
-                                </button>
-                                <button className='btn btn-light rounded-5 px-4 py-1'>
-                                    <i className="fa-brands fa-linkedin-in"></i>
-                                    <span className="ms-2">LinkedIn</span>
-                                </button>
+                            <div className="app-route bg-blur rounded-bottom p-4  ">
+                                <div className="row g-3 justify-content-center" >
+                                    <div className="col-lg-6 col-xl-3">
+                                        <Link to='/home'>
+                                            <button className='btn btn-info rounded-5 mt-2 px-4 py-2'>
+                                                <i className="fa-solid fa-arrow-right-to-bracket"></i>
+                                                <span className="ms-2">Browse</span>
+                                            </button>
+                                        </Link>
+                                    </div>
+                                    <div className="col-lg-6 col-xl-3">
+                                        <Link to={`/details/${game.slug}/${game._id}`}>
+                                            <button className='btn btn-light rounded-5 mt-2 px-4 py-2'>
+                                                <i className="fa-solid fa-dice"></i>
+                                                <span className="ms-2">Random</span>
+                                            </button>
+                                        </Link>
+                                    </div>
+                                    <div className="col-lg-6 col-xl-3">
+                                        <span>
+                                            <button className='btn btn-light rounded-5 mt-2 px-4 py-2'>
+                                                <i className="fa-brands fa-github"></i>
+                                                <span className="ms-2">Github</span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <div className="col-lg-6 col-xl-3">
+                                    </div>
+                                    <div className="col-lg-6 col-xl-3">
+                                        <span>
+                                            <button className='btn btn-light rounded-5 mt-2 px-4 py-2'>
+                                                <i className="fa-brands fa-linkedin-in"></i>
+                                                <span className="ms-2">LinkedIn</span>
+                                            </button>
+                                        </span>
+                                    </div>
+
+
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div className="col-lg-6">
-                        <div className="info bg-blur d-flex flex-column text-center text-white w-50 ms-lg-auto mx-auto me-lg-4">
+                    <div className="offset-lg-3 col-lg-3 ">
+                        <div className="info bg-blur d-flex flex-column text-center text-white rounded">
                             <h3 className='fw-bolder mt-3'>Quick Navigation</h3>
                             <div className="app-route mt-4 pb-3 px-5 d-flex flex-column ">
                                 <button className='btn btn-light mb-1 rounded-5 px-4 py-2'>
@@ -88,7 +106,7 @@ function StartScreen() {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     </>)
 }
 

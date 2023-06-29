@@ -1,3 +1,7 @@
+.cart{
+    z-index: 999;
+}
+
 .close-btn{
     border: none !important;
 }
