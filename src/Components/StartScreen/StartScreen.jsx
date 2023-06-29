@@ -83,24 +83,26 @@ function StartScreen() {
                         <div className="info bg-blur d-flex flex-column text-center text-white rounded">
                             <h3 className='fw-bolder mt-3'>Quick Navigation</h3>
                             <div className="app-route mt-4 pb-3 px-5 d-flex flex-column ">
-                                <button className='btn btn-light mb-1 rounded-5 px-4 py-2'>
-                                    <i className="fa-solid fa-arrow-right-to-bracket"></i>
                                     <Link to='home'>
-                                        <span className="ms-2">Game Page</span>
+                                <button className='btn btn-light mb-1 rounded-5 px-4 py-2'>
+                                        <i className="fa-solid fa-arrow-right-to-bracket"></i>
+                                    <span className="ms-2">Game Page</span>
+                                </button>
                                     </Link>
-                                </button>
+                                    <Link to="/404">
                                 <button className='btn btn-light my-1 rounded-5 px-4 py-2'>
-                                    <i className="fa-solid fa-bug"></i>
-                                    <span className="ms-2">404 Page</span>
+                                        <i className="fa-solid fa-bug"></i>
+                                        <span className="ms-2">404 Page</span>
                                 </button>
-                                <button className='btn btn-light my-1 rounded-5 px-4 py-2'>
+                                    </Link>
+                                {/* <button className='btn btn-light my-1 rounded-5 px-4 py-2'>
                                     <i className="fa-solid fa-bug"></i>
                                     <span className="ms-2">404 Query</span>
                                 </button>
                                 <button className='btn btn-light my-1 rounded-5 px-4 py-2'>
                                     <i className="fa-solid fa-address-card"></i>
                                     <span className="ms-2">About</span>
-                                </button>
+                                </button> */}
                             </div>
                         </div>
                     </div>
