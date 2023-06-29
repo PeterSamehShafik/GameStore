@@ -1,6 +1,7 @@
 import React from 'react'
 import "./NotFound.css"
 import $ from "jquery";
+import { Link } from 'react-router-dom';
 
 
 export default function NotFound() {
@@ -15,8 +16,9 @@ export default function NotFound() {
             </div>
         </div>
         <div className="w-100 d-flex justify-content-center">
-
-            <button id='homeBtn' className="mx-auto button-49" onMouseLeave={pauseScreen} onMouseEnter={pauseScreen} role="button">Home</button>
+            <Link to="/">
+                <button id='homeBtn' className="mx-auto button-49" onMouseLeave={pauseScreen} onMouseEnter={pauseScreen} role="button">Home</button>
+            </Link>
         </div>
 
 
