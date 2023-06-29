@@ -210,6 +210,8 @@ export default function Profile({ crrUser, currentUser }) {
   const checkIsFollowed = () => {
     if (localStorage.getItem("id") === crrUser?._id) {
       localStorage.setItem("userId", "owner");
+    }else{
+      localStorage.setItem("userId", "user");
     }
     let checkId = localStorage.getItem("id");
     if (crrUser) {
@@ -390,8 +392,8 @@ export default function Profile({ crrUser, currentUser }) {
                   </div>
                 </div>
                 <div className="col-md-8">
-                  <div className="mb-3">
-                    <nav className="navbar navbar-expand-sm navbar-light bg-dark-grey ">
+                  <div className="mb-3 ">
+                    <nav className="navbar z-minus navbar-expand-sm navbar-light bg-dark-grey ">
                       <div className="container-fluid ">
                         <div className="">
                           <button

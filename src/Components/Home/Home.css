@@ -109,3 +109,8 @@ main .card-footer {
     background-color: #16490e !important;
     padding: 0.7rem;
 }
+
+/* paginate */
+.css-1ysyrvn-MuiButtonBase-root-MuiPaginationItem-root{
+    color: white !important;
+}

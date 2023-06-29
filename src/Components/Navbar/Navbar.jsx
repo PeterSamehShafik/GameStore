@@ -10,14 +10,20 @@ function Navbar({ currentUser, removeUser, cart, setSearch }) {
     setSearch(e.target.value);
   };
 
+  const hideNave = () => {
+    document.getElementById('navbarSupportedContent').classList.remove('show')
+
+  }
+
   return (
     <>
-      <nav className="navbar top-nav navbar-expand-lg navbar-dark text-white position-sticky">
+      <nav className="main-nav navbar top-nav navbar-expand-lg navbar-dark text-white position-fixed w-100 bg-dark top-0">
         <div className="container-fluid px-lg-5">
-          <Link to="/" className="navbar-brand">
+          <Link onClick={hideNave} to="/" className="navbar-brand">
             <i className="fa-solid fa-gamepad me-3"></i>
             <span className="fw-bolder">Game Store</span>
           </Link>
+
           <button
             className="navbar-toggler"
             type="button"
@@ -30,7 +36,7 @@ function Navbar({ currentUser, removeUser, cart, setSearch }) {
             <span className="navbar-toggler-icon text-white"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            {location.pathname === "/" ? (
+            {location.pathname === "/" || !currentUser ? (
               ""
             ) : (
               <div
@@ -47,26 +53,35 @@ function Navbar({ currentUser, removeUser, cart, setSearch }) {
                 <i className="fa-solid fa-magnifying-glass close-search "></i>
               </div>
             )}
-            <ul className="navbar-nav">
-              {location.pathname === "/" ? (
-                <Link to="/home" className="ms-lg-5 ms-4 navbar-brand">
-                  <i className="fa-solid fa-cart-shopping me-3"></i>
-                  <span className="fw-bolder">Browse Store</span>
-                </Link>
-              ) : (
-                ""
-              )}
-            </ul>
+
             <ul className="navbar-nav navbar-nav-list ms-auto mb-2 mb-lg-0 d-flex align-items-center ">
+              {location.pathname.toLowerCase() === "/" ? <>
+                <li className="nav-item" >
+                  <Link
+                    to='/home'
+                    className="nav-link text-white fw-bolder ms-2 py-1"
+                    aria-current="page"
+                  >
+                    <i className=" fa-solid fa-magnifying-glass me-1"></i>
+                    <span>Browse Store</span>
+                  </Link>
+                </li>
+                <div className="line-grey w-100 d-block d-lg-none my-1"></div>
+              </>
+                :
+                ""
+              }
+
               {currentUser ? (
                 <>
                   {currentUser.role === roles.admin ||
-                  currentUser.role === roles.superAdmin ? (
+                    currentUser.role === roles.superAdmin ? (
                     <>
                       <li className="nav-item">
                         <div className="nav-link text-white fw-bolder mx-2">
                           <Link
                             to="/cpanel"
+                            onClick={hideNave}
                             className="c-panel d-lg-flex align-items-center text-warning"
                           >
                             <i className="fa-solid fa-gear fa-spin"></i>
@@ -85,23 +100,30 @@ function Navbar({ currentUser, removeUser, cart, setSearch }) {
                       className="nav-link text-white fw-bolder ms-2"
                       aria-current="page"
                     >
+
                       <Link
                         to={`/profile/info/${currentUser._id}`}
                         onClick={() => {
                           localStorage.setItem("userId", "owner");
+                          hideNave()
                         }}
                       >
-                        <img
-                          src={currentUser.profilePic.secure_url}
-                          className="img-fluid rounded-circle"
-                        />
-                        <span className="ms-2">{currentUser?.firstName}</span>
+                        <button onClick={hideNave} class="glow-on-hover bg-dark" type="button">
+                          <img
+                            src={currentUser.profilePic.secure_url}
+                            className="img-fluid rounded-circle"
+                          />
+                          <span className="ms-2">{currentUser?.firstName}</span>
+                        </button>
                       </Link>
                     </div>
                   </li>
+
                   <div className="line-grey w-100 d-block d-lg-none my-1"></div>
-                  <li className="nav-item">
+                  <li className="nav-item"
+                  >
                     <div
+                      onClick={hideNave}
                       className="nav-link text-white fw-bolder ms-2"
                       data-bs-toggle="offcanvas"
                       data-bs-target="#offcanvasExample"
@@ -118,6 +140,7 @@ function Navbar({ currentUser, removeUser, cart, setSearch }) {
                   <div className="line-grey w-100 d-block d-lg-none my-1"></div>
                   <li className="nav-item" onClick={removeUser}>
                     <div
+                      onClick={hideNave}
                       className="nav-link text-white fw-bolder ms-2"
                       aria-current="page"
                     >
@@ -128,20 +151,28 @@ function Navbar({ currentUser, removeUser, cart, setSearch }) {
               ) : (
                 <>
                   <li className="nav-item">
-                    <div
-                      className="nav-link text-white fw-bolder mx-4"
+                    <Link
+                      onClick={hideNave}
+                      to="login"
+                      className="nav-link text-white fw-bolder mx-4 my-2 "
                       aria-current="page"
                     >
-                      <Link to="login">Login</Link>
-                    </div>
+                      <div>
+                        <span>Login</span>
+                      </div>
+                    </Link>
                   </li>
                   <li className="nav-item">
-                    <div
-                      className="nav-link text-white fw-bolder mx-4"
+                    <Link
+                      onClick={hideNave}
+                      to="signup"
+                      className="nav-link text-white fw-bolder mx-4 my-2"
                       aria-current="page"
                     >
-                      <Link to="signup">Signup</Link>
-                    </div>
+                      <div>
+                        <span>Sign up</span>
+                      </div>
+                    </Link>
                   </li>
                 </>
               )}
