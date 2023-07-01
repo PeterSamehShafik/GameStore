@@ -27,6 +27,7 @@ import UserControl from './CPanel/UserControl/UserControl.jsx';
 // import { CartStore } from './Components/Redux/CartStore.js';
 import GenreControl from './CPanel/GenreControl/GenreControl';
 import NotFound from './Components/NotFound/NotFound.jsx';
+import ForgotPassword from './Components/ForgotPassword/ForgotPassword.jsx';
 
 function App() {
   const location = useLocation()
@@ -136,7 +137,7 @@ function App() {
     }
     <div className={location.pathname.toLowerCase().includes("cpanel") ? "app" : 'app pt-5 mt-5'}>
       <Routes>
-        <Route path='' element={<StartScreen />} />
+        <Route path='' element={<StartScreen currentUser={crrUser} />} />
         <Route path='home' element={<Home search={search} setSearch={setSearch} page={gamePage} setPage={setGamePage} />} />
 
         <Route path='cpanel' element={<CPanel removeUser={removeUser} />}>
@@ -195,7 +196,9 @@ function App() {
         <Route path='details/:slug/:id' element={<Details currentUser={crrUser} getCart={getCart} cart={cart} />} />
         <Route path='login' element={<ProtectedLogin> <Login currentUser={currentUser} /> </ProtectedLogin>} />
         <Route path='signup' element={<ProtectedLogin> <Signup /> </ProtectedLogin>} />
-        <Route path='*' element={<NotFound />} />
+        <Route path='forgot' element={<ProtectedLogin> <ForgotPassword /> </ProtectedLogin>} />
+        <Route path='404' element={<NotFound />} />
+        <Route path='*' element={<Navigate to='/404' />} />
 
       </Routes>
     </div>

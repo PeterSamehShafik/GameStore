@@ -1,47 +1,266 @@
-.fa-check , .fa-xmark
-{
-  right: 15px;
-  top: 10px;
-  font-size: 20px;
-  /* display: none; */
-}
-.fa-check
-{
-  color: green;
-}
-.fa-xmark
-{
-  color: red;
-}
-.checked-right
-{
-    border: 2px solid greenyellow;
-}
-.checked-wrong
-{
-    border: 2px solid red;
-}
-.button-disabled
-{
-  background-color: gray !important;
-  border-color: gray !important;
-}
-.wrong-input
-{
-  font-size: 14px !important;
-}
-#tsparticles
-{
-    position: fixed;
-    width: 100%;
-    z-index: -1;
-}
-.sign-up-page
-{
-    height: 92vh;
-}
+ .fa-check,
+ .fa-xmark {
+   right: 15px;
+   top: 10px;
+   font-size: 20px;
+ }
 
-.form-control:focus {
-    border-color: transparent !important;
-    box-shadow: none;
-}
+ .fa-check {
+   color: green;
+ }
+
+ .fa-xmark {
+   color: red;
+ }
+
+ .checked-right {
+   border: 2px solid greenyellow;
+ }
+
+ .checked-wrong {
+   border: 2px solid red;
+ }
+
+ .button-disabled {
+   background-color: gray !important;
+   border-color: gray !important;
+ }
+
+ .wrong-input {
+   font-size: 14px !important;
+ }
+
+ #tsparticles {
+   position: fixed;
+   width: 100%;
+   z-index: -1;
+ }
+
+ .sign-up-page {
+   height: 92vh;
+ }
+
+ .form-control:focus {
+   border-color: transparent !important;
+   box-shadow: none;
+ }
+
+
+ /* login css */
+ @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+
+
+ .sign-in-page section {
+   position: absolute;
+   top: 0;
+   width: 100vw;
+   height: 100vh;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   gap: 2px;
+   flex-wrap: wrap;
+   overflow: hidden;
+ }
+
+ .sign-in-page section::before {
+   content: '';
+   position: absolute;
+   width: 100%;
+   height: 100%;
+   background: linear-gradient(#000, #0f0, #000);
+   animation: animate 5s linear infinite;
+ }
+
+ @keyframes animate {
+   0% {
+     transform: translateY(-100%);
+   }
+
+   100% {
+     transform: translateY(100%);
+   }
+ }
+
+ .sign-in-page section span {
+   position: relative;
+   display: block;
+   width: calc(6.25vw - 2px);
+   height: calc(6.25vw - 2px);
+   background: #181818;
+   z-index: 2;
+   transition: 1.5s;
+ }
+
+ .sign-in-page section span:hover {
+   background: #0f0;
+   transition: 0s;
+ }
+
+ .sign-in-page section .signin {
+   position: absolute;
+   width: 400px;
+   background: #222;
+   z-index: 1000;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   padding: 40px;
+   border-radius: 4px;
+   box-shadow: 0 15px 35px rgba(0, 0, 0, 9);
+ }
+
+ .sign-in-page section .signin .content {
+   position: relative;
+   width: 100%;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   flex-direction: column;
+   gap: 40px;
+ }
+
+ .sign-in-page section .signin .content h2 {
+   font-size: 2em;
+   color: #0f0;
+   text-transform: uppercase;
+ }
+
+ .sign-in-page section .signin .content .form {
+   width: 100%;
+   display: flex;
+   flex-direction: column;
+   gap: 25px;
+ }
+
+ .sign-in-page section .signin .content .form .inputBox {
+   position: relative;
+   width: 100%;
+ }
+
+ .sign-in-page section .signin .content .form .inputBox input {
+   position: relative;
+   width: 100%;
+   background: #333;
+   border: none;
+   outline: none;
+   padding: 25px 10px 7.5px;
+   border-radius: 4px;
+   color: #fff;
+   font-weight: 500;
+   font-size: 1em;
+ }
+
+ .sign-in-page section .signin .content .form .inputBox i {
+   position: absolute;
+   left: 0;
+   padding: 15px 10px;
+   font-style: normal;
+   color: #aaa;
+   transition: 0.5s;
+   pointer-events: none;
+ }
+
+ .signin .content .form .inputBox input:focus~i,
+ .signin .content .form .inputBox input:valid~i {
+   transform: translateY(-7.5px);
+   font-size: 0.8em;
+   color: #fff;
+ }
+
+ .signin .content .form .links {
+   position: relative;
+   width: 100%;
+   display: flex;
+   justify-content: space-between;
+ }
+
+ .signin .content .form .links a {
+   color: #fff;
+   text-decoration: none;
+ }
+
+ .sign-up-btn {
+   color: #0f0 !important;
+   font-weight: 600 !important;
+ }
+
+ .sign-btn {
+   padding: 10px !important;
+   background: #0f0 !important;
+   color: #000 !important;
+   font-weight: 600 !important;
+   font-size: 1.35em !important;
+   letter-spacing: 0.05em !important;
+   cursor: pointer !important;
+ }
+
+ .sign-btn:active {
+   opacity: 0.6 !important;
+ }
+
+ input:autofill .desc,
+ input:-webkit-autofill .desc {
+   color: #000 !important;
+ }
+
+ @media (max-width: 900px) {
+   .sign-in-page section span {
+     width: calc(10vw - 2px);
+     height: calc(10vw - 2px);
+   }
+ }
+
+ @media (max-width: 600px) {
+   .sign-in-page section span {
+     width: calc(20vw - 2px);
+     height: calc(20vw - 2px);
+   }
+ }
+
+ /* google btn */
+ @import url(https://fonts.googleapis.com/css?family=Roboto:500);
+
+ .google-btn {
+   width: 184px;
+   height: 42px;
+   background-color: #4285f4;
+   border-radius: 2px;
+   box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .25);
+ }
+
+ .google-btn .google-icon-wrapper {
+   position: absolute;
+   left: 0 !important;
+   margin-top: 1px;
+   margin-left: 1px;
+   width: 40px;
+   height: 40px;
+   border-radius: 2px;
+   background-color: #fff;
+ }
+
+ .google-btn .google-icon {
+   position: absolute;
+   margin-top: 11px;
+   margin-left: 11px;
+   width: 18px;
+   height: 18px;
+ }
+
+ .google-btn .btn-text {
+   float: right;
+   margin: 11px 11px 0 0;
+   color: #fff;
+   font-size: 14px;
+   letter-spacing: 0.2px;
+   font-family: "Roboto";
+ }
+
+ .google-btn:hover {
+   box-shadow: 0 0 6px #4285f4;
+ }
+
+ .google-btn:active {
+   background: #1669f2;
+ }
