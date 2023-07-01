@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { debounce } from "./debounce.jsx";
+import { useLocation } from "react-router-dom";
 
 export function useScroll() {
   // storing this to get the scroll direction
@@ -14,25 +15,28 @@ export function useScroll() {
   const [scrollX, setScrollX] = useState(bodyOffset.left);
   // scroll direction would be either up or down
   const [scrollDirection, setScrollDirection] = useState('down');
-
+  //location
+  const location = useLocation()
+  const [currentLocation, setCurrentLocation] = useState(location.pathname)
   const listener = debounce((e) => {
     setBodyOffset(document.body.getBoundingClientRect());
     setScrollY(-bodyOffset.top);
     setScrollX(bodyOffset.left);
     setScrollDirection(lastScrollTop > -bodyOffset.top ? "down" : "up");
-    
     setLastScrollTop(-bodyOffset.top);
   })
 
   useEffect(() => {
-    if (bodyOffset.top === 0) {
-      setScrollDirection('down')
-    } 
     window.addEventListener("scroll", listener);
+    setCurrentLocation(location.pathname)
     return () => {
       window.removeEventListener("scroll", listener);
     };
   });
+  useEffect(() => {
+    setScrollDirection("down")
+  }, [currentLocation])
+
 
   return {
     scrollY,

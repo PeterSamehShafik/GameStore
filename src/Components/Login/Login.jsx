@@ -277,7 +277,7 @@ export default function Login({ currentUser }) {
                     ""
                   ) : (
                     <button
-                      className="sign-btn hover-50 text-white bg-violet w-100 py-2"
+                      className="sign-btn btn hover-50 text-white bg-violet w-100 py-2"
                       type="submit"
                     >
                       Login

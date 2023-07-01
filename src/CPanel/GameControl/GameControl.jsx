@@ -71,7 +71,7 @@ export default function GameControl() {
     let result
 
     if (profile.role === roles.superAdmin) {
-      result = await axios.get(`${baseURL}/game/all`).catch(function (error) {
+      result = await axios.get(`${baseURL}/game/all/control`).catch(function (error) {
         if (error.response) {
           console.log(error.response);
           setGames(null);
