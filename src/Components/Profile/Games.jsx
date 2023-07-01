@@ -24,7 +24,7 @@ export default function Games() {
   return <>
   {
       games? 
-        games.length != 0?
+        games.length !== 0?
           <div className="container game">
             <div className="row">
             {

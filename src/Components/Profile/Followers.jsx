@@ -4,7 +4,7 @@ import { Link, useOutletContext } from "react-router-dom";
 import { BEARERKEY, baseURL } from "../../index.js";
 
 export default function Followers({crrUser}) {
-  const [profile, setProfile, id] = useOutletContext();
+  const [profile, setProfile] = useOutletContext();
   const [limit, setLimit] = useState(0);
   const removeFollowing = async (userId, index) => {
     const config = {
@@ -89,7 +89,7 @@ export default function Followers({crrUser}) {
             })}
             <nav aria-label="Page navigation example">
               <ul className="pagination bg-transparent d-flex justify-content-center pb-2">
-                {profile.following.length - limit == 0 || limit <= 0 ? (
+                {profile.following.length - limit === 0 || limit <= 0 ? (
                   ""
                 ) : (
                   <li className="page-item cursor-pointer">

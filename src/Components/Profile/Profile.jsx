@@ -518,7 +518,7 @@ export default function Profile({ crrUser, currentUser }) {
 
             <Modal.Body>{modalData.body}</Modal.Body>
             <Modal.Footer>
-              {modalData.isCloseBtn == true ? (
+              {modalData.isCloseBtn === true ? (
                 <Button
                   variant={modalData.closeBtnColor}
                   onClick={handleCloseModal}
@@ -528,7 +528,7 @@ export default function Profile({ crrUser, currentUser }) {
               ) : (
                 ""
               )}
-              {modalData.isMainBtn == true ? (
+              {modalData.isMainBtn === true ? (
                 <Button
                   variant={modalData.mainBtnColor}
                   onClick={applyCloseModel}
