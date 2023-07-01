@@ -86,7 +86,7 @@ function Navbar({ currentUser, removeUser, cart, setSearch }) {
                     currentUser.role === roles.superAdmin ? (
                     <>
                       <li className="nav-item">
-                        <div className="nav-link text-white fw-bolder mx-2">
+                        <div className="nav-link cursor-normal text-white fw-bolder mx-2">
                           <Link
                             to="/cpanel"
                             onClick={hideNave}

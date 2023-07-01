@@ -20,6 +20,7 @@ export default function Login({ currentUser }) {
 
   //Functions
   function getUser(e) {
+    setAPIRes(null)
     let newUser = { ...user };
     let data = e.target.value;
     newUser[e.target.id] = data;
@@ -48,30 +49,30 @@ export default function Login({ currentUser }) {
       console.log(errors)
       let inputField = e.target;
       let errorFlag = false;
-      if(e.target.value != ''){
+      if (e.target.value != '') {
         inputField?.nextElementSibling.classList.remove("d-none")
 
         for (let i = 0; i < errors.length; i++) {
-          if(errors[i].context.label === inputField?.id){
+          if (errors[i].context.label === inputField?.id) {
             errorFlag = true;
             break;
           }
         }
 
-        if(errorFlag){
+        if (errorFlag) {
           inputField?.classList.add("invalid-input")
           inputField?.classList.remove("valid-input")
           inputField?.nextElementSibling.children[1].classList.remove("d-none")
           inputField?.nextElementSibling.children[0].classList.add("d-none")
-        }else{
+        } else {
           console.log("trueee")
           inputField?.classList.remove("invalid-input")
           inputField?.classList.add("valid-input")
           inputField?.nextElementSibling.children[0].classList.remove("d-none")
           inputField?.nextElementSibling.children[1].classList.add("d-none")
         }
-        
-      }else{
+
+      } else {
         inputField?.nextElementSibling.classList.add("d-none")
       }
     } else {
@@ -223,6 +224,8 @@ export default function Login({ currentUser }) {
               <h2>Sign In</h2>
 
               <form onSubmit={checkAPI} className="form">
+
+                {APIRes ? <div className="alert alert-danger">                {APIRes}                </div> : ""}
                 <div className="inputBox ">
                   <input
                     autoComplete="off"
