@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import "./Navbar.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { roles } from "./../../index";
+import { useScroll } from './../../utilities/scrollNav';
 
 function Navbar({ currentUser, removeUser, cart, setSearch }) {
   const location = useLocation();
@@ -15,9 +16,13 @@ function Navbar({ currentUser, removeUser, cart, setSearch }) {
 
   }
 
+ //handel scrolling hide
+ const { scrollDirection } = useScroll();  
+
+
   return (
     <>
-      <nav className="main-nav navbar top-nav navbar-expand-lg navbar-dark text-white position-fixed w-100 bg-dark top-0">
+      <nav className={scrollDirection==='down'?"main-nav navbar top-nav navbar-expand-lg navbar-dark text-white position-fixed w-100 bg-dark top-0":"main-nav navbar top-nav navbar-expand-lg navbar-dark text-white position-fixed w-100 bg-dark top-minus"}>
         <div className="container-fluid px-lg-5">
           <Link onClick={hideNave} to="/" className="navbar-brand">
             <i className="fa-solid fa-gamepad me-3"></i>
@@ -36,7 +41,7 @@ function Navbar({ currentUser, removeUser, cart, setSearch }) {
             <span className="navbar-toggler-icon text-white"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            {!location.pathname.toLowerCase().includes("home")  || !currentUser ? (
+            {!location.pathname.toLowerCase().includes("home") || !currentUser ? (
               ""
             ) : (
               <div
@@ -109,7 +114,7 @@ function Navbar({ currentUser, removeUser, cart, setSearch }) {
                           hideNave()
                         }}
                       >
-                        <button onClick={hideNave} class="glow-on-hover bg-dark" type="button">
+                        <button onClick={hideNave} className="glow-on-hover bg-dark" type="button">
                           <img
                             src={currentUser.profilePic.secure_url}
                             className="img-fluid rounded-circle"
