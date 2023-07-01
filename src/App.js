@@ -28,6 +28,7 @@ import UserControl from './CPanel/UserControl/UserControl.jsx';
 import GenreControl from './CPanel/GenreControl/GenreControl';
 import NotFound from './Components/NotFound/NotFound.jsx';
 import ForgotPassword from './Components/ForgotPassword/ForgotPassword.jsx';
+import GoogleOauth from './utilities/GoogleOauth.jsx';
 
 function App() {
   const location = useLocation()
@@ -137,6 +138,8 @@ function App() {
     }
     <div className={location.pathname.toLowerCase().includes("cpanel") ? "app" : 'app pt-5 mt-5'}>
       <Routes>
+      <Route path='/googleOauth' element={<GoogleOauth currentUser = {currentUser} />} />
+
         <Route path='' element={<StartScreen currentUser={crrUser} />} />
         <Route path='home' element={<Home search={search} setSearch={setSearch} page={gamePage} setPage={setGamePage} />} />
 

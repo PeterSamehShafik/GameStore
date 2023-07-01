@@ -112,7 +112,7 @@ function Details({ currentUser, getCart, cart }) {
           setGame(null);
         }
       });
-      
+      console.log(result)
     if (result?.data?.message === "done") {
       setGame(result.data.game);
       setUserRate(result.data.game.userRate);
