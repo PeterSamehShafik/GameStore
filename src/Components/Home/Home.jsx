@@ -20,7 +20,6 @@ function Home({ search, setSearch, page, setPage }) {
   const [loading, setLoading] = useState("loading");
   const [isGrid, setIsGrid] = useState(true);
   const [games, setGames] = useState("loading");
-  console.log(games)
   const [genres, setGenres] = useState([]);
   //
   const [pageCount, setPageCount] = useState(1);
@@ -46,9 +45,10 @@ function Home({ search, setSearch, page, setPage }) {
 
   async function getGames({ genre = null, price = null, avgRate = null, alpha = null, lastAdded = null, released = null, asc_desc, clear = false, } = {}) {
     setLoading("loading");
-    let isGenre = "",
+    let isGenre = "", tempPage=null,
       sort = "";
     if (genre) {
+      tempPage=1;
       isGenre = `genre=${genre}&`;
       setFilters({ ...filters, genre: genre });
     } else if (filters.genre !== null) {
@@ -102,14 +102,13 @@ function Home({ search, setSearch, page, setPage }) {
     }
     // console.log(`${baseURL}/game/all?page=3&${isGenre + sort + `search=${search}`}`)
     const result = await axios
-      .get(`${baseURL}/game/all?size=18&page=${page}&${isGenre + sort + `search=${search}`}`)
-      // page=1&size=10search=spider
+      .get(`${baseURL}/game/all?size=18&page=${tempPage ? tempPage : page}&${isGenre + sort + `search=${search}`}`)
       .catch((err) => {
         setGames(null);
         setLoading(true);
         console.log(err);
       });
-    // console.log(data)
+    console.log(result.data)
     setGames(result?.data?.games);
     setPageCount(result.data.pages)
     setLoading(true);
@@ -398,7 +397,7 @@ function Home({ search, setSearch, page, setPage }) {
                           ) : (
                             games?.map((game, idx) => {
                               return (
-                                  game.isDeleted == true?
+                                game.isDeleted == true ?
                                   ''
                                   :
                                   <div
@@ -541,7 +540,7 @@ function Home({ search, setSearch, page, setPage }) {
                                       </div>
                                     </Link>
                                   </div>
-                                
+
                               );
                             })
                           )}
@@ -551,18 +550,19 @@ function Home({ search, setSearch, page, setPage }) {
                   </div>
                 </div>
               </div>
-              
-                <div className={loading !== "loading" && games.length > 0 ?"paginate d-flex justify-content-center ":"paginate d-flex justify-content-center d-none"}>
-                  <Stack spacing={2}>
-                    <Pagination
-                      size="large"
-                      count={pageCount}
-                      showFirstButton showLastButton variant="outlined" color="primary"
-                      onChange={handlePage}
-                    />
-                  </Stack>
-                </div>
-                
+
+              <div className={loading !== "loading" && games.length > 0 ? "paginate d-flex justify-content-center " : "paginate d-flex justify-content-center d-none"}>
+                <Stack spacing={2}>
+                  <Pagination
+                    size="large"
+                    count={pageCount}
+                    showFirstButton showLastButton variant="outlined" color="primary"
+                    onChange={handlePage}
+                    defaultPage={page}
+                  />
+                </Stack>
+              </div>
+
             </div>
           </div>
         )}
