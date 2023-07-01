@@ -19,7 +19,12 @@ export function useScroll() {
     setBodyOffset(document.body.getBoundingClientRect());
     setScrollY(-bodyOffset.top);
     setScrollX(bodyOffset.left);
-    setScrollDirection(lastScrollTop > -bodyOffset.top ? "down" : "up");
+    console.log(bodyOffset.top)
+    if (bodyOffset.top === 0) {
+      setScrollDirection('down')
+    } else {
+      setScrollDirection(lastScrollTop > -bodyOffset.top ? "down" : "up");
+    }
     setLastScrollTop(-bodyOffset.top);
   })
 
