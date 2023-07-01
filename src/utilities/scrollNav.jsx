@@ -19,16 +19,15 @@ export function useScroll() {
     setBodyOffset(document.body.getBoundingClientRect());
     setScrollY(-bodyOffset.top);
     setScrollX(bodyOffset.left);
-    console.log(bodyOffset.top)
-    if (bodyOffset.top === 0) {
-      setScrollDirection('down')
-    } else {
-      setScrollDirection(lastScrollTop > -bodyOffset.top ? "down" : "up");
-    }
+    setScrollDirection(lastScrollTop > -bodyOffset.top ? "down" : "up");
+    
     setLastScrollTop(-bodyOffset.top);
   })
 
   useEffect(() => {
+    if (bodyOffset.top === 0) {
+      setScrollDirection('down')
+    } 
     window.addEventListener("scroll", listener);
     return () => {
       window.removeEventListener("scroll", listener);

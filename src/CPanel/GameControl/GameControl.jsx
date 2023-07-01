@@ -87,8 +87,6 @@ export default function GameControl() {
 
     }
 
-
-
     if (result?.data?.message == "done") {
       setGames(result.data.games);
       // console.log(result.data.games)

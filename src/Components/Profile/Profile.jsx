@@ -285,7 +285,7 @@ export default function Profile({ crrUser, currentUser }) {
                     <div className="card-body">
                       <div className="d-flex flex-column align-items-center">
                         <div className="profile-img position-relative">
-                          {localStorage.getItem("userId") === "user" ? (
+                          {localStorage.getItem("id") === "user" ? (
                             ""
                           ) : (
                             <div className="image-upload position-absolute top-0 end-0">

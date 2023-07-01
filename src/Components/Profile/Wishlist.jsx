@@ -47,6 +47,8 @@ export default function Wishlist() {
 
   //end of modal
   const [wishList, setWishList] = useState(null);
+  const [allDeleted, setAllDeleted] = useState(false)
+
 
   const getWishList = async () => {
     const config = {
@@ -61,6 +63,15 @@ export default function Wishlist() {
           console.log(error.response);
         }
       });
+      let count = 0;
+      for(let i = 0;i < result?.data?.games?.length;i++){
+        if(result?.data?.games[i].isDeleted){
+          count++;
+        }
+      }
+      if(count == result?.data?.games?.length){
+        setAllDeleted(true)
+      }
     if (result?.data?.message === "done") {
       setWishList(result.data.wishList);
     }
@@ -94,11 +105,16 @@ export default function Wishlist() {
   return (
     <>
       {wishList ? (
-        wishList.length !== 0 ? (
+        wishList.length !== 0 && !allDeleted? (
           <div className="container game">
             <div className="row">
-              {wishList?.map((game, idx) =>
-                  <div className="col-xl-4 col-sm-6" key={idx}>
+              {wishList?.map((game, idx) => 
+              {
+                return <>{
+                game.isDeleted?
+                ''
+                :
+                <div className="col-xl-4 col-sm-6" key={idx}>
                     <div className="card rounded-3 bg-grey text-center mb-3 hover-50">
                       <Link
                           to={`/details/${game.slug}/${game._id}`}
@@ -126,7 +142,11 @@ export default function Wishlist() {
                             });
                           }}> Remove</button>
                     </div>
-                  </div>
+                </div>
+                }
+                </>
+              }
+              
               )}
               
             </div>
