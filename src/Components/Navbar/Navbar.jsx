@@ -36,7 +36,7 @@ function Navbar({ currentUser, removeUser, cart, setSearch }) {
             <span className="navbar-toggler-icon text-white"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            {location.pathname === "/" || !currentUser ? (
+            {!location.pathname.toLowerCase().includes("home")  || !currentUser ? (
               ""
             ) : (
               <div
@@ -61,6 +61,7 @@ function Navbar({ currentUser, removeUser, cart, setSearch }) {
                     to='/home'
                     className="nav-link text-white fw-bolder ms-2 py-1"
                     aria-current="page"
+                    onClick={hideNave}
                   >
                     <i className=" fa-solid fa-magnifying-glass me-1"></i>
                     <span>Browse Store</span>

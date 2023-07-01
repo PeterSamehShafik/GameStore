@@ -4,7 +4,7 @@ import './StartScreen.css'
 import axios from 'axios'
 import { baseURL } from '../../index.js'
 
-function StartScreen() {
+function StartScreen({ currentUser }) {
     const [game, setGame] = useState({
         slug: '',
         _id: ''
@@ -26,8 +26,7 @@ function StartScreen() {
                 <source src="/liveWP.mp4" type="video/mp4" />
             </video>
         </div>
-
-        <div className="start-screen d-flex align-items-center">
+        <div className="start-screen d-flex align-items-center mt-5">
             <div className="container-fluid ">
                 <div className="row g-3">
                     <div className="col-lg-6">
@@ -36,37 +35,35 @@ function StartScreen() {
                                 <h1 className='display-1 fw-bolder'>Game Store</h1>
                                 <p>The best destination to buy new games to competitive prices. 24 hour support, "best price" guarantee and a flawless UX. Wish for more? Tell us below — or check out our careers.</p>
                             </div>
-                            <div className="app-route bg-blur rounded-bottom p-4  ">
-                                <div className="row g-3 justify-content-center" >
-                                    <div className="col-lg-6 col-xl-3">
+                            <div className="app-route bg-blur rounded-bottom  ">
+                                <div className="row g-3 justify-content-center py-3 "  >
+                                    <div className="col-md-6 col-lg-3 d-flex justify-content-center">
                                         <Link to='/home'>
-                                            <button className='btn btn-info rounded-5 mt-2 px-4 py-2'>
+                                            <button className='btn btn-info rounded-5 mt-2'>
                                                 <i className="fa-solid fa-arrow-right-to-bracket"></i>
                                                 <span className="ms-2">Browse</span>
                                             </button>
                                         </Link>
                                     </div>
-                                    <div className="col-lg-6 col-xl-3">
+                                    <div className="col-md-6 col-lg-3 d-flex justify-content-center">
                                         <Link to={`/details/${game.slug}/${game._id}`}>
-                                            <button className='btn btn-light rounded-5 mt-2 px-4 py-2'>
+                                            <button className='btn btn-light rounded-5 mt-2'>
                                                 <i className="fa-solid fa-dice"></i>
                                                 <span className="ms-2">Random</span>
                                             </button>
                                         </Link>
                                     </div>
-                                    <div className="col-lg-6 col-xl-3">
+                                    <div className="col-md-6 col-lg-3 d-flex justify-content-center">
                                         <span>
-                                            <button className='btn btn-light rounded-5 mt-2 px-4 py-2'>
+                                            <button className='btn btn-light rounded-5 mt-2'>
                                                 <i className="fa-brands fa-github"></i>
                                                 <span className="ms-2">Github</span>
                                             </button>
                                         </span>
                                     </div>
-                                    <div className="col-lg-6 col-xl-3">
-                                    </div>
-                                    <div className="col-lg-6 col-xl-3">
+                                    <div className="col-md-6 col-lg-3 d-flex justify-content-center">
                                         <span>
-                                            <button className='btn btn-light rounded-5 mt-2 px-4 py-2'>
+                                            <button className='btn btn-light rounded-5 mt-2'>
                                                 <i className="fa-brands fa-linkedin-in"></i>
                                                 <span className="ms-2">LinkedIn</span>
                                             </button>
@@ -83,18 +80,35 @@ function StartScreen() {
                         <div className="info bg-blur d-flex flex-column text-center text-white rounded">
                             <h3 className='fw-bolder mt-3'>Quick Navigation</h3>
                             <div className="app-route mt-4 pb-3 px-5 d-flex flex-column ">
-                                    <Link to='home'>
-                                <button className='btn btn-light mb-1 rounded-5 px-4 py-2'>
+                                <Link to='home'>
+                                    <button className='btn btn-light mb-1 rounded-5 px-4 py-2'>
                                         <i className="fa-solid fa-arrow-right-to-bracket"></i>
-                                    <span className="ms-2">Game Page</span>
-                                </button>
-                                    </Link>
-                                    <Link to="/404">
-                                <button className='btn btn-light my-1 rounded-5 px-4 py-2'>
+                                        <span className="ms-2">Game Page</span>
+                                    </button>
+                                </Link>
+                                <Link to="/404">
+                                    <button className='btn btn-light my-1 rounded-5 px-4 py-2'>
                                         <i className="fa-solid fa-bug"></i>
                                         <span className="ms-2">404 Page</span>
-                                </button>
-                                    </Link>
+                                    </button>
+                                </Link>
+                                {currentUser ?
+                                    <>
+                                        <Link to="/profile">
+                                            <button className='btn btn-light my-1 rounded-5 px-4 py-2'>
+                                            <i className="fa-solid fa-user"></i>
+                                                <span className="ms-2">Profile</span>
+                                            </button>
+                                        </Link>
+                                        <Link to="/cpanel">
+                                            <button className='btn btn-light my-1 rounded-5 px-4 py-2'>
+                                            <i className="fa-brands fa-cpanel"></i>
+                                                <span className="ms-2">Control Panel</span>
+                                            </button>
+                                        </Link>
+                                    </>
+                                :""
+                                 }
                                 {/* <button className='btn btn-light my-1 rounded-5 px-4 py-2'>
                                     <i className="fa-solid fa-bug"></i>
                                     <span className="ms-2">404 Query</span>
@@ -109,6 +123,7 @@ function StartScreen() {
                 </div>
             </div>
         </div >
+
     </>)
 }
 
