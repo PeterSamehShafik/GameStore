@@ -63,3 +63,14 @@
     padding: 10px;
   }
 } */
+
+
+  .w-md-100{
+    width: 100% !important;
+  }
+
+  @media (max-width: 990px) {
+    .w-sm-75{
+      width: 75% !important;
+    }
+}

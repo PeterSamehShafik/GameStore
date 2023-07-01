@@ -110,15 +110,15 @@ function Navbar({ currentUser, removeUser, cart, setSearch }) {
                     >
 
                       <Link
-                        to={`/profile/info/${currentUser._id}`}
+                        to={`/profile/info/${currentUser?._id}`}
                         onClick={() => {
                           localStorage.setItem("userId", "owner");
                           hideNave()
                         }}
                       >
-                        <button onClick={hideNave} className="glow-on-hover bg-dark" type="button">
+                        <button onClick={hideNave} className="glow-on-hover bg-dark d-flex align-items-center" type="button">
                           <img
-                            src={currentUser.profilePic.secure_url}
+                            src={currentUser?.profilePic?.secure_url}
                             className="img-fluid rounded-circle"
                           />
                           <span className="ms-2">{currentUser?.firstName}</span>

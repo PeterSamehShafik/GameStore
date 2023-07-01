@@ -154,7 +154,7 @@ export default function CPanel({ removeUser }) {
                                 <div className=" d-flex flex-column justify-content-center align-items-center align-items-sm-start px-0 pt-2 text-white min-vh-100">
                                     <div className="barContent dropdown-center mt-3 pb-1 mx-auto p-3 pt-0">
                                         <span className="cursor-pointer d-flex flex-column align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false" >
-                                            <img src={profile.profilePic.secure_url} alt="profPic" style={{ "width": "5rem" }} className="img-fluid rounded-circle border border-success border-3" />
+                                            <img src={profile.profilePic?.secure_url} alt="profPic" style={{ "width": "5rem" }} className="img-fluid rounded-circle border border-success border-3" />
                                             <div className="name d-flex cursor-pointer h4 mb-0 mt-1">
                                                 <span className="d-none d-sm-inline mx-1">{profile.firstName} {profile.lastName}</span>
                                                 <i className="fa-solid fa-circle-chevron-down"></i>

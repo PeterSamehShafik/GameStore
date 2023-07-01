@@ -31,37 +31,56 @@ export default function Login({ currentUser }) {
       email: Joi.string()
         .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
         .required(),
-      password: Joi.string().pattern(
-        new RegExp(
-          /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
+      password: Joi.string()
+        .pattern(
+          new RegExp(
+            /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
+          )
         )
-      ).messages(),
+        .messages(),
     });
-    let joiResponse = schema.validate(newUser, { abortEarly: true });
+    let joiResponse = schema.validate(newUser, { abortEarly: false });
     if (joiResponse.error) {
-      $(".saveData").attr("disabled", true);
-      $(".saveData").addClass("button-disabled");
+      // $(".saveData").attr("disabled", true);
+      // $(".saveData").addClass("button-disabled");
       let errors = joiResponse.error.details;
-      setErrList(joiResponse.error.details);
+      setErrList(errors);
+      console.log(errors)
+      let inputField = e.target;
+      let errorFlag = false;
+      if(e.target.value != ''){
+        inputField?.nextElementSibling.classList.remove("d-none")
 
-      if (errors[0].context.label === e.target.id) {
-        $(e.target).next().next().addClass("fa-xmark");
-        $(e.target).next().next().removeClass("fa-check");
-        $(e.target).addClass("checked-wrong");
-        $(e.target).removeClass("checked-right");
-      } else {
-        $(e.target).next().next().addClass("fa-check");
-        $(e.target).next().next().removeClass("fa-xmark");
-        $(e.target).addClass("checked-right");
-        $(e.target).removeClass("checked-wrong");
+        for (let i = 0; i < errors.length; i++) {
+          if(errors[i].context.label === inputField?.id){
+            errorFlag = true;
+            break;
+          }
+        }
+
+        if(errorFlag){
+          inputField?.classList.add("invalid-input")
+          inputField?.classList.remove("valid-input")
+          inputField?.nextElementSibling.children[1].classList.remove("d-none")
+          inputField?.nextElementSibling.children[0].classList.add("d-none")
+        }else{
+          console.log("trueee")
+          inputField?.classList.remove("invalid-input")
+          inputField?.classList.add("valid-input")
+          inputField?.nextElementSibling.children[0].classList.remove("d-none")
+          inputField?.nextElementSibling.children[1].classList.add("d-none")
+        }
+        
+      }else{
+        inputField?.nextElementSibling.classList.add("d-none")
       }
     } else {
-      $(".saveData").attr("disabled", false);
-      $(".saveData").removeClass("button-disabled");
-      $("input").next().next().addClass("fa-check");
-      $("input").next().next().removeClass("fa-xmark");
-      $("input").addClass("checked-right");
-      $("input").removeClass("checked-wrong");
+      // $(".saveData").attr("disabled", false);
+      // $(".saveData").removeClass("button-disabled");
+      // $("input").next().next().addClass("fa-check");
+      // $("input").next().next().removeClass("fa-xmark");
+      // $("input").addClass("checked-right");
+      // $("input").removeClass("checked-wrong");
       setErrList([]);
     }
   }
@@ -80,7 +99,7 @@ export default function Login({ currentUser }) {
       .post(`${baseURL}/auth/signin`, user)
       .catch(function (error) {
         if (error.response) {
-          console.log(error.response)
+          console.log(error.response);
           setAPIRes(error?.response?.data?.message);
           setApiFlag(false);
         }
@@ -95,7 +114,6 @@ export default function Login({ currentUser }) {
   }
 
   const googleSign = async () => {
-    
     // let result = await axios
     //   .get(`${baseURL}/auth/google/callback`, user)
     //   .catch(function (error) {
@@ -107,14 +125,13 @@ export default function Login({ currentUser }) {
     //   });
     // if (result?.data?.message == "done") {
     //   localStorage.setItem("token", result?.data.token);
-    //   currentUser();    
+    //   currentUser();
     //   setGoogleFlag(false);
     //   setAPIRes(null);
     //   navigate("/home");
     // }
     window.location.replace(`${baseURL}/auth/google`);
-
-  }
+  };
 
   return (
     <>
@@ -197,18 +214,16 @@ export default function Login({ currentUser }) {
       <div className="sign-in-page">
         <section>
           {/* getting background */}
-          {[...Array(260)].map((idx) => { return <span key={idx}></span> })}
+          {[...Array(260)].map((idx) => {
+            return <span key={idx}></span>;
+          })}
 
           <div className="signin mt-5">
-
             <div className="content">
-
               <h2>Sign In</h2>
 
               <form onSubmit={checkAPI} className="form">
-
-                <div className="inputBox">
-
+                <div className="inputBox ">
                   <input
                     autoComplete="off"
                     autoFocus
@@ -216,73 +231,98 @@ export default function Login({ currentUser }) {
                     onChange={getUser}
                     typeof="text"
                     id="email"
-                    className="input-field"
-                  /> <i className="desc">Email</i>
+                    className="position-relative"
+                  />{" "}
+                  <div className="position-absolute check-mark d-none">
+                    <i className="fa-solid fa-check"></i>
+                    <i className="fa-solid fa-xmark"></i>
+                  </div>
+                  <i className="desc">Email</i>
                   <p className="text-danger mb-2" id="email">
                     {getError("email")}
                   </p>
                 </div>
 
                 <div className="inputBox">
-
                   <input
+                    className="position-relative"
                     autoComplete="off"
                     autoFocus
                     required
                     onChange={getUser}
                     type="password"
                     id="password"
-                  /> <i className="desc">Password</i>
-                  <p className="text-danger wrong-input mb-2" id="email">
+                  />
+                  <div className="position-absolute check-mark d-none">
+                    <i className="fa-solid fa-check"></i>
+                    <i className="fa-solid fa-xmark"></i>
+                  </div>
+                  <i className="desc">Password</i>
+                  <p className="text-danger wrong-input mb-2 " id="email">
                     {getError("password")}
                   </p>
-
                 </div>
 
                 <div className="links">
-                  <Link className="hover-50" to="/forgot" >Forgot Password</Link>
-                  <Link className="sign-up-btn hover-50" to="/signup">Signup</Link>
-
+                  <Link className="hover-50" to="/forgot">
+                    Forgotten password?
+                  </Link>
+                  <Link className="sign-up-btn hover-50" to="/signup">
+                    Signup
+                  </Link>
                 </div>
 
                 <div className="inputBox">
+                  {googleFlag || apiFlag ? (
+                    ""
+                  ) : (
+                    <button
+                      className="sign-btn hover-50 text-white bg-violet w-100 py-2"
+                      type="submit"
+                    >
+                      Login
+                    </button>
+                  )}
 
-                  {googleFlag || apiFlag ? "" :
-                    <input className="sign-btn hover-50 text-white" type="submit" value="Login" />
-                  }
-
-
-                  {apiFlag || googleFlag ? "" :
-                    <div onClick={googleSign} className="google-btn w-100 cursor-pointer d-flex justify-content-center align-items-center my-3">
+                  {apiFlag || googleFlag ? (
+                    ""
+                  ) : (
+                    <div
+                      onClick={googleSign}
+                      className="bg-google py-2 google-btn w-100 cursor-pointer d-flex justify-content-center align-items-center my-3"
+                    >
                       <div className="google-icon-wrapper">
-                        <img className="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" />
+                        <img
+                          className="google-icon"
+                          src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
+                        />
                       </div>
-                      <p className=" text-white m-0"><b>Sign in with google</b></p>
-
+                      <p className="hover-50 text-white m-0">
+                        <b>Sign in with google</b>
+                      </p>
                     </div>
-                  }
+                  )}
 
-                  {apiFlag || googleFlag ? <button className="btn btn-info w-100 d-flex justify-content-center align-items-center">
-                    <div className="sk-chase">
-                      <div className="sk-chase-dot"></div>
-                      <div className="sk-chase-dot"></div>
-                      <div className="sk-chase-dot"></div>
-                      <div className="sk-chase-dot"></div>
-                      <div className="sk-chase-dot"></div>
-                      <div className="sk-chase-dot"></div>
-                    </div></button> : ""}
-
+                  {apiFlag || googleFlag ? (
+                    <button className="btn btn-info w-100 d-flex justify-content-center align-items-center">
+                      <div className="sk-chase">
+                        <div className="sk-chase-dot"></div>
+                        <div className="sk-chase-dot"></div>
+                        <div className="sk-chase-dot"></div>
+                        <div className="sk-chase-dot"></div>
+                        <div className="sk-chase-dot"></div>
+                        <div className="sk-chase-dot"></div>
+                      </div>
+                    </button>
+                  ) : (
+                    ""
+                  )}
                 </div>
-
               </form>
-
             </div>
-
           </div>
-
         </section>
       </div>
-
     </>
   );
 }

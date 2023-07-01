@@ -108,9 +108,11 @@ function Details({ currentUser, getCart, cart }) {
       .get(`${baseURL}/game/${id}`, config)
       .catch(function (error) {
         if (error.response) {
+          console.log(error)
           setGame(null);
         }
       });
+      
     if (result?.data?.message === "done") {
       setGame(result.data.game);
       setUserRate(result.data.game.userRate);

@@ -162,7 +162,7 @@ export default function GameControl() {
       if (result?.data?.message == "done") {
         handleCloseModal()
         callModal({ header: "Success!", body: "Images uploaded successfully", isMainBtn: false, closeBtnTxt: "Close", closeBtnColor: "success" })
-        setGamePics(result.data.game.pics)
+        setGamePics(result.data.game?.pics)
         getGames()
         // console.log(result.data.games)
       }
@@ -204,7 +204,7 @@ export default function GameControl() {
       if (result?.data?.message == "done") {
         handleCloseModal()
         callModal({ header: "Success!", body: "Video uploaded successfully", isMainBtn: false, closeBtnTxt: "Close", closeBtnColor: "success" })
-        setGameVideo(result.data.game.video)
+        setGameVideo(result.data.game?.video)
         getGames()
         // console.log(result.data.games)
       }
@@ -230,7 +230,7 @@ export default function GameControl() {
     });
     if (result?.data?.message == "done") {
       callModal({ header: "Success!", body: "The picture deleted successfully", isMainBtn: false, closeBtnTxt: "Close", closeBtnColor: "success" })
-      setGamePics(result.data.game.pics)
+      setGamePics(result.data.game?.pics)
       getGames()
       // console.log(result.data)
 
@@ -240,7 +240,7 @@ export default function GameControl() {
 
   const editImgs = (gameId) => {
     setEditMode({ id: gameId, mode: "editImg" })
-    const searchIndex = games.findIndex((game) => game._id == gameId);
+    const searchIndex = games.findIndex((game) => game?._id == gameId);
     setGame(games[searchIndex])
     setGamePics(games[searchIndex].pics)
     setGameVideo(games[searchIndex].video)
@@ -577,19 +577,19 @@ export default function GameControl() {
                   </thead>
                   <tbody className="table-group-divider">
                     {games?.map((game) =>
-                      <tr key={game._id} >
+                      <tr key={game?._id} >
                         <td className='gamePic w-25 w-sm-15 position-relative'>
-                          {editMode.mode === "edit" && editMode.id == game._id ?
+                          {editMode.mode === "edit" && editMode.id == game?._id ?
                             <>
-                              <label htmlFor={`gamePic${game._id}`} className='position-absolute top-0 end-0'>
+                              <label htmlFor={`gamePic${game?._id}`} className='position-absolute top-0 end-0'>
                                 <i className="fa-regular fa-pen-to-square fa-2xl cursor-pointer hover-50"></i>
                               </label>
-                              <input id={`gamePic${game._id}`} type="file" className='d-none' onChange={viewPic} />
+                              <input id={`gamePic${game?._id}`} type="file" className='d-none' onChange={viewPic} />
                             </>
                             :
                             ""
                           }
-                          {editMode.mode === "edit" && editMode.id == game._id && editMode.pic ?
+                          {editMode.mode === "edit" && editMode.id == game?._id && editMode.pic ?
                             showCropper ?
                               <div className="text-center">
                                 <Cropper
@@ -615,14 +615,14 @@ export default function GameControl() {
                               :
                               <img
                                 src={editMode.pic}
-                                alt={game.slug}
+                                alt={game?.slug}
                                 className="rounded-circle img-fluid "
                                 width="150"
                                 name="gameImg"
                               /> :
                             <img
-                              src={game.mainPic?.secure_url}
-                              alt={game.slug}
+                              src={game?.mainPic?.secure_url}
+                              alt={game?.slug}
                               className="rounded-circle img-fluid "
                               width="150"
                               name="gameImg"
@@ -630,34 +630,34 @@ export default function GameControl() {
                           }
                         </td>
                         <td className='game-name-t '>
-                          {editMode.mode === "edit" && editMode.id == game._id ?
-                            <textarea type="text" className='form-control' defaultValue={game.name} name='gameName' />
+                          {editMode.mode === "edit" && editMode.id == game?._id ?
+                            <textarea type="text" className='form-control' defaultValue={game?.name} name='gameName' />
                             :
-                            <span> {game.name}</span>}
+                            <span> {game?.name}</span>}
                         </td>
                         <td className='desc-div w-50 w-sm-100'>
-                          {editMode.mode === "edit" && editMode.id == game._id ?
-                            <textarea type="text" className='form-control ' defaultValue={game.desc} name='gameDesc' />
+                          {editMode.mode === "edit" && editMode.id == game?._id ?
+                            <textarea type="text" className='form-control ' defaultValue={game?.desc} name='gameDesc' />
                             :
-                            <span>  {game.desc}</span>
+                            <span>  {game?.desc}</span>
                           }
                         </td>
                         <td className='price-div'>
-                          {editMode.mode === "edit" && editMode.id == game._id ?
-                            <textarea type="number" className='form-control' defaultValue={game.price} name="gamePrice" />
+                          {editMode.mode === "edit" && editMode.id == game?._id ?
+                            <textarea type="number" className='form-control' defaultValue={game?.price} name="gamePrice" />
                             :
-                            <span> {game.price}</span>
+                            <span> {game?.price}</span>
                           }
                         </td>
                         <td className='platform-div'>
-                          {editMode.mode === "edit" && editMode.id == game._id ?
-                            game.platform.map((e, idx) => <span key={idx} className='text-capitalize'> {e + " "}</span>)
+                          {editMode.mode === "edit" && editMode.id == game?._id ?
+                            game?.platform.map((e, idx) => <span key={idx} className='text-capitalize'> {e + " "}</span>)
                             :
-                            game.platform.map((e, idx) => <span key={idx} className='text-capitalize'> {e + " "}</span>)
+                            game?.platform.map((e, idx) => <span key={idx} className='text-capitalize'> {e + " "}</span>)
                           }
                         </td>
                         <td className='genre-div'>
-                          {editMode.mode === "edit" && editMode.id == game._id ?
+                          {editMode.mode === "edit" && editMode.id == game?._id ?
                             <select name='gameGenre' className="form-select" aria-label="Default select example">
                               <option defaultValue disabled>Choose the Genre</option>
                               {genres?.map((genre) =>
@@ -665,32 +665,32 @@ export default function GameControl() {
                               )}
                             </select>
                             :
-                            <span> {game.genreId?.name}</span>
+                            <span> {game?.genreId?.name}</span>
                           }
                         </td>
                         <td className="mange">
-                          {editMode.mode === "edit" && editMode.id == game._id ?
+                          {editMode.mode === "edit" && editMode.id == game?._id ?
                             <>
-                              {showCropper ? "" : <button onClick={() => saveGame(game._id)} className={'btn btn-success m-1 '}> Save </button>}
+                              {showCropper ? "" : <button onClick={() => saveGame(game?._id)} className={'btn btn-success m-1 '}> Save </button>}
                               <button onClick={() => setEditMode({ id: 0, mode: "view" })} className='btn btn-secondary m-1 '> Cancel </button>
                             </>
                             :
                             <>
 
-                              {game.isDeleted ?
-                                editMode.mode === "editImg" && editMode.id == game._id ? "" : <button onClick={() => { unDeleteGame(game._id) }} className='btn btn-danger m-1'> undelete </button>
+                              {game?.isDeleted ?
+                                editMode.mode === "editImg" && editMode.id == game?._id ? "" : <button onClick={() => { unDeleteGame(game?._id) }} className='btn btn-danger m-1'> undelete </button>
                                 :
                                 <>
-                                  {editMode.mode === "editImg" && editMode.id == game._id ? "" : game.createdBy._id === profile._id ? <button onClick={() => editGame(game._id)} className='btn btn-info m-1'> Edit </button> : ""}
-                                  {game.createdBy._id === profile._id ? <button onClick={() => editImgs(game._id)} className='btn btn-primary m-1'> Imgs </button> : ""}
-                                  {editMode.mode === "editImg" && editMode.id == game._id ? "" : <button onClick={() => {
+                                  {editMode.mode === "editImg" && editMode.id == game?._id ? "" : game?.createdBy?._id === profile?._id ? <button onClick={() => editGame(game?._id)} className='btn btn-info m-1'> Edit </button> : ""}
+                                  {game?.createdBy?._id === profile?._id ? <button onClick={() => editImgs(game?._id)} className='btn btn-primary m-1'> Imgs </button> : ""}
+                                  {editMode.mode === "editImg" && editMode.id == game?._id ? "" : <button onClick={() => {
                                     callModal({
                                       isMainBtn: true,
                                       header: "Delete game",
                                       body: "Are you sure?",
                                       mainBtnTxt: "Yes",
                                       mainBtnColor: "danger",
-                                      mainBtnFunc: () => deleteGame(game._id),
+                                      mainBtnFunc: () => deleteGame(game?._id),
                                       closeBtnTxt: "No",
                                       closeBtnColor: "success",
                                     });

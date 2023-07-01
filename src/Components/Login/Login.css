@@ -1,27 +1,5 @@
- .fa-check,
- .fa-xmark {
-   right: 15px;
-   top: 10px;
-   font-size: 20px;
- }
 
- .fa-check {
-   color: green;
- }
-
- .fa-xmark {
-   color: red;
- }
-
- .checked-right {
-   border: 2px solid greenyellow;
- }
-
- .checked-wrong {
-   border: 2px solid red;
- }
-
- .button-disabled {
+.button-disabled {
    background-color: gray !important;
    border-color: gray !important;
  }
@@ -30,11 +8,6 @@
    font-size: 14px !important;
  }
 
- #tsparticles {
-   position: fixed;
-   width: 100%;
-   z-index: -1;
- }
 
  .sign-up-page {
    height: 92vh;
@@ -165,7 +138,7 @@
  .signin .content .form .inputBox input:valid~i {
    transform: translateY(-7.5px);
    font-size: 0.8em;
-   color: #fff;
+   color: #892be0;
  }
 
  .signin .content .form .links {
@@ -184,10 +157,14 @@
    color: #892be0 !important;
    font-weight: 600 !important;
  }
-
+ .bg-violet{
+  background: #892be0 !important;
+ }
+ .bg-google{
+  background-color: #4285f4 !important;
+ }
  .sign-btn {
    padding: 10px !important;
-   background: #892be0 !important;
    color: #000 !important;
    font-weight: 600 !important;
    font-size: 1.35em !important;
@@ -199,6 +176,9 @@
    opacity: 0.6 !important;
  }
 
+ .desc{
+  font-weight: 600;
+ }
  input:autofill .desc,
  input:-webkit-autofill .desc {
    color: #000 !important;
@@ -224,9 +204,8 @@
  .google-btn {
    width: 184px;
    height: 42px;
-   background-color: #4285f4;
    border-radius: 2px;
-   box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .25);
+   box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .25) !important;
  }
 
  .google-btn .google-icon-wrapper {
@@ -263,4 +242,21 @@
 
  .google-btn:active {
    background: #1669f2;
+ }
+
+ .valid-input{
+    border: 3px solid green !important;
+ }
+ .invalid-input{
+    border: 3px solid red !important;
+ }
+ .fa-check{
+  color: green;
+ }
+ .fa-xmark{
+  color: red;
+ }
+ .check-mark{
+    right: 40px;
+    top: 0px;
  }
