@@ -10,7 +10,7 @@
  
  
   .sign-up-page {
-    height: 92vh;
+    /* height: 92vh; */
   }
  
   .form-control:focus {
@@ -26,8 +26,8 @@
   .sign-up-page section {
     position: absolute;
     top: 0;
-    width: 100vw;
-    height: 100vh;
+    /* width: 100vw; */
+    height: 150vh; 
     display: flex;
     justify-content: center;
     align-items: center;
@@ -72,12 +72,13 @@
  
   .sign-up-page section .signup {
     position: absolute;
-    width: 400px;
+    top: 7%;
+    /* width: 50rem; */
     background: #222;
     z-index: 1000;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: start;
     padding: 40px;
     border-radius: 4px;
     box-shadow: 0 15px 35px rgba(0, 0, 0, 9);

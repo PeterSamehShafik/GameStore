@@ -1,4 +1,4 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import Joi from "joi";
 import $ from "jquery";
 import axios from "axios";
@@ -274,36 +274,38 @@ export default function Signup() {
               <h2>Sign Up</h2>
 
               <form onSubmit={checkAPI} className="form">
-                <div className="inputBox ">
-                  <input
-                    autoComplete="off"
-                    autoFocus
-                    required
-                    onChange={getUser}
-                    typeof="text"
-                    id="firstName"
-                    className="input-field"
-                  />{" "}
-                  <i className="desc">First Name</i>
-                  <p className="text-danger mb-2" id="firstName">
-                    {getError("firstName")}
-                  </p>
-                </div>
-                
-                <div className="inputBox ">
-                  <input
-                    autoComplete="off"
-                    autoFocus
-                    required
-                    onChange={getUser}
-                    typeof="text"
-                    id="lastName"
-                    className="input-field"
-                  />{" "}
-                  <i className="desc">Last Name</i>
-                  <p className="text-danger mb-2" id="lastName">
-                    {getError("lastName")}
-                  </p>
+                <div className="d-flex">
+                  <div className="inputBox me-2">
+                    <input
+                      autoComplete="off"
+                      autoFocus
+                      required
+                      onChange={getUser}
+                      typeof="text"
+                      id="firstName"
+                      className="input-field"
+                    />{" "}
+                    <i className="desc">First Name</i>
+                    <p className="text-danger mb-2 d-none" id="firstName">
+                      {getError("firstName")}
+                    </p>
+                  </div>
+
+                  <div className="inputBox ms-2">
+                    <input
+                      autoComplete="off"
+                      autoFocus
+                      required
+                      onChange={getUser}
+                      typeof="text"
+                      id="lastName"
+                      className="input-field"
+                    />{" "}
+                    <i className="desc">Last Name</i>
+                    <p className="text-danger mb-2 d-none" id="lastName">
+                      {getError("lastName")}
+                    </p>
+                  </div>
                 </div>
 
                 <div className="inputBox ">
@@ -312,16 +314,32 @@ export default function Signup() {
                     autoFocus
                     required
                     onChange={getUser}
-                    typeof="text"
-                    id="userName"
+                    type="email"
+                    id="email"
                     className="input-field"
                   />{" "}
-                  <i className="desc">Username</i>
-                  <p className="text-danger mb-2" id="userName">
+                  <i className="desc">Email</i>
+                  <p className="text-danger mb-2 d-none" id="email">
+                    {getError("email")}
+                  </p>
+                </div>
+
+               
+                <div className="inputBox ">
+                  <input
+                    autoComplete="off"
+                    autoFocus
+                    required
+                    onChange={getUser}
+                    id="userName"
+                    type="text"                    
+                    className="input-field"
+                  />{" "}
+                  <i className="desc">userName</i>
+                  <p className="text-danger mb-2 d-none" id="userName">
                     {getError("userName")}
                   </p>
                 </div>
-                
                 <div className="inputBox ">
                   <input
                     autoComplete="off"
@@ -329,26 +347,11 @@ export default function Signup() {
                     required
                     onChange={getUser}
                     typeof="text"
-                    id="email"
+                    id="phone"
                     className="input-field"
                   />{" "}
-                  <i className="desc">Email</i>
-                  <p className="text-danger mb-2" id="email">
-                    {getError("email")}
-                  </p>
-                </div>
-                <div className="inputBox ">
-                  <input
-                    autoComplete="off"
-                    autoFocus
-                    required
-                    onChange={getUser}
-                    typeof="text"
-                    id="email"
-                    className="input-field"
-                  />{" "}
-                  <i className="desc">Email</i>
-                  <p className="text-danger mb-2" id="email">
+                  <i className="desc">Phone</i>
+                  <p className="text-danger mb-2 d-none" id="phone">
                     {getError("email")}
                   </p>
                 </div>
@@ -359,12 +362,12 @@ export default function Signup() {
                     autoFocus
                     required
                     onChange={getUser}
-                    typeof="date"
+                    type="date"
                     id="DOB"
                     className="input-field"
                   />{" "}
                   <i className="desc">Date of birth:</i>
-                  <p className="text-danger mb-2" id="DOB">
+                  <p className="text-danger mb-2 d-none" id="DOB">
                     {getError("DOB")}
                   </p>
                 </div>
@@ -378,10 +381,7 @@ export default function Signup() {
                     type="password"
                     id="password"
                   />
-                  <i className="desc">Password</i>
-                  <p className="text-danger wrong-input mb-2 " id="email">
-                    {getError("password")}
-                  </p>
+                  <i className="desc">Password</i>                 
                 </div>
 
 
@@ -390,12 +390,17 @@ export default function Signup() {
                     ""
                   ) : (
                     <button
-                      className="sign-btn hover-50 text-white bg-violet w-100 py-2"
+                      className="sign-btn btn hover-50 text-white bg-violet w-100 py-2"
                       type="submit"
                     >
-                      Login
+                      Sign Up
                     </button>
                   )}
+                  <div className="links">
+                    <Link className=" sign-up-btn mt-2 hover-50" to="/login">
+                      Already have an account?
+                    </Link>
+                  </div>
 
 
                   {apiFlag ? (
