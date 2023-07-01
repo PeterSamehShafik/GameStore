@@ -63,7 +63,7 @@ function Details({ currentUser, getCart, cart }) {
   const { id } = useParams();
   const [addCommentFlag, setAddCommentFlag] = useState(false);
   const checkCart = async () => {
-    const res = cart.games?.find((e) => e._id == id);
+    const res = cart.games?.find((e) => e._id === id);
     res ? setIsInCart(true) : setIsInCart(false);
   };
 
@@ -90,7 +90,7 @@ function Details({ currentUser, getCart, cart }) {
         }
       });
 
-    if (result?.data?.message == "done") {
+    if (result?.data?.message === "done") {
       setUserRate(newValue);
     }
   };
@@ -111,7 +111,7 @@ function Details({ currentUser, getCart, cart }) {
           setGame(null);
         }
       });
-    if (result?.data?.message == "done") {
+    if (result?.data?.message === "done") {
       setGame(result.data.game);
       setUserRate(result.data.game.userRate);
     } else {
@@ -126,7 +126,7 @@ function Details({ currentUser, getCart, cart }) {
           setComments(null);
         }
       });
-    if (result?.data?.message == "done") {
+    if (result?.data?.message === "done") {
       result.data.comments.reverse();
       setComments(result.data.comments);
     } else {
@@ -155,7 +155,7 @@ function Details({ currentUser, getCart, cart }) {
             setAddCommentFlag(false);
           }
         });
-      if (result?.data?.message == "done") {
+      if (result?.data?.message === "done") {
         document.getElementById("commentBody").value = "";
         setAddCommentFlag(false);
         getGameComment();
@@ -201,7 +201,7 @@ function Details({ currentUser, getCart, cart }) {
             console.log(error.response);
           }
         });
-      if (result?.data?.message == "done") {
+      if (result?.data?.message === "done") {
         text.classList.remove("d-none");
         editSection.classList.add("d-none");
         editSection.classList.remove("d-sm-flex");
@@ -239,7 +239,7 @@ function Details({ currentUser, getCart, cart }) {
           console.log(error.response);
         }
       });
-    if (result?.data?.message == "done") {
+    if (result?.data?.message === "done") {
       const tempComments = [...comments];
       tempComments.splice(index, 1);
       setComments(tempComments);
@@ -279,7 +279,7 @@ function Details({ currentUser, getCart, cart }) {
           console.log(error.response);
         }
       });
-    if (result?.data?.message == "done") {
+    if (result?.data?.message === "done") {
       callModal({
         header: "Success!",
         body: "The Game added to your cart",
@@ -297,7 +297,7 @@ function Details({ currentUser, getCart, cart }) {
   const addToWishList = async () => {
     // console.log("test")
     // const localWishlist = JSON.parse(localStorage.getItem("wishlist"));
-    // const res = localWishlist?.find(e => e == game.id);
+    // const res = localWishlist?.find(e => e === game.id);
     // if (!res) {
     const config = {
       headers: {
@@ -309,7 +309,7 @@ function Details({ currentUser, getCart, cart }) {
       .catch((error) => {
         console.log(error);
       });
-    if (result?.data?.message == "done") {
+    if (result?.data?.message === "done") {
       console.log(JSON.stringify(result?.data?.update?.wishList));
       localStorage.setItem(
         "wishlist",
@@ -327,7 +327,7 @@ function Details({ currentUser, getCart, cart }) {
   //   if(localWishlist){
   //     console.log(localWishlist)
   //     for (const w of localWishlist) {
-  //       if(w.localeCompare(game._id) == 0){
+  //       if(w.localeCompare(game._id) === 0){
   //         console.log("first")
   //         exist = true;
   //         break;
@@ -550,7 +550,7 @@ function Details({ currentUser, getCart, cart }) {
                     )}
                   </span>
                 </div>
-                {game.createdBy?._id == currentUser?._id ? (
+                {game.createdBy?._id === currentUser?._id ? (
                   <span className="fw-bolder text-success pe-2">Creator</span>
                 ) : (
                   <>
@@ -649,9 +649,9 @@ function Details({ currentUser, getCart, cart }) {
                                     {comment?.createdBy?.lastName}
                                   </h4>
                                 </div>
-                                {comment?.createdBy?._id == currentUser?._id ||
-                                currentUser?.role == "superAdmin" ||
-                                game?.createdBy?._id == currentUser?._id ? (
+                                {comment?.createdBy?._id === currentUser?._id ||
+                                currentUser?.role === "superAdmin" ||
+                                game?.createdBy?._id === currentUser?._id ? (
                                   <div className="dropdownmenu ms-auto">
                                     <div className="dropdown">
                                       <button
@@ -686,7 +686,7 @@ function Details({ currentUser, getCart, cart }) {
                                         )}
                                         {comment?.createdBy?._id ==
                                           currentUser?._id ||
-                                        currentUser?.role == "superAdmin" ||
+                                        currentUser?.role === "superAdmin" ||
                                         game?.createdBy?._id ==
                                           currentUser?._id ? (
                                           <span
@@ -788,7 +788,7 @@ function Details({ currentUser, getCart, cart }) {
               >
                 {modalData.closeBtnTxt}
               </Button>
-              {modalData.isMainBtn == true ? (
+              {modalData.isMainBtn === true ? (
                 <Button
                   variant={modalData.mainBtnColor}
                   onClick={applyCloseModel}

@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 //modal
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import jwtDecode from "jwt-decode";
 
 export default function Wishlist() {
   //modal
@@ -62,7 +61,7 @@ export default function Wishlist() {
           console.log(error.response);
         }
       });
-    if (result?.data?.message == "done") {
+    if (result?.data?.message === "done") {
       setWishList(result.data.wishList);
     }
   };
@@ -78,7 +77,7 @@ export default function Wishlist() {
         // handle errors
         console.log(error);
       });
-    if (result?.data?.message == "done") {
+    if (result?.data?.message === "done") {
       let tempWishlist = [...wishList];
       tempWishlist.splice(index, 1);
       // localStorage.setItem("wishlist", JSON.stringify(result?.data?.update?.wishList))
@@ -95,7 +94,7 @@ export default function Wishlist() {
   return (
     <>
       {wishList ? (
-        wishList.length != 0 ? (
+        wishList.length !== 0 ? (
           <div className="container game">
             <div className="row">
               {wishList?.map((game, idx) =>
@@ -147,7 +146,7 @@ export default function Wishlist() {
                 >
                   {modalData.closeBtnTxt}
                 </Button>
-                {modalData.isMainBtn == true ? (
+                {modalData.isMainBtn === true ? (
                   <Button
                     variant={modalData.mainBtnColor}
                     onClick={applyCloseModel}

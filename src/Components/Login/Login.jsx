@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Joi from "joi";
 import $ from "jquery";
 import axios from "axios";
@@ -44,7 +44,7 @@ export default function Login({ currentUser }) {
       let errors = joiResponse.error.details;
       setErrList(joiResponse.error.details);
 
-      if (errors[0].context.label == e.target.id) {
+      if (errors[0].context.label === e.target.id) {
         $(e.target).next().next().addClass("fa-xmark");
         $(e.target).next().next().removeClass("fa-check");
         $(e.target).addClass("checked-wrong");
@@ -67,7 +67,7 @@ export default function Login({ currentUser }) {
   }
   function getError(key) {
     for (const error of ErrList) {
-      if (error.context.key == key) {
+      if (error.context.key === key) {
         return error.message;
       }
     }
@@ -85,7 +85,7 @@ export default function Login({ currentUser }) {
           setApiFlag(false);
         }
       });
-    if (result?.data?.message == "done") {
+    if (result?.data?.message === "done") {
       localStorage.setItem("token", result?.data.token);
       currentUser();
       setApiFlag(false);

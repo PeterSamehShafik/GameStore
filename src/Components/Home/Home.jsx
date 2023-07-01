@@ -5,7 +5,7 @@ import "./HomeMediaQuery.css";
 import "./Navigation.css";
 import "./NavigationMediaQuery.css";
 import axios from "axios";
-import { BEARERKEY, baseURL } from "../../index.js";
+import { baseURL } from "../../index.js";
 //paginate
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
