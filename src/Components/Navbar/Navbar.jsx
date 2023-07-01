@@ -35,8 +35,9 @@ function Navbar({ currentUser, removeUser, cart, setSearch }) {
           >
             <span className="navbar-toggler-icon text-white"></span>
           </button>
+          
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            {!location.pathname.toLowerCase().includes("home")  || !currentUser ? (
+            {!location.pathname.toLowerCase().includes("home") ? (
               ""
             ) : (
               <div
