@@ -110,7 +110,6 @@ export default function Profile({ crrUser, currentUser }) {
         setReload(false);
       }
     }
-    checkIsFollowed();
   };
   function modifyButtons(e) {
     setPathname(e.target.id);
@@ -211,6 +210,7 @@ export default function Profile({ crrUser, currentUser }) {
     if (localStorage.getItem("id") === crrUser?._id) {
       localStorage.setItem("userId", "owner");
     }else{
+
       localStorage.setItem("userId", "user");
     }
     let checkId = localStorage.getItem("id");
@@ -257,6 +257,7 @@ export default function Profile({ crrUser, currentUser }) {
   };
   useEffect(() => {
     getProfile();
+    checkIsFollowed();
   }, []);
 
   useEffect(() => {
@@ -265,6 +266,7 @@ export default function Profile({ crrUser, currentUser }) {
 
   useEffect(() => {
     getProfile();
+    checkIsFollowed();
   }, [localStorage.getItem("id")]);
 
   return (
@@ -285,7 +287,7 @@ export default function Profile({ crrUser, currentUser }) {
                     <div className="card-body">
                       <div className="d-flex flex-column align-items-center">
                         <div className="profile-img position-relative">
-                          {localStorage.getItem("id") === "user" ? (
+                          {localStorage.getItem("userId") === "user" ? (
                             ""
                           ) : (
                             <div className="image-upload position-absolute top-0 end-0">

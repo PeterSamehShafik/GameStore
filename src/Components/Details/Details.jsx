@@ -109,10 +109,9 @@ function Details({ currentUser, getCart, cart }) {
       .catch(function (error) {
         if (error.response) {
           console.log(error)
-          setGame(null);
+          // setGame(null);
         }
       });
-      console.log(result)
     if (result?.data?.message === "done") {
       setGame(result.data.game);
       setUserRate(result.data.game.userRate);
@@ -235,7 +234,6 @@ function Details({ currentUser, getCart, cart }) {
     };
     let result = await axios
       .delete(`${baseURL}/game/${game._id}/comment/${commentID}`, config)
-      //console.log(`${baseURL}/game/${game._id}/comment/${commentID}`)
       .catch(function (error) {
         if (error.response) {
           console.log(error.response);
@@ -297,10 +295,6 @@ function Details({ currentUser, getCart, cart }) {
 
   // AddToWishList
   const addToWishList = async () => {
-    // console.log("test")
-    // const localWishlist = JSON.parse(localStorage.getItem("wishlist"));
-    // const res = localWishlist?.find(e => e === game.id);
-    // if (!res) {
     const config = {
       headers: {
         authorization: BEARERKEY + localStorage.getItem("token"),
@@ -312,7 +306,6 @@ function Details({ currentUser, getCart, cart }) {
         console.log(error);
       });
     if (result?.data?.message === "done") {
-      console.log(JSON.stringify(result?.data?.update?.wishList));
       localStorage.setItem(
         "wishlist",
         JSON.stringify(result?.data?.update?.wishList)

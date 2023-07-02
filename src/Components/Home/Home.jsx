@@ -108,7 +108,7 @@ function Home({ search, setSearch, page, setPage }) {
         setLoading(true);
         console.log(err);
       });
-    console.log(result.data)
+
     setGames(result?.data?.games);
     setPageCount(result.data.pages)
     setLoading(true);

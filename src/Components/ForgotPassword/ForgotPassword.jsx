@@ -5,6 +5,7 @@ import Joi from "joi";
 import $ from "jquery";
 import axios from "axios";
 import { Link, useNavigate } from 'react-router-dom';
+import './ForgotPassword.css'
 
 export default function ForgotPassword() {
     const [user, setUser] = useState({});
@@ -31,36 +32,40 @@ export default function ForgotPassword() {
                 new RegExp(
                     /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
                 )
-            ).messages(),
+            ).messages({"string.pattern.base": `Minimum eight, at least one uppercase letter, one lowercase letter, one number and one special character`}),
             code: Joi.string()
         });
         let joiResponse = schema.validate(newUser, { abortEarly: true });
-        if (joiResponse.error) {
-            $(".sendCode").attr("disabled", true);
-            $(".sendCode").addClass("button-disabled");
-            let errors = joiResponse.error.details;
-            setErrList(joiResponse.error.details);
-
-            if (errors[0].context.label == e.target.id) {
-                $(e.target).next().next().addClass("fa-xmark");
-                $(e.target).next().next().removeClass("fa-check");
-                $(e.target).addClass("checked-wrong");
-                $(e.target).removeClass("checked-right");
-            } else {
-                $(e.target).next().next().addClass("fa-check");
-                $(e.target).next().next().removeClass("fa-xmark");
-                $(e.target).addClass("checked-right");
-                $(e.target).removeClass("checked-wrong");
-            }
-        } else {
-            $(".sendCode").attr("disabled", false);
-            $(".sendCode").removeClass("button-disabled");
-            $("input").next().next().addClass("fa-check");
-            $("input").next().next().removeClass("fa-xmark");
-            $("input").addClass("checked-right");
-            $("input").removeClass("checked-wrong");
-            setErrList([]);
+        let inputField = e.target;
+    if (joiResponse.error) {
+      let errors = joiResponse.error.details;
+      let errorFlag,
+        i = 0;
+      for (i = 0; i < errors.length; i++) {
+        if (errors[i].context.label === inputField?.id) {
+          errorFlag = true;
+          break;
         }
+      }
+      if (errorFlag) {
+        inputField?.nextElementSibling.classList.remove("d-none");
+        inputField?.classList.add("invalid-input");
+        inputField?.classList.remove("valid-input");
+        
+        setErrList([errors[i]]);
+      } else {
+        inputField?.classList.remove("invalid-input");
+        inputField?.classList.add("valid-input");
+        setErrList([]);
+      }
+      if (inputField.value === "" && errorFlag) {
+        setErrList([]);
+      }
+    } else {
+      inputField?.classList.remove("invalid-input");
+      inputField?.classList.add("valid-input");
+      setErrList([]);
+    }
     }
     function getError(key) {
         for (const error of ErrList) {
@@ -149,9 +154,17 @@ export default function ForgotPassword() {
                                                 onChange={getUser}
                                                 typeof="text"
                                                 id="email"
-                                                className="input-field"
+                                                className="input-field position-relative"
                                                 defaultValue=""
-                                            /> <i className="desc">email</i>
+                                            /> 
+                                            <div className="position-absolute check-mark d-none">
+                                                <i className="fa-solid fa-check"></i>
+                                                <i className="fa-solid fa-xmark"></i>
+                                            </div>
+                                            <i className="desc">email</i>
+                                            <p className="text-danger wrong-input mb-2 " id="email">
+                    {getError("email")}
+                  </p>
                                         </div> : ""}
 
                                         <div className="inputBox">
@@ -176,7 +189,11 @@ export default function ForgotPassword() {
                                                 onChange={getUser}
                                                 type="text"
                                                 id="newPassword"
-                                            /> <i className="desc">New Password</i>
+                                            />
+                                            <div className="position-absolute check-mark d-none">
+
+                                            </div> 
+                                            <i className="desc">New Password</i>
                                             <p className="text-danger wrong-input mb-2" id="email">
                                                 {getError("newPassword")}
                                             </p>

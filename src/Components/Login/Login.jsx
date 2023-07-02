@@ -187,19 +187,19 @@ export default function Login({ currentUser }) {
                   >
                     {
                       !showPassword?
-                      <i class="fa-regular fa-eye-slash"></i>
+                      <i className="fa-regular fa-eye-slash"></i>
                       :
                       ''
                     }
                     {
                       showPassword?
-                      <i class="fa-regular fa-eye"></i>
+                      <i className="fa-regular fa-eye"></i>
                       :
                       ''
                     }
                   </span>
                   <i className="desc">Password</i>
-                  <p className="text-danger wrong-input mb-2 " id="email">
+                  <p className="text-danger wrong-input mb-2 " id="password">
                     {getError("password")}
                   </p>
                 </div>
