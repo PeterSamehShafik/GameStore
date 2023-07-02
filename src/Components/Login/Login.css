@@ -263,4 +263,8 @@
  .show-password{
   right: -25px !important;
   top: 0px !important;
+  transition: all 0.2s;
+ }
+ .show-password:hover i{
+    color: #892be0 !important;
  }

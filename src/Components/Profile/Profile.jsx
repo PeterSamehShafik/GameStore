@@ -88,6 +88,7 @@ export default function Profile({ crrUser, currentUser }) {
             navigate("/login");
           }
         });
+
       if (result?.data?.message === "done") {
         setProfile(result.data.user);
         setReload(false);
@@ -210,7 +211,6 @@ export default function Profile({ crrUser, currentUser }) {
     if (localStorage.getItem("id") === crrUser?._id) {
       localStorage.setItem("userId", "owner");
     }else{
-
       localStorage.setItem("userId", "user");
     }
     let checkId = localStorage.getItem("id");

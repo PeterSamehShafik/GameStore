@@ -38,14 +38,19 @@
   /* margin-left: 44px; */
 
 }
-.start-screen button{
+.start-screen .btn{
+  padding: 0.65rem 0rem;
   transition: all 0.1s !important;
   font-size: large !important;
+  color: black !important;
 }
-.start-screen button:hover {
+.start-screen .btn:hover {
   background-color: #0dcaf0 !important;
   border: none!important;
   transform: scale(1.05) !important;
+}
+.start-screen a{
+  
 }
 
 

@@ -9,7 +9,7 @@
 }
 
 .not-found {
-    overflow: hidden;
+    overflow-x: hidden;
     margin: 0px;
     background: rgb(31, 31, 31);
     height: 100vh;
@@ -141,8 +141,7 @@
 /* CSS button */
 .button-49,
 .button-49:after {
-    width: 150px;
-    height: 76px;
+    
     line-height: 78px;
     font-size: 20px;
     font-family: 'Bebas Neue', sans-serif;

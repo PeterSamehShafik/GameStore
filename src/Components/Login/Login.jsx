@@ -182,7 +182,7 @@ export default function Login({ currentUser }) {
                     <i className="fa-solid fa-xmark"></i>
                   </div>
                   <span
-                    className="show-password bg-transparent position-absolute"
+                    className="show-password bg-transparent position-absolute cursor-pointer"
                     onClick={handlePassword}
                   >
                     {
@@ -193,7 +193,7 @@ export default function Login({ currentUser }) {
                     }
                     {
                       showPassword?
-                      <i className="fa-regular fa-eye"></i>
+                      <i className="fa-regular fa-eye "></i>
                       :
                       ''
                     }
