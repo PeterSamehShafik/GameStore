@@ -4,7 +4,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import "../Login/Login.css";
 import { baseURL } from "../../index.js";
-import './SignUp.css'
+import "./SignUp.css";
 
 export default function Signup() {
   let navigate = useNavigate();
@@ -48,7 +48,8 @@ export default function Signup() {
           new RegExp(
             /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
           )
-        ).required()
+        )
+        .required()
         .messages({
           "string.pattern.base":
             "Minimum eight, at least one uppercase letter, one lowercase letter, one number and one special character",
@@ -56,7 +57,7 @@ export default function Signup() {
     });
     let joiResponse = schema.validate(newUser, { abortEarly: false });
     let inputField = e.target;
-    if(inputField.id === 'DOB'){
+    if (inputField.id === "DOB") {
       return;
     }
     if (joiResponse.error) {
@@ -69,7 +70,7 @@ export default function Signup() {
           break;
         }
       }
-      // console.log(ErrList)
+
       if (errorFlag) {
         inputField?.nextElementSibling.classList.remove("d-none");
         inputField?.classList.add("invalid-input");
@@ -85,7 +86,7 @@ export default function Signup() {
         setErrList([]);
       }
       if (inputField.value === "" && errorFlag) {
-        console.log(errorFlag)
+        console.log(errorFlag);
         setErrList([]);
       }
     } else {
@@ -105,9 +106,9 @@ export default function Signup() {
     return "";
   }
   async function checkAPI(e) {
-    e.preventDefault(); 
-    if(ErrList.length !== 0){
-      setAPIRes('Invalid data')
+    e.preventDefault();
+    if (ErrList.length !== 0) {
+      setAPIRes("Invalid data");
       return;
     }
     setApiFlag(true);
@@ -150,7 +151,7 @@ export default function Signup() {
               <h2>Sign Up</h2>
 
               <form onSubmit={checkAPI} className="form">
-              {APIRes ? (
+                {APIRes ? (
                   <div className="alert alert-danger"> {APIRes} </div>
                 ) : (
                   ""
@@ -217,7 +218,6 @@ export default function Signup() {
                   </p>
                 </div>
 
-               
                 <div className="inputBox ">
                   <input
                     autoComplete="off"
@@ -225,7 +225,7 @@ export default function Signup() {
                     required
                     onChange={getUser}
                     id="userName"
-                    type="text"                    
+                    type="text"
                     className="input-field position-relative"
                   />{" "}
                   <div className="position-absolute check-mark d-none">
@@ -266,7 +266,6 @@ export default function Signup() {
                     id="DOB"
                     className="input-field position-relative"
                   />{" "}
-                  
                   <i className="desc">Date of birth:</i>
                   <p className="text-danger mb-2" id="DOB">
                     {getError("DOB")}
@@ -291,23 +290,17 @@ export default function Signup() {
                     className="show-password bg-transparent position-absolute"
                     onClick={handlePassword}
                   >
-                    {
-                      !showPassword?
-                      <i class="fa-regular fa-eye-slash"></i>
-                      :
-                      ''
-                    }
-                    {
-                      showPassword?
-                      <i class="fa-regular fa-eye"></i>
-                      :
-                      ''
-                    }
+                    {!showPassword ? (
+                      <i className="fa-regular fa-eye-slash"></i>
+                    ) : (
+                      ""
+                    )}
+                    {showPassword ? <i className="fa-regular fa-eye"></i> : ""}
                   </span>
-                  <i className="desc">Password</i>   
+                  <i className="desc">Password</i>
                   <p className="text-danger wrong-input mb-2 " id="email">
                     {getError("password")}
-                  </p>     
+                  </p>
                 </div>
 
                 <div className="inputBox">
@@ -326,7 +319,6 @@ export default function Signup() {
                       Already have an account?
                     </Link>
                   </div>
-
 
                   {apiFlag ? (
                     <button className="btn btn-info w-100 d-flex justify-content-center align-items-center">

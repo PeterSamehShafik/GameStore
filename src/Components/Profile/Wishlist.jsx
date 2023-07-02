@@ -64,12 +64,12 @@ export default function Wishlist() {
         }
       });
       let count = 0;
-      for(let i = 0;i < result?.data?.games?.length;i++){
-        if(result?.data?.games[i].isDeleted){
+      for(let i = 0;i < result?.data?.wishList?.length;i++){
+        if(result?.data?.wishList[i].isDeleted){
           count++;
         }
       }
-      if(count == result?.data?.games?.length){
+      if(count == result?.data?.wishList?.length){
         setAllDeleted(true)
       }
     if (result?.data?.message === "done") {
@@ -97,7 +97,6 @@ export default function Wishlist() {
       alert("Failed to remove game from wishlist");
     }
   };
-
   useEffect(() => {
     getWishList();
   }, []);
@@ -111,7 +110,7 @@ export default function Wishlist() {
               {wishList?.map((game, idx) => 
               {
                 return <>{
-                game.isDeleted?
+                game.isDeleted === true?
                 ''
                 :
                 <div className="col-xl-4 col-sm-6" key={idx}>

@@ -89,7 +89,7 @@ export default function GameControl() {
 
     if (result?.data?.message == "done") {
       setGames(result.data.games);
-      // console.log(result.data.games)
+
     }
 
   }
@@ -198,7 +198,7 @@ export default function GameControl() {
           });
         }
       });
-      console.log(result)
+
       if (result?.data?.message == "done") {
         handleCloseModal()
         callModal({ header: "Success!", body: "Video uploaded successfully", isMainBtn: false, closeBtnTxt: "Close", closeBtnColor: "success" })
