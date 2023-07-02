@@ -216,11 +216,11 @@ export default function CPanel({ removeUser }) {
 
                                             </ul>
                                         </li>
-                                        <li className="nav-item ">
-                                            <a className="nav-link d-flex justify-content-between w-100 px-0 align-middle">
-                                                <span className="ms-1">Test</span>
-                                                <i className="fa-solid d-none d-sm-inline fa-gauge-high text-white opacity-75"></i>
-                                            </a>
+                                        <li className={pathName.toLowerCase().includes("support") ? "nav-item active current-active" : "nav-item"}>
+                                            <Link to="support" onClick={() => setPathname("/cpanel/support")} className="nav-link  align-middle px-0 d-flex justify-content-between">
+                                                <span className="ms-1 ">My Support</span>
+                                                <i className="fa-regular fa-comments d-none d-sm-inline text-white opacity-75"></i>
+                                            </Link>
                                         </li>
                                         <li className="nav-item ">
                                             <a href="#submenu2" data-bs-toggle="collapse" className="nav-link d-flex justify-content-between px-0 align-middle">

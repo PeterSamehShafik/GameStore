@@ -32,40 +32,40 @@ export default function ForgotPassword() {
                 new RegExp(
                     /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
                 )
-            ).messages({"string.pattern.base": `Minimum eight, at least one uppercase letter, one lowercase letter, one number and one special character`}),
+            ).messages({ "string.pattern.base": `Minimum eight, at least one uppercase letter, one lowercase letter, one number and one special character` }),
             code: Joi.string()
         });
         let joiResponse = schema.validate(newUser, { abortEarly: true });
         let inputField = e.target;
-    if (joiResponse.error) {
-      let errors = joiResponse.error.details;
-      let errorFlag,
-        i = 0;
-      for (i = 0; i < errors.length; i++) {
-        if (errors[i].context.label === inputField?.id) {
-          errorFlag = true;
-          break;
+        if (joiResponse.error) {
+            let errors = joiResponse.error.details;
+            let errorFlag,
+                i = 0;
+            for (i = 0; i < errors.length; i++) {
+                if (errors[i].context.label === inputField?.id) {
+                    errorFlag = true;
+                    break;
+                }
+            }
+            if (errorFlag) {
+                inputField?.nextElementSibling.classList.remove("d-none");
+                inputField?.classList.add("invalid-input");
+                inputField?.classList.remove("valid-input");
+
+                setErrList([errors[i]]);
+            } else {
+                inputField?.classList.remove("invalid-input");
+                inputField?.classList.add("valid-input");
+                setErrList([]);
+            }
+            if (inputField.value === "" && errorFlag) {
+                setErrList([]);
+            }
+        } else {
+            inputField?.classList.remove("invalid-input");
+            inputField?.classList.add("valid-input");
+            setErrList([]);
         }
-      }
-      if (errorFlag) {
-        inputField?.nextElementSibling.classList.remove("d-none");
-        inputField?.classList.add("invalid-input");
-        inputField?.classList.remove("valid-input");
-        
-        setErrList([errors[i]]);
-      } else {
-        inputField?.classList.remove("invalid-input");
-        inputField?.classList.add("valid-input");
-        setErrList([]);
-      }
-      if (inputField.value === "" && errorFlag) {
-        setErrList([]);
-      }
-    } else {
-      inputField?.classList.remove("invalid-input");
-      inputField?.classList.add("valid-input");
-      setErrList([]);
-    }
     }
     function getError(key) {
         for (const error of ErrList) {
@@ -156,15 +156,15 @@ export default function ForgotPassword() {
                                                 id="email"
                                                 className="input-field position-relative"
                                                 defaultValue=""
-                                            /> 
+                                            />
                                             <div className="position-absolute check-mark d-none">
                                                 <i className="fa-solid fa-check"></i>
                                                 <i className="fa-solid fa-xmark"></i>
                                             </div>
                                             <i className="desc">email</i>
                                             <p className="text-danger wrong-input mb-2 " id="email">
-                    {getError("email")}
-                  </p>
+                                                {getError("email")}
+                                            </p>
                                         </div> : ""}
 
                                         <div className="inputBox">
@@ -192,7 +192,7 @@ export default function ForgotPassword() {
                                             />
                                             <div className="position-absolute check-mark d-none">
 
-                                            </div> 
+                                            </div>
                                             <i className="desc">New Password</i>
                                             <p className="text-danger wrong-input mb-2" id="email">
                                                 {getError("newPassword")}
