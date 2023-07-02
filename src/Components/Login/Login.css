@@ -260,3 +260,7 @@
     right: 40px;
     top: 0px;
  }
+ .show-password{
+  right: -25px !important;
+  top: 0px !important;
+ }

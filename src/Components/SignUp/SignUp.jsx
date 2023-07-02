@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Joi from "joi";
-import $ from "jquery";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import "../Login/Login.css";
@@ -22,9 +21,11 @@ export default function Signup() {
   });
   const [ErrList, setErrList] = useState([]);
   const [APIRes, setAPIRes] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   //Functions
   function getUser(e) {
+    setAPIRes(null);
     let newUser = { ...user };
     let data = e.target.value;
     newUser[e.target.id] = data;
@@ -34,8 +35,9 @@ export default function Signup() {
   function checkInputs(newUser, e) {
     const schema = Joi.object({
       firstName: Joi.string().min(3).max(10).alphanum().required(),
-      userName: Joi.string().min(3).max(10).alphanum(),
+      userName: Joi.string().min(3).max(10).alphanum().required(),
       DOB: Joi.date(),
+      phone: Joi.number().min(5),
       lastName: Joi.string().min(3).max(10).alphanum().required(),
       email: Joi.string()
         .required()
@@ -46,37 +48,51 @@ export default function Signup() {
           new RegExp(
             /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
           )
-        )
+        ).required()
         .messages({
           "string.pattern.base":
             "Minimum eight, at least one uppercase letter, one lowercase letter, one number and one special character",
         }),
     });
-    let joiResponse = schema.validate(newUser, { abortEarly: true });
+    let joiResponse = schema.validate(newUser, { abortEarly: false });
+    let inputField = e.target;
+    if(inputField.id === 'DOB'){
+      return;
+    }
     if (joiResponse.error) {
-      $(".saveData").attr("disabled", true);
-      $(".saveData").addClass("button-disabled");
       let errors = joiResponse.error.details;
-      setErrList(joiResponse.error.details);
-
-      if (errors[0].context.label === e.target.id) {
-        $(e.target).next().next().addClass("fa-xmark");
-        $(e.target).next().next().removeClass("fa-check");
-        $(e.target).addClass("checked-wrong");
-        $(e.target).removeClass("checked-right");
+      let errorFlag,
+        i = 0;
+      for (i = 0; i < errors.length; i++) {
+        if (errors[i].context.label === inputField?.id) {
+          errorFlag = true;
+          break;
+        }
+      }
+      // console.log(ErrList)
+      if (errorFlag) {
+        inputField?.nextElementSibling.classList.remove("d-none");
+        inputField?.classList.add("invalid-input");
+        inputField?.classList.remove("valid-input");
+        inputField?.nextElementSibling.children[1].classList.remove("d-none");
+        inputField?.nextElementSibling.children[0].classList.add("d-none");
+        setErrList([errors[i]]);
       } else {
-        $(e.target).next().next().addClass("fa-check");
-        $(e.target).next().next().removeClass("fa-xmark");
-        $(e.target).addClass("checked-right");
-        $(e.target).removeClass("checked-wrong");
+        inputField?.classList.remove("invalid-input");
+        inputField?.classList.add("valid-input");
+        inputField?.nextElementSibling.children[0].classList.remove("d-none");
+        inputField?.nextElementSibling.children[1].classList.add("d-none");
+        setErrList([]);
+      }
+      if (inputField.value === "" && errorFlag) {
+        console.log(errorFlag)
+        setErrList([]);
       }
     } else {
-      $(".saveData").attr("disabled", false);
-      $(".saveData").removeClass("button-disabled");
-      $("input").next().next().addClass("fa-check");
-      $("input").next().next().removeClass("fa-xmark");
-      $("input").addClass("checked-right");
-      $("input").removeClass("checked-wrong");
+      inputField?.classList.remove("invalid-input");
+      inputField?.classList.add("valid-input");
+      inputField?.nextElementSibling.children[0].classList.remove("d-none");
+      inputField?.nextElementSibling.children[1].classList.add("d-none");
       setErrList([]);
     }
   }
@@ -89,178 +105,38 @@ export default function Signup() {
     return "";
   }
   async function checkAPI(e) {
+    e.preventDefault(); 
+    if(ErrList.length !== 0){
+      setAPIRes('Invalid data')
+      return;
+    }
     setApiFlag(true);
-    e.preventDefault();
     let result = await axios
       .post(`${baseURL}/auth/signup`, user)
       .catch(function (error) {
         if (error.response) {
           console.log(error.response);
-          setAPIRes(error.response.data.message);
+          setAPIRes(error?.response?.data?.message);
           setApiFlag(false);
         }
       });
     if (result?.data?.message === "done") {
-      //console.log(data.token);
       setApiFlag(false);
       setAPIRes(null);
       navigate("/login");
     }
   }
 
+  const handlePassword = () => {
+    if (!showPassword) {
+      document.getElementById("password").type = "text";
+      setShowPassword(true);
+    } else {
+      document.getElementById("password").type = "password";
+      setShowPassword(false);
+    }
+  };
   return (
-    // <>
-    //   <div className="sign-up-page d-flex align-items-center">
-    //     <div className="Signup d-flex align-align-items-center  mx-auto w-100">
-    //       <div className="register-form w-50 mx-auto">
-    //         <form onSubmit={checkAPI}>
-    //           <div className="container">
-    //             <div className="row">
-    //               <div className="col-md-6 position-relative">
-    //                 <div className="floating-label-group">
-    //                   <input
-    //                     autoComplete="off"
-    //                     autoFocus
-    //                     onChange={getUser}
-    //                     typeof="text"
-    //                     className="form-control"
-    //                     id="userName"
-    //                   />
-    //                   <label className="floating-label">Username</label>
-    //                   <i className="fa-solid position-absolute"></i>
-    //                   <p className="text-danger wrong-input mb-2" id="userName">
-    //                     {/* //{getError("userName")}{" "} */}
-    //                   </p>
-    //                 </div>
-    //               </div>
-    //               <div className="col-md-6 position-relative">
-    //                 <div className="floating-label-group">
-    //                   <input
-    //                     autoComplete="off"
-    //                     autoFocus
-    //                     required
-    //                     onChange={getUser}
-    //                     typeof="text"
-    //                     className="form-control"
-    //                     id="firstName"
-    //                   />
-    //                   <label className="floating-label">First Name</label>
-    //                   <i className="fa-solid position-absolute"></i>
-    //                   <p
-    //                     className="text-danger wrong-input mb-2"
-    //                     id="firstName"
-    //                   >
-    //                     {getError("firstName")}{" "}
-    //                   </p>
-    //                 </div>
-    //               </div>
-    //               <div className="col-md-6 position-relative">
-    //                 <div className="floating-label-group mt-3">
-    //                   <input
-    //                     autoComplete="off"
-    //                     autoFocus
-    //                     required
-    //                     onChange={getUser}
-    //                     typeof="text"
-    //                     className="form-control"
-    //                     id="lastName"
-    //                   />{" "}
-    //                   <label className="floating-label">Last Name</label>{" "}
-    //                   <i className="fa-solid position-absolute"></i>{" "}
-    //                   <p className="text-danger wrong-input mb-2" id="lastName">
-    //                     {getError("lastName")}
-    //                   </p>
-    //                 </div>
-    //               </div>
-    //               <div className="col-md-12 position-relative">
-    //                 <div className="floating-label-group mt-3">
-    //                   <input
-    //                     autoComplete="off"
-    //                     autoFocus
-    //                     required
-    //                     onChange={getUser}
-    //                     typeof="text"
-    //                     className="form-control"
-    //                     id="email"
-    //                   />{" "}
-    //                   <label className="floating-label">Email</label>{" "}
-    //                   <i className="fa-solid position-absolute"></i>{" "}
-    //                   <p className="text-danger wrong-input mb-2" id="email">
-    //                     {getError("email")}
-    //                   </p>
-    //                 </div>
-    //               </div>
-    //               <div className="col-md-12 position-relative">
-    //                 <div className="floating-label-group mt-3">
-    //                   <input
-    //                     autoComplete="off"
-    //                     autoFocus
-    //                     onChange={getUser}
-    //                     type="date"
-    //                     typeof="date"
-    //                     className="form-control"
-    //                     id="DOB"
-    //                   />
-    //                   <label className="floating-label">Date of birth</label>{" "}
-    //                   <i className="fa-solid position-absolute"></i>{" "}
-    //                   <p className="text-danger wrong-input mb-2" id="DOB">
-    //                     {getError("DOB")}
-    //                   </p>
-    //                 </div>
-    //               </div>
-    //               <div className="col-md-12 position-relative">
-    //                 <div className="floating-label-group mt-3">
-    //                   <input
-    //                     autoComplete="off"
-    //                     autoFocus
-    //                     required
-    //                     onChange={getUser}
-    //                     typeof="password"
-    //                     className="form-control"
-    //                     id="password"
-    //                   />{" "}
-    //                   <label className="floating-label">Password</label>{" "}
-    //                   <i className="fa-solid position-absolute"></i>{" "}
-    //                   <label className="floating-label">Password</label>{" "}
-    //                   <p className="text-danger wrong-input mb-2" id="password">
-    //                     {getError("password")}
-    //                   </p>
-    //                 </div>
-    //               </div>
-
-    //               <div className="position-relative col-md-12">
-    //                 {apiFlag ? (
-    //                   <button
-    //                     typeof="submit"
-    //                     className="btn w-100 btn-info my-3 saveData btnMain"
-    //                   >
-    //                     {" "}
-    //                     Waiting...{" "}
-    //                   </button>
-    //                 ) : (
-    //                   <button
-    //                     typeof="submit"
-    //                     className="btn w-100 btn-info my-2 saveData btnMain"
-    //                   >
-    //                     {" "}
-    //                     Sign Up{" "}
-    //                   </button>
-    //                 )}
-    //               </div>
-    //               {APIRes ? (
-    //                 <div className="col-md-12">
-    //                   <p className="text-danger"> {APIRes} </p>
-    //                 </div>
-    //               ) : (
-    //                 ""
-    //               )}
-    //             </div>
-    //           </div>
-    //         </form>
-    //       </div>
-    //     </div>
-    //   </div>
-    // </>
     <>
       <div className="sign-up-page">
         <section>
@@ -269,11 +145,16 @@ export default function Signup() {
             return <span key={idx}></span>;
           })}
 
-          <div className="signup">
+          <div className="signup mt-5">
             <div className="content">
               <h2>Sign Up</h2>
 
               <form onSubmit={checkAPI} className="form">
+              {APIRes ? (
+                  <div className="alert alert-danger"> {APIRes} </div>
+                ) : (
+                  ""
+                )}
                 <div className="d-flex">
                   <div className="inputBox me-2">
                     <input
@@ -283,10 +164,14 @@ export default function Signup() {
                       onChange={getUser}
                       typeof="text"
                       id="firstName"
-                      className="input-field"
+                      className="input-field position-relative"
                     />{" "}
+                    <div className="position-absolute check-mark d-none">
+                      <i className="fa-solid fa-check"></i>
+                      <i className="fa-solid fa-xmark"></i>
+                    </div>
                     <i className="desc">First Name</i>
-                    <p className="text-danger mb-2 d-none" id="firstName">
+                    <p className="text-danger mb-2" id="firstName">
                       {getError("firstName")}
                     </p>
                   </div>
@@ -299,10 +184,14 @@ export default function Signup() {
                       onChange={getUser}
                       typeof="text"
                       id="lastName"
-                      className="input-field"
+                      className="input-field position-relative"
                     />{" "}
+                    <div className="position-absolute check-mark d-none">
+                      <i className="fa-solid fa-check"></i>
+                      <i className="fa-solid fa-xmark"></i>
+                    </div>
                     <i className="desc">Last Name</i>
-                    <p className="text-danger mb-2 d-none" id="lastName">
+                    <p className="text-danger mb-2" id="lastName">
                       {getError("lastName")}
                     </p>
                   </div>
@@ -316,10 +205,14 @@ export default function Signup() {
                     onChange={getUser}
                     type="email"
                     id="email"
-                    className="input-field"
+                    className="input-field position-relative"
                   />{" "}
+                  <div className="position-absolute check-mark d-none">
+                    <i className="fa-solid fa-check"></i>
+                    <i className="fa-solid fa-xmark"></i>
+                  </div>
                   <i className="desc">Email</i>
-                  <p className="text-danger mb-2 d-none" id="email">
+                  <p className="text-danger mb-2" id="email">
                     {getError("email")}
                   </p>
                 </div>
@@ -333,10 +226,14 @@ export default function Signup() {
                     onChange={getUser}
                     id="userName"
                     type="text"                    
-                    className="input-field"
+                    className="input-field position-relative"
                   />{" "}
+                  <div className="position-absolute check-mark d-none">
+                    <i className="fa-solid fa-check"></i>
+                    <i className="fa-solid fa-xmark"></i>
+                  </div>
                   <i className="desc">userName</i>
-                  <p className="text-danger mb-2 d-none" id="userName">
+                  <p className="text-danger mb-2" id="userName">
                     {getError("userName")}
                   </p>
                 </div>
@@ -348,11 +245,15 @@ export default function Signup() {
                     onChange={getUser}
                     typeof="text"
                     id="phone"
-                    className="input-field"
+                    className="input-field position-relative"
                   />{" "}
+                  <div className="position-absolute check-mark d-none">
+                    <i className="fa-solid fa-check"></i>
+                    <i className="fa-solid fa-xmark"></i>
+                  </div>
                   <i className="desc">Phone</i>
-                  <p className="text-danger mb-2 d-none" id="phone">
-                    {getError("email")}
+                  <p className="text-danger mb-2" id="phone">
+                    {getError("phone")}
                   </p>
                 </div>
 
@@ -360,14 +261,14 @@ export default function Signup() {
                   <input
                     autoComplete="off"
                     autoFocus
-                    required
                     onChange={getUser}
                     type="date"
                     id="DOB"
-                    className="input-field"
+                    className="input-field position-relative"
                   />{" "}
+                  
                   <i className="desc">Date of birth:</i>
-                  <p className="text-danger mb-2 d-none" id="DOB">
+                  <p className="text-danger mb-2" id="DOB">
                     {getError("DOB")}
                   </p>
                 </div>
@@ -380,10 +281,34 @@ export default function Signup() {
                     onChange={getUser}
                     type="password"
                     id="password"
+                    className="position-relative"
                   />
-                  <i className="desc">Password</i>                 
+                  <div className="position-absolute check-mark d-none">
+                    <i className="fa-solid fa-check"></i>
+                    <i className="fa-solid fa-xmark"></i>
+                  </div>
+                  <span
+                    className="show-password bg-transparent position-absolute"
+                    onClick={handlePassword}
+                  >
+                    {
+                      !showPassword?
+                      <i class="fa-regular fa-eye-slash"></i>
+                      :
+                      ''
+                    }
+                    {
+                      showPassword?
+                      <i class="fa-regular fa-eye"></i>
+                      :
+                      ''
+                    }
+                  </span>
+                  <i className="desc">Password</i>   
+                  <p className="text-danger wrong-input mb-2 " id="email">
+                    {getError("password")}
+                  </p>     
                 </div>
-
 
                 <div className="inputBox">
                   {apiFlag ? (
