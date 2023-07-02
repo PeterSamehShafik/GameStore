@@ -142,7 +142,7 @@ export default function Signup() {
       <div className="sign-up-page">
         <section>
           {/* getting background */}
-          {[...Array(260)].map((idx) => {
+          {[...Array(260)].map((num, idx) => {
             return <span key={idx}></span>;
           })}
 

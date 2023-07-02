@@ -133,7 +133,7 @@ export default function Login({ currentUser }) {
       <div className="sign-in-page">
         <section>
           {/* getting background */}
-          {[...Array(260)].map((idx) => {
+          {[...Array(260)].map((num,idx) => {
             return <span className="bg" key={idx}></span>;
           })}
 
