@@ -34,6 +34,25 @@ import MySupport from './CPanel/MySupport/MySupport.jsx';
 function App() {
   const location = useLocation()
 
+  //scroll to top
+  const [isTopBtn, setIsTopBtn] = useState(false)
+
+  function returnToTop() {
+    // setIsTopBtn(false)
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+  }
+  const handleVisibleButton = () => {
+    
+    if (window.pageYOffset > 10) {
+      setIsTopBtn(true);
+    } else if (window.pageYOffset <10) {
+      setIsTopBtn(false);
+    }
+  };
+  // end of scroll to top
+
+
   // Cart
   const [cart, setCart] = useState([]);
   const getCart = async () => {
@@ -125,6 +144,8 @@ function App() {
     if (localStorage.getItem("token")) {
       currentUser();
     }
+    window.addEventListener("scroll", handleVisibleButton);
+
   }, [])
 
 
@@ -139,7 +160,7 @@ function App() {
     }
     <div className={location.pathname.toLowerCase().includes("cpanel") ? "app" : 'app pt-5 mt-5'}>
       <Routes>
-      <Route path='/googleOauth' element={<GoogleOauth currentUser = {currentUser} />} />
+        <Route path='/googleOauth' element={<GoogleOauth currentUser={currentUser} />} />
 
         <Route path='' element={<StartScreen currentUser={crrUser} />} />
         <Route path='home' element={<Home search={search} setSearch={setSearch} page={gamePage} setPage={setGamePage} />} />
@@ -209,6 +230,8 @@ function App() {
         <Route path='*' element={<Navigate to='/404' />} />
 
       </Routes>
+      {isTopBtn ? <button onClick={returnToTop} id="toTop" title="Go to top"><i className="fa-solid fa-jet-fighter-up"></i></button> : ""}
+
     </div>
 
     {/* </Provider> */}
