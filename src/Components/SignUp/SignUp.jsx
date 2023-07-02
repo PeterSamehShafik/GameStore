@@ -150,7 +150,7 @@ export default function Signup() {
             <div className="content">
               <h2>Sign Up</h2>
 
-              <form onSubmit={checkAPI} className="form">
+              <form onSubmit={checkAPI} className="form" autoComplete="off">
                 {APIRes ? (
                   <div className="alert alert-danger"> {APIRes} </div>
                 ) : (
