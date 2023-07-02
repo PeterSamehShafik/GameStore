@@ -552,7 +552,7 @@ function Home({ search, setSearch, page, setPage }) {
                 </div>
               </div>
               
-                <div className={loading !== "loading" && games.length > 0 ?"paginate d-flex justify-content-center ":"paginate d-flex justify-content-center d-none"}>
+                <div className={loading !== "loading" && games.length > 0 ?"paginate my-4 d-flex justify-content-center ":"paginate my-4 d-flex justify-content-center d-none"}>
                   <Stack spacing={2}>
                     <Pagination
                       size="large"
