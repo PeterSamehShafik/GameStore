@@ -150,7 +150,7 @@ export default function CPanel({ removeUser }) {
                 <>
                     <div className="container-fluid CPanel">
                         <div className="row flex-nowrap">
-                            <div id="sideBarMenu" className="col-auto col-md-3 col-xl-2 px-0 bg-dark c-panel-menu">
+                            <div id="sideBarMenu" className="col-auto col-md-3 col-xl-2 px-0 bg-dark c-panel-menu text-truncate" >
                                 <div className=" d-flex flex-column justify-content-center align-items-center align-items-sm-start px-0 pt-2 text-white min-vh-100">
                                     <div className="barContent dropdown-center mt-3 pb-1 mx-auto p-3 pt-0">
                                         <span className="cursor-pointer d-flex flex-column align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false" >

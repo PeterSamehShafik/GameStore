@@ -198,29 +198,36 @@ export default function Info() {
                         <div className="col-sm-9 text-secondary">{info.email}</div>
                       </div>
                       <hr />
-                      <div className="row">
-                        <div className="col-sm-3">
-                          <h6 className="mb-0">Phone</h6>
-                        </div>
-                        <div className="col-sm-9 text-secondary">{info.phone}</div>
-                      </div>
-                      <hr />
+                      {
+                        info?.phone?
+                        <>
+                          <div className="row">
+                            <div className="col-sm-3">
+                              <h6 className="mb-0">Phone</h6>
+                            </div>
+                            <div className="col-sm-9 text-secondary">{info.phone}</div>
+                          </div>
+                          <hr />
+                        </>
+                        :
+                        ''
+                      }
                       <div className="row">
                         <div className="col-sm-3">
                           <h6 className="mb-0">Age</h6>
                         </div>
                         <div className="col-sm-9 text-secondary">{info.age}</div>
                       </div>
-                      <hr />
-                      <div className="row">
+                      {/* <hr /> */}
+                      {/* <div className="row">
                         <div className="col-sm-3">
                           <h6 className="mb-0">Address</h6>
                         </div>
                         <div className="col-sm-9 text-secondary">
                           {info.address}
                         </div>
-                      </div>
-                      <hr />
+                      </div> */}
+                      {/* <hr /> */}
                   </div>
               }
               </div>

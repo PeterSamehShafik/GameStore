@@ -287,7 +287,7 @@ export default function Signup() {
                     <i className="fa-solid fa-xmark"></i>
                   </div>
                   <span
-                    className="show-password bg-transparent position-absolute"
+                    className="show-password bg-transparent position-absolute cursor-pointer"
                     onClick={handlePassword}
                   >
                     {!showPassword ? (

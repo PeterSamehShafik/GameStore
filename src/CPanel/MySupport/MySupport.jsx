@@ -93,7 +93,6 @@ export default function MySupport() {
     
     }
 
-
     return (
         <div className="my-support">
             <div className="container rounded shadow">
@@ -101,11 +100,11 @@ export default function MySupport() {
                     <div className="contact-data w-100 w-sm-75 mx-auto">
                         <h2 className='h1 text-white'>Contact Us</h2>
                         <hr />
-                        <form onSubmit={sendEmail}>
+                        <form onSubmit={sendEmail}> 
                             <label htmlFor="user_name"><input disabled readOnly className='form-control my-2' type="text" id="name" value={`${profile.firstName} ${profile.lastName} `} /></label>
                             <label htmlFor="user_email"><input disabled readOnly className='form-control my-2' type="email" id="email" value={profile.email} /></label>
-                            <label htmlFor="subject"><input className='form-control my-2' type="text" id="subject" placeholder='Subject' /></label>
-                            <label htmlFor="message"><textarea className='form-control my-2' name="message" id="message" cols="30" rows="10" placeholder="Leave us a message."></textarea></label>
+                            <label htmlFor="subject"><input required className='form-control my-2' type="text" id="subject" placeholder='Subject' /></label>
+                            <label htmlFor="message"><textarea required   className='form-control my-2' name="message" id="message" cols="30" rows="10" placeholder="Leave us a message."></textarea></label>
                             <input className='btn p-4 fa-xl' type="submit" value="Send Email" />
 
                         </form>

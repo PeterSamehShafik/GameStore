@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./StartScreen.css";
 import axios from "axios";
-import { baseURL } from "../../index.js";
+import { baseURL, roles } from "../../index.js";
 
 function StartScreen({ currentUser }) {
   const [game, setGame] = useState({
@@ -45,32 +45,60 @@ function StartScreen({ currentUser }) {
                   <div className="container">
                     <div className="row g-3 justify-content-center py-3 ">
                       <div className="col-md-6 ps-0 pe-1 col-lg-3 d-flex justify-content-center">
-                        <button className="w-sm-75 btn btn-info rounded-5 mt-2 w-md-100">
-                          <Link to="/home">
+                        <div className="w-100 px-lg-0 px-4">
+                          <Link
+                            to="/home"
+                            className=" btn btn-info rounded-5 mt-2 w-100"
+                          >
+                            {/* <button className="w-sm-75 btn btn-info rounded-5 mt-2 w-md-100"> */}
                             <i className="fa-solid fa-arrow-right-to-bracket"></i>
                             <span className="ms-1">Browse</span>
+                            {/* </button> */}
                           </Link>
-                        </button>
+                        </div>
                       </div>
                       <div className="col-md-6 ps-0 pe-1 col-lg-3 d-flex justify-content-center">
-                        <button className="w-sm-75 btn btn-light rounded-5 mt-2 w-md-100">
-                          <Link to={`/details/${game.slug}/${game._id}`}>
+                        <div className="w-100 px-lg-0 px-4">
+                          <Link
+                            to={`/details/${game.slug}/${game._id}`}
+                            className="w-100 btn btn-light rounded-5 mt-2"
+                          >
+                            {/* <button className="w-sm-75 btn btn-light rounded-5 mt-2 w-md-100"> */}
                             <i className="fa-solid fa-dice"></i>
                             <span className="ms-1">Random</span>
+                            {/* </button> */}
                           </Link>
-                        </button>
+                        </div>
                       </div>
                       <div className="col-md-6 ps-0 pe-1 col-lg-3 d-flex justify-content-center">
-                        <button className="w-sm-75 btn btn-light rounded-5 mt-2 w-md-100">
-                          <i className="fa-brands fa-github"></i>
-                          <span className="ms-1">Github</span>
-                        </button>
+                        <div className="w-100 px-lg-0 px-4">
+                          <a
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            href="https://www.google.com"
+                            className=" btn btn-light rounded-5 mt-2 w-100"
+                          >
+                            {/* <button className="w-sm-75 btn btn-light rounded-5 mt-2 w-md-100"> */}
+                            <i className="fa-brands fa-github"></i>
+                            <span className="ms-1">Github</span>
+                            {/* </button> */}
+                          </a>
+                        </div>
                       </div>
                       <div className="col-md-6 ps-0 pe-1 col-lg-3 d-flex justify-content-center">
-                        <button className="w-sm-75 btn btn-light rounded-5 mt-2 w-md-100">
-                          <i className="fa-brands fa-linkedin-in"></i>
-                          <span className="ms-1">LinkedIn</span>
-                        </button>
+                        <div className="w-100 px-lg-0 px-4">
+                          <a
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            href="https://www.google.com"
+                            className=" btn btn-light rounded-5 mt-2 w-100"
+                          >
+                            {/* <button className="w-sm-75 btn btn-light rounded-5 mt-2 w-md-100"> */}
+                            <i className="fa-brands fa-linkedin-in"></i>
+                            <span className="ms-1">LinkedIn</span>
+                            {/* </button> */}
+                          </a>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -85,43 +113,68 @@ function StartScreen({ currentUser }) {
                   <div className="container">
                     <div className="row g-3 justify-content-center py-3 ">
                       <div className="px-0 d-flex justify-content-center">
-                        <button className="btn btn-light mb-1 rounded-5 px-3 w-sm-75 w-md-100 py-2">
-                          <Link to="home">
+                        <div className="w-100 px-lg-0 px-4">
+                          <Link
+                            to="home"
+                            className="btn btn-light mb-1 rounded-5 px-3 w-100 "
+                          >
+                            {/* <button className="btn btn-light mb-1 rounded-5 px-3 w-100 "> */}
                             <i className="fa-solid fa-arrow-right-to-bracket"></i>
                             <span className="ms-2">Game Page</span>
+                            {/* </button> */}
                           </Link>
-                        </button>
+                        </div>
                       </div>
                       <div className="px-0 d-flex justify-content-center">
-                        <button className="btn btn-light my-1 rounded-5 px-3 w-sm-75 w-md-100 py-2">
-                          <Link to="/404">
+                        <div className="w-100 px-lg-0 px-4">
+                          <Link
+                            to="/404"
+                            className="btn btn-light my-1 rounded-5 px-3 w-100 "
+                          >
+                            {/* <button className="btn btn-light my-1 rounded-5 px-3 w-100 "> */}
                             <i className="fa-solid fa-bug"></i>
                             <span className="ms-2">404 Page</span>
+                            {/* </button> */}
                           </Link>
-                        </button>
+                        </div>
                       </div>
-                    {currentUser ? (
+                      {currentUser ? (
                         <>
-                        <div className="px-0 d-flex justify-content-center">
-                            <button className="btn btn-light my-1 rounded-5 px-3 w-sm-75 w-md-100 py-2">
-                            <Link to="/profile">
+                          <div className="px-0 d-flex justify-content-center">
+                            <div className="w-100 px-lg-0 px-4">
+                              <Link
+                                to="/profile"
+                                className="btn btn-light my-1 rounded-5 px-3 w-100 "
+                              >
+                                {/* <button className="btn btn-light my-1 rounded-5 px-3 w-100 "> */}
                                 <i className="fa-solid fa-user"></i>
                                 <span className="ms-2">Profile</span>
-                            </Link>
-                            </button>
-                        </div>
-                        <div className="px-0 d-flex justify-content-center">
-                            <button className="btn btn-light my-1 rounded-5 px-3 w-sm-75 w-md-100 py-2">
-                            <Link to="/cpanel">
-                                <i className="fa-brands fa-cpanel"></i>
-                                <span className="ms-2">Control Panel</span>
-                            </Link>
-                            </button>
-                        </div>
+                                {/* </button> */}
+                              </Link>
+                            </div>
+                          </div>
+                          <div className="px-0 d-flex justify-content-center">
+                            <div className="w-100 px-lg-0 px-4">
+                              {currentUser.role === roles.superAdmin ||
+                              currentUser === roles.admin ? (
+                                <Link
+                                  to="/cpanel"
+                                  className="btn btn-light my-1 rounded-5 px-3 w-100 "
+                                >
+                                  {/* <button className="btn btn-light my-1 rounded-5 px-3 w-100 "> */}
+                                  <i className="fa-brands fa-cpanel"></i>
+                                  <span className="ms-2">Control Panel</span>
+                                  {/* </button> */}
+                                </Link>
+                              ) : (
+                                ""
+                              )}
+                            </div>
+                          </div>
                         </>
-                    ) : (
+                      ) : (
                         ""
-                    )}
+                      )}
                     </div>
                   </div>
                   {/* <button className='btn btn-light my-1 rounded-5 px-4 py-2'>
