@@ -17,16 +17,17 @@ export default function Login({ currentUser }) {
   });
   const [ErrList, setErrList] = useState([]);
   const [APIRes, setAPIRes] = useState(null);
-
+  const [showPassword, setShowPassword] = useState(false);
   //Functions
   function getUser(e) {
-    setAPIRes(null)
+    setAPIRes(null);
     let newUser = { ...user };
     let data = e.target.value;
     newUser[e.target.id] = data;
     setUser(newUser);
     checkInputs(newUser, e);
   }
+
   function checkInputs(newUser, e) {
     const schema = Joi.object({
       email: Joi.string()
@@ -38,50 +39,44 @@ export default function Login({ currentUser }) {
             /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
           )
         )
-        .messages(),
+        .messages({
+          "string.pattern.base": `Minimum eight, at least one uppercase letter, one lowercase letter, one number and one special character`,
+        }),
     });
     let joiResponse = schema.validate(newUser, { abortEarly: false });
+    let inputField = e.target;
     if (joiResponse.error) {
-      // $(".saveData").attr("disabled", true);
-      // $(".saveData").addClass("button-disabled");
       let errors = joiResponse.error.details;
-      setErrList(errors);
-      console.log(errors)
-      let inputField = e.target;
-      let errorFlag = false;
-      if (e.target.value != '') {
-        inputField?.nextElementSibling.classList.remove("d-none")
-
-        for (let i = 0; i < errors.length; i++) {
-          if (errors[i].context.label === inputField?.id) {
-            errorFlag = true;
-            break;
-          }
+      let errorFlag,
+        i = 0;
+      for (i = 0; i < errors.length; i++) {
+        if (errors[i].context.label === inputField?.id) {
+          errorFlag = true;
+          break;
         }
-
-        if (errorFlag) {
-          inputField?.classList.add("invalid-input")
-          inputField?.classList.remove("valid-input")
-          inputField?.nextElementSibling.children[1].classList.remove("d-none")
-          inputField?.nextElementSibling.children[0].classList.add("d-none")
-        } else {
-          console.log("trueee")
-          inputField?.classList.remove("invalid-input")
-          inputField?.classList.add("valid-input")
-          inputField?.nextElementSibling.children[0].classList.remove("d-none")
-          inputField?.nextElementSibling.children[1].classList.add("d-none")
-        }
-
+      }
+      if (errorFlag) {
+        inputField?.nextElementSibling.classList.remove("d-none");
+        inputField?.classList.add("invalid-input");
+        inputField?.classList.remove("valid-input");
+        inputField?.nextElementSibling.children[1].classList.remove("d-none");
+        inputField?.nextElementSibling.children[0].classList.add("d-none");
+        setErrList([errors[i]]);
       } else {
-        inputField?.nextElementSibling.classList.add("d-none")
+        inputField?.classList.remove("invalid-input");
+        inputField?.classList.add("valid-input");
+        inputField?.nextElementSibling.children[0].classList.remove("d-none");
+        inputField?.nextElementSibling.children[1].classList.add("d-none");
+        setErrList([]);
+      }
+      if (inputField.value === "" && errorFlag) {
+        setErrList([]);
       }
     } else {
-      // $(".saveData").attr("disabled", false);
-      // $(".saveData").removeClass("button-disabled");
-      // $("input").next().next().addClass("fa-check");
-      // $("input").next().next().removeClass("fa-xmark");
-      // $("input").addClass("checked-right");
-      // $("input").removeClass("checked-wrong");
+      inputField?.classList.remove("invalid-input");
+      inputField?.classList.add("valid-input");
+      inputField?.nextElementSibling.children[0].classList.remove("d-none");
+      inputField?.nextElementSibling.children[1].classList.add("d-none");
       setErrList([]);
     }
   }
@@ -93,9 +88,14 @@ export default function Login({ currentUser }) {
     }
     return "";
   }
+
   async function checkAPI(e) {
-    setApiFlag(true);
     e.preventDefault();
+    if(ErrList.length !== 0){
+      setAPIRes('Invalid data')
+      return;
+    }
+    setApiFlag(true);
     let result = await axios
       .post(`${baseURL}/auth/signin`, user)
       .catch(function (error) {
@@ -114,109 +114,27 @@ export default function Login({ currentUser }) {
     }
   }
 
-  const googleSign = async () => {
-    // let result = await axios
-    //   .get(`${baseURL}/auth/google/callback`, user)
-    //   .catch(function (error) {
-    //     if (error.response) {
-    //       console.log(error.response)
-    //       setAPIRes(error?.response?.data?.message);
-    //       setGoogleFlag(false);
-    //     }
-    //   });
-    // if (result?.data?.message == "done") {
-    //   localStorage.setItem("token", result?.data.token);
-    //   currentUser();
-    //   setGoogleFlag(false);
-    //   setAPIRes(null);
-    //   navigate("/home");
-    // }
+  const handlePassword = () => {
+    if (!showPassword) {
+      document.getElementById("password").type = "text";
+      setShowPassword(true);
+    } else {
+      document.getElementById("password").type = "password";
+      setShowPassword(false);
+    }
+  };
+
+  const googleSign = () => {
     window.location.replace(`${baseURL}/auth/google`);
   };
 
   return (
     <>
-      {/* <div className="sign-up-page d-flex align-items-center">
-        <div className="Signup d-flex align-align-items-center  mx-auto w-100">
-          <div className="register-form w-50 mx-auto">
-            <form onSubmit={checkAPI}>
-              <div className="container">
-                <div className="row">
-                  <div className="col-md-12 position-relative">
-                    <div className="floating-label-group">
-                      <input
-                        autoComplete="off"
-                        autoFocus
-                        required
-                        onChange={getUser}
-                        typeof="text"
-                        className="form-control"
-                        id="email"
-                      />{" "}
-                      <label className="floating-label">Email</label>{" "}
-                      <i className="fa-solid position-absolute"></i>{" "}
-                      <p className="text-danger wrong-input mb-2" id="email">
-                        {getError("email")}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="col-md-12 position-relative">
-                    <div className="floating-label-group mt-3">
-                      <input
-                        autoComplete="off"
-                        autoFocus
-                        required
-                        onChange={getUser}
-                        type="password"
-                        className="form-control"
-                        id="password"
-                      />{" "}
-                      <label className="floating-label">Password</label>{" "}
-                      <i className="fa-solid position-absolute"></i>{" "}
-                      <p className="text-danger wrong-input mb-2" id="password">
-                        {getError("password")}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="position-relative col-md-12 mt-2">
-                    {apiFlag ? (
-                      <button
-                        typeof="submit"
-                        className="btn w-100 btn-info saveData btnMain"
-                      >
-                        {" "}
-                        Waiting...{" "}
-                      </button>
-                    ) : (
-                      <button
-                        typeof="submit"
-                        className="btn w-100 btn-info my-2 saveData btnMain"
-                      >
-                        {" "}
-                        Log in{" "}
-                      </button>
-                    )}
-                  </div>
-                  {APIRes ? (
-                    <div className="col-md-12">
-                      <p className="text-danger"> {APIRes} </p>
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div> */}
-
       <div className="sign-in-page">
         <section>
           {/* getting background */}
           {[...Array(260)].map((idx) => {
-            return <span key={idx}></span>;
+            return <span className="bg" key={idx}></span>;
           })}
 
           <div className="signin mt-5">
@@ -224,8 +142,11 @@ export default function Login({ currentUser }) {
               <h2>Sign In</h2>
 
               <form onSubmit={checkAPI} className="form">
-
-                {APIRes ? <div className="alert alert-danger">                {APIRes}                </div> : ""}
+                {APIRes ? (
+                  <div className="alert alert-danger"> {APIRes} </div>
+                ) : (
+                  ""
+                )}
                 <div className="inputBox ">
                   <input
                     autoComplete="off"
@@ -260,6 +181,23 @@ export default function Login({ currentUser }) {
                     <i className="fa-solid fa-check"></i>
                     <i className="fa-solid fa-xmark"></i>
                   </div>
+                  <span
+                    className="show-password bg-transparent position-absolute"
+                    onClick={handlePassword}
+                  >
+                    {
+                      !showPassword?
+                      <i class="fa-regular fa-eye-slash"></i>
+                      :
+                      ''
+                    }
+                    {
+                      showPassword?
+                      <i class="fa-regular fa-eye"></i>
+                      :
+                      ''
+                    }
+                  </span>
                   <i className="desc">Password</i>
                   <p className="text-danger wrong-input mb-2 " id="email">
                     {getError("password")}
