@@ -29,6 +29,7 @@ import GenreControl from './CPanel/GenreControl/GenreControl';
 import NotFound from './Components/NotFound/NotFound.jsx';
 import ForgotPassword from './Components/ForgotPassword/ForgotPassword.jsx';
 import GoogleOauth from './utilities/GoogleOauth.jsx';
+import MySupport from './CPanel/MySupport/MySupport.jsx';
 
 function App() {
   const location = useLocation()
@@ -161,8 +162,12 @@ function App() {
             element={<GenreControl />}
           />
           <Route
+            path="support"
+            element={<MySupport />}
+          />
+          <Route
             path="*"
-            element={<Navigate to="/" />}
+            element={<Navigate to="/404" />}
           />
         </Route>
 

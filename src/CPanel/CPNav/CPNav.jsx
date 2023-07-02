@@ -30,10 +30,10 @@ export default function CPNav() {
                         </Link>
                     </div>
                     <div className="col-lg-3 col-md-4 col-md-6">
-                        <span to='product' className="panel shadow bg-four px-0 py-5 text-center d-flex flex-column justify-content-center align-items-center">
+                        <Link to='support' onClick={() => setPathname("/cpanel/support")} className="panel shadow bg-four px-0 py-5 text-center d-flex flex-column justify-content-center align-items-center">
                             <i className="fa-regular fa-comments display-3 mb-3 rounded-circle text-white opacity-75"></i>
                             <h2 className='text-white fw-bolder h4'>My Support</h2>
-                        </span>
+                        </Link>
                     </div>
 
                 </div>
