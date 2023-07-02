@@ -164,3 +164,11 @@ nav img {
 .top-minus{
     top:-6rem !important;
 }
+
+.c-panel{
+    transition: all 0.2s;
+}
+.c-panel:hover{
+ transform: scale(1.1);
+ color: #8a2be2 !important;
+}
