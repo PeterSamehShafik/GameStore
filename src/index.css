@@ -23,6 +23,11 @@ body {
     color: white;
 }
 
+
+.modal{
+  z-index: 9999999;
+}
+
 .cursor-pointer {
     cursor: pointer !important;
 }
