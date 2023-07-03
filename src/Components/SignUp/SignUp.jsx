@@ -150,7 +150,7 @@ export default function Signup() {
             <div className="content">
               <h2>Sign Up</h2>
 
-              <form onSubmit={checkAPI} className="form" autoComplete="off">
+              <form onSubmit={checkAPI} className="form" >
                 {APIRes ? (
                   <div className="alert alert-danger"> {APIRes} </div>
                 ) : (
@@ -159,8 +159,7 @@ export default function Signup() {
                 <div className="d-flex">
                   <div className="inputBox me-2">
                     <input
-                      autoComplete="off"
-                      autoFocus
+                      autoComplete="off"                      
                       required
                       onChange={getUser}
                       typeof="text"
@@ -179,8 +178,7 @@ export default function Signup() {
 
                   <div className="inputBox ms-2">
                     <input
-                      autoComplete="off"
-                      autoFocus
+                      autoComplete="off"                      
                       required
                       onChange={getUser}
                       typeof="text"
@@ -200,8 +198,7 @@ export default function Signup() {
 
                 <div className="inputBox ">
                   <input
-                    autoComplete="off"
-                    autoFocus
+                    autoComplete="off"                    
                     required
                     onChange={getUser}
                     type="email"
@@ -220,8 +217,7 @@ export default function Signup() {
 
                 <div className="inputBox ">
                   <input
-                    autoComplete="off"
-                    autoFocus
+                    autoComplete="off"                    
                     required
                     onChange={getUser}
                     id="userName"
@@ -239,8 +235,7 @@ export default function Signup() {
                 </div>
                 <div className="inputBox ">
                   <input
-                    autoComplete="off"
-                    autoFocus
+                    autoComplete="off"                    
                     required
                     onChange={getUser}
                     typeof="text"
@@ -259,8 +254,7 @@ export default function Signup() {
 
                 <div className="inputBox ">
                   <input
-                    autoComplete="off"
-                    autoFocus
+                    autoComplete="off"                    
                     onChange={getUser}
                     type="date"
                     id="DOB"
@@ -274,8 +268,7 @@ export default function Signup() {
 
                 <div className="inputBox">
                   <input
-                    autoComplete="off"
-                    autoFocus
+                    autoComplete="off"                    
                     required
                     onChange={getUser}
                     type="password"

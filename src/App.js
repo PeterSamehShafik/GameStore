@@ -35,7 +35,6 @@ function App() {
   const location = useLocation()
 
   //scroll to top
-  const [isTopBtn, setIsTopBtn] = useState(false)
 
   function returnToTop() {
     // setIsTopBtn(false)
@@ -45,9 +44,10 @@ function App() {
   const handleVisibleButton = () => {
     
     if (window.pageYOffset > 10) {
-      setIsTopBtn(true);
+      document.getElementById("toTop").classList.remove("d-none")
     } else if (window.pageYOffset <10) {
-      setIsTopBtn(false);
+      document.getElementById("toTop").classList.add("d-none")
+      
     }
   };
   // end of scroll to top
@@ -145,7 +145,7 @@ function App() {
       currentUser();
     }
     window.addEventListener("scroll", handleVisibleButton);
-
+    
   }, [])
 
 
@@ -230,7 +230,7 @@ function App() {
         <Route path='*' element={<Navigate to='/404' />} />
 
       </Routes>
-      {isTopBtn ? <button onClick={returnToTop} id="toTop" title="Go to top"><i className="fa-solid fa-jet-fighter-up"></i></button> : ""}
+       <button onClick={returnToTop} id="toTop" title="Go to top"><i className="fa-solid fa-jet-fighter-up"></i></button> 
 
     </div>
 
