@@ -164,7 +164,12 @@ export default function CPanel({ removeUser }) {
                                         </span>
                                         <ul className="dropdown-menu dropdown-menu-dark text-small shadow">
 
-                                            <li><Link to="/profile/info" className="dropdown-item">Profile</Link></li>
+                                            <li><Link
+                                                onClick={() => {
+                                                    localStorage.setItem("userId", "owner")
+                                                    localStorage.setItem("id", profile._id)
+                                                }}
+                                                to="/profile/info" className="dropdown-item">Profile</Link></li>
                                             <li>
                                                 <hr className="dropdown-divider" />
                                             </li>
