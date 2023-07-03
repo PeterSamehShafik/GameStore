@@ -114,3 +114,17 @@ main .card-footer {
 .css-1ysyrvn-MuiButtonBase-root-MuiPaginationItem-root{
     color: white !important;
 }
+.MuiPaginationItem-root{
+    color: white !important;
+    border:rgba(255, 255, 255,0.3) 1px solid !important;
+    transition: all 0.3s;
+}
+.MuiPaginationItem-root:hover{
+    background-color: rgba(255, 255, 255,0.3) !important;
+    transform: scale(1.1) !important;
+}
+
+.Mui-selected:hover{
+    /* background-color: transparent !important; */
+
+}
