@@ -249,7 +249,7 @@ function App() {
         <Route path='*' element={<Navigate to='/404' />} />
 
       </Routes>
-      <button onClick={returnToTop} id="toTop" title="Go to top"><i className="fa-solid fa-jet-fighter-up"></i></button>
+      <button className="d-none" onClick={returnToTop} id="toTop" title="Go to top"><i className="fa-solid fa-jet-fighter-up"></i></button>
 
     </div>
 
