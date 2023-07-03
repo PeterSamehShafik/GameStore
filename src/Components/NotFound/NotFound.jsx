@@ -53,7 +53,7 @@ export default function NotFound({ error, resetErrorBoundary }) {
     //end of modal
 
     const navigateToHome  = () => {
-        window.location.href = "http://localhost:3000";
+        window.location.href = "https://gamestore-379019.web.app/";
     }
     const pauseScreen = () => {
         $('.glitch-wrapper').toggleClass('paused');
