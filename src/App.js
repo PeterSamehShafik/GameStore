@@ -2,7 +2,7 @@ import './App.css';
 import React, { useEffect, useState } from "react";
 import StartScreen from './Components/StartScreen/StartScreen';
 import Home from './Components/Home/Home';
-import { Routes, Route, useNavigate, Navigate, useLocation } from 'react-router-dom'
+import { Routes, Route, useNavigate, Navigate, useLocation, useSearchParams } from 'react-router-dom'
 import Navbar from './Components/Navbar/Navbar';
 import Details from './Components/Details/Details';
 import Cart from './Components/Cart/Cart';
@@ -42,12 +42,12 @@ function App() {
     document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
   }
   const handleVisibleButton = () => {
-    
+
     if (window.pageYOffset > 10) {
-      document.getElementById("toTop").classList.remove("d-none")
-    } else if (window.pageYOffset <10) {
-      document.getElementById("toTop").classList.add("d-none")
-      
+      document.getElementById("toTop")?.classList.remove("d-none")
+    } else if (window.pageYOffset < 10) {
+      document.getElementById("toTop")?.classList.add("d-none")
+
     }
   };
   // end of scroll to top
@@ -92,6 +92,8 @@ function App() {
       return <Navigate to='/home' />
     }
   }
+
+
   let navigate = useNavigate();
   const [crrUser, setCrrUser] = useState(null);
   async function currentUser() {
@@ -134,6 +136,22 @@ function App() {
 
   }
 
+  const [searchParams, setSearchParams] = useSearchParams()
+  const isLogin = () => {
+    if (searchParams.get('message') === 'done') {
+      if (!localStorage.getItem("token") && searchParams.get('token')) {
+        localStorage.setItem('token', searchParams.get('token'))
+        currentUser();
+        navigate('/home')
+      }
+    } else if (searchParams.get('message') === 'error') {
+      localStorage.removeItem("token");
+      setCrrUser(null);
+      navigate('/')
+    }
+
+  }
+
   //search
   const [search, setSearch] = useState('');
 
@@ -141,11 +159,12 @@ function App() {
   const [gamePage, setGamePage] = useState(1);
 
   useEffect(() => {
+    isLogin()
     if (localStorage.getItem("token")) {
       currentUser();
     }
     window.addEventListener("scroll", handleVisibleButton);
-    
+
   }, [])
 
 
@@ -160,7 +179,7 @@ function App() {
     }
     <div className={location.pathname.toLowerCase().includes("cpanel") ? "app" : 'app pt-5 mt-5'}>
       <Routes>
-        <Route path='/googleOauth' element={<GoogleOauth currentUser={currentUser} />} />
+        {/* <Route path='/googleOauth' element={<GoogleOauth currentUser={currentUser} />} /> */}
 
         <Route path='' element={<StartScreen currentUser={crrUser} />} />
         <Route path='home' element={<Home search={search} setSearch={setSearch} page={gamePage} setPage={setGamePage} />} />
@@ -230,7 +249,7 @@ function App() {
         <Route path='*' element={<Navigate to='/404' />} />
 
       </Routes>
-       <button onClick={returnToTop} id="toTop" title="Go to top"><i className="fa-solid fa-jet-fighter-up"></i></button> 
+      <button onClick={returnToTop} id="toTop" title="Go to top"><i className="fa-solid fa-jet-fighter-up"></i></button>
 
     </div>
 
