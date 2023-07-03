@@ -3,12 +3,16 @@ import { Link } from "react-router-dom";
 import "./StartScreen.css";
 import axios from "axios";
 import { baseURL, roles } from "../../index.js";
+import Box from '@mui/material/Box';
+import Popper from '@mui/material/Popper';
+import Fade from '@mui/material/Fade';
 
 function StartScreen({ currentUser }) {
   const [game, setGame] = useState({
     slug: "",
     _id: "",
   });
+  const [checked, setChecked] = useState(true)
   const getRandomGame = async () => {
     const result = await axios.get(`${baseURL}/game/random`).catch((e) => {
       console.log(e);
@@ -19,7 +23,33 @@ function StartScreen({ currentUser }) {
   };
   useEffect(() => {
     getRandomGame();
+    // setChecked(false)
   }, []);
+
+  // Popper
+  const [open, setOpen] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [open2, setOpen2] = React.useState(false);
+  const [anchorEl2, setAnchorEl2] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+    setOpen((previousOpen) => !previousOpen);
+    setOpen2(false)
+  };
+  const handleClick2 = (event) => {
+    setAnchorEl2(event.currentTarget);
+    setOpen2((previousOpen) => !previousOpen);
+    setOpen(false)
+  };
+
+  const canBeOpen = open && Boolean(anchorEl);
+  const canBeOpen2 = open2 && Boolean(anchorEl2);
+  const id1 = canBeOpen ? 'transition-popper' : undefined;
+  const id2 = canBeOpen2 ? 'transition-popper' : undefined;
+
+  //End of popper
+
 
   return (
     <>
@@ -28,7 +58,40 @@ function StartScreen({ currentUser }) {
           <source src="/liveWP.mp4" type="video/mp4" />
         </video>
       </div>
-      <div className="start-screen d-flex align-items-center mt-5">
+      <div className="d-flex justify-content-center">
+
+      <div className="show-content bg-blur p-2 d-inline-block  rounded-pill">
+
+        <div className="form-check form-switch text-blue fw-bold">
+          {
+            checked?
+            <input
+              className="form-check-input"
+              type="checkbox"
+              role="switch"
+              id="flexSwitchCheckChecked"
+              checked
+              onChange={()=>{setChecked(false)}}
+            />
+            :
+            <input
+              className="form-check-input"
+              type="checkbox"
+              role="switch"
+              id="flexSwitchCheckChecked"
+              onChange={()=>{setChecked(true)}}
+
+            />
+          }
+          <label className="form-check-label" for="flexSwitchCheckChecked">
+            {checked?  "Hide content" : "Show content"
+            }
+          </label>
+        </div>
+      </div>
+      </div>
+      {
+        checked && <div className="start-screen d-flex align-items-center mt-5">
         <div className="container-fluid ">
           <div className="row g-3">
             <div className="col-lg-7">
@@ -72,32 +135,62 @@ function StartScreen({ currentUser }) {
                       </div>
                       <div className="col-md-6 ps-0 pe-1 col-lg-3 d-flex justify-content-center">
                         <div className="w-100 px-lg-0 px-4">
-                          <a
-                            target="_blank"
+                        <div>
+                          <button aria-describedby={id1} type="button" onClick={handleClick}className=" btn btn-light rounded-5 mt-2 w-100">
+                          <i className="fa-brands fa-github"></i> Github
+                          </button>
+                          <Popper id={id1} open={open} anchorEl={anchorEl} transition >
+                            {({ TransitionProps }) => (
+                              <Fade {...TransitionProps} timeout={350}>
+                                <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }}>
+                                  <a target="_blank"
                             rel="noopener noreferrer"
-                            href="https://www.google.com"
-                            className=" btn btn-light rounded-5 mt-2 w-100"
-                          >
-                            {/* <button className="w-sm-75 btn btn-light rounded-5 mt-2 w-md-100"> */}
-                            <i className="fa-brands fa-github"></i>
-                            <span className="ms-1">Github</span>
-                            {/* </button> */}
-                          </a>
+                            href="https://github.com/PeterSamehShafik/GameStore"
+                            className=" btn btn-light rounded-5 mt-2 w-100 text-dark">
+                              Frontend
+                            </a>
+                                  <a target="_blank"
+                            rel="noopener noreferrer"
+                            href="https://github.com/ahmedessamrizk/GameStore_BE"
+                            className=" btn btn-light rounded-5 mt-2 w-100 text-dark">
+                              Backend
+                            </a>
+                                </Box>
+                              </Fade>
+                            )}
+                          </Popper>
+                        </div>
+                          
                         </div>
                       </div>
                       <div className="col-md-6 ps-0 pe-1 col-lg-3 d-flex justify-content-center">
                         <div className="w-100 px-lg-0 px-4">
-                          <a
-                            target="_blank"
+                        <div>
+                          <button aria-describedby={id2} type="button" onClick={handleClick2}className=" btn btn-light rounded-5 mt-2 w-100">
+                          <i className="fa-brands fa-linkedin-in"></i> LinkedIn
+                          </button>
+                          <Popper id={id2} open={open2} anchorEl={anchorEl2} transition >
+                            {({ TransitionProps }) => (
+                              <Fade {...TransitionProps} timeout={350}>
+                                <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }}>
+                                  <a target="_blank"
                             rel="noopener noreferrer"
-                            href="https://www.google.com"
-                            className=" btn btn-light rounded-5 mt-2 w-100"
-                          >
-                            {/* <button className="w-sm-75 btn btn-light rounded-5 mt-2 w-md-100"> */}
-                            <i className="fa-brands fa-linkedin-in"></i>
-                            <span className="ms-1">LinkedIn</span>
-                            {/* </button> */}
-                          </a>
+                            href="https://www.linkedin.com/in/ahmed-essam7722/"
+                            className=" btn btn-light rounded-5 mt-2 w-100 text-dark">
+                              Ahmed Essam
+                            </a>
+                                  <a target="_blank"
+                            rel="noopener noreferrer"
+                            href="https://www.linkedin.com/in/peter-sameh-38b914220/"
+                            className=" btn btn-light rounded-5 mt-2 w-100 text-dark">
+                              Peter Sameh
+                            </a>
+                                </Box>
+                              </Fade>
+                            )}
+                          </Popper>
+                        </div>
+                          
                         </div>
                       </div>
                     </div>
@@ -144,9 +237,9 @@ function StartScreen({ currentUser }) {
                             <div className="w-100 px-lg-0 px-4">
                               <Link
                                 to="/profile"
-                                onClick={()=>{
-                                  localStorage.setItem("userId", "owner")
-                                  localStorage.setItem("id", currentUser._id)
+                                onClick={() => {
+                                  localStorage.setItem("userId", "owner");
+                                  localStorage.setItem("id", currentUser._id);
                                 }}
                                 className="btn btn-light my-1 rounded-5 px-3 w-100 "
                               >
@@ -160,7 +253,7 @@ function StartScreen({ currentUser }) {
                           <div className="px-0 d-flex justify-content-center">
                             <div className="w-100 px-lg-0 px-4">
                               {currentUser.role === roles.superAdmin ||
-                                currentUser === roles.admin ? (
+                              currentUser === roles.admin ? (
                                 <Link
                                   to="/cpanel"
                                   className="btn btn-light my-1 rounded-5 px-3 w-100 "
@@ -194,7 +287,8 @@ function StartScreen({ currentUser }) {
             </div>
           </div>
         </div>
-      </div >
+      </div>
+      }
     </>
   );
 }

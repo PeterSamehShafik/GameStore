@@ -169,7 +169,7 @@ export default function Info() {
                           <h6 className="mb-0">First Name</h6>
                         </div>
                         <div className="col-sm-9 text-secondary">
-                          {info.firstName}
+                          {info?.firstName}
                         </div>
                       </div>
                       <hr />
@@ -178,7 +178,7 @@ export default function Info() {
                           <h6 className="mb-0">Last Name</h6>
                         </div>
                         <div className="col-sm-9 text-secondary">
-                          {info.lastName}
+                          {info?.lastName}
                         </div>
                       </div>
                       <hr />
@@ -187,7 +187,7 @@ export default function Info() {
                           <h6 className="mb-0">Date of Birth</h6>
                         </div>
                         <div className="col-sm-9 text-secondary">
-                          {info.DOB.split("T")[0]}
+                          {info?.DOB.split("T")[0]}
                         </div>
                       </div>
                       <hr />
@@ -195,7 +195,7 @@ export default function Info() {
                         <div className="col-sm-3">
                           <h6 className="mb-0">Email</h6>
                         </div>
-                        <div className="col-sm-9 text-secondary">{info.email}</div>
+                        <div className="col-sm-9 text-secondary">{info?.email}</div>
                       </div>
                       <hr />
                       {

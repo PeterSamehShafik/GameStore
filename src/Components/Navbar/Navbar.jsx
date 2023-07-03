@@ -5,10 +5,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { roles } from "./../../index";
 import { useScroll } from './../../utilities/scrollNav';
 
-function Navbar({ currentUser, removeUser, cart, setSearch }) {
+function Navbar({ currentUser, removeUser, cart, setSearch, setPage }) {
   const location = useLocation();
   const handleSearch = (e) => {
     setSearch(e.target.value);
+    setPage(1);
   };
 
   const hideNave = () => {

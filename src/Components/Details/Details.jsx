@@ -95,6 +95,7 @@ function Details({ currentUser, getCart, cart }) {
     }
   };
 
+  // const navigate = useNavigate()
   const getGame = async () => {
     let config = {};
     if (localStorage.getItem("token")) {
@@ -109,6 +110,7 @@ function Details({ currentUser, getCart, cart }) {
       .catch(function (error) {
         if (error.response) {
           console.log(error)
+          navigate('/404')
           // setGame(null);
         }
       });
@@ -342,6 +344,10 @@ function Details({ currentUser, getCart, cart }) {
   useEffect(() => {
     checkCart();
   }, [cart]);
+  useEffect(() => {
+    getGame()
+  }, [window.location.href])
+  
 
   return (
     <>
@@ -468,21 +474,21 @@ function Details({ currentUser, getCart, cart }) {
                                 {game.genreId?.name}{" "}
                               </li>
                               <Link
-                                to={`/profile/info/${game.createdBy._id}`}
+                                to={`/profile/info/${game.createdBy?._id}`}
                                 onClick={() => {
                                   localStorage.setItem("userId", "user");
                                 }}
                               >
                                 <li className="text-white-50">
-                                  {game?.createdBy._id === currentUser?._id ? (
+                                  {game?.createdBy?._id === currentUser?._id ? (
                                     ""
                                   ) : (
                                     <span>
                                       {" "}
                                       Publisher:{" "}
                                       <span className="publisher">
-                                        {game.createdBy.firstName}{" "}
-                                        {game.createdBy.lastName}
+                                        {game.createdBy?.firstName}{" "}
+                                        {game.createdBy?.lastName}
                                       </span>{" "}
                                     </span>
                                   )}

@@ -49,6 +49,7 @@ function Home({ search, setSearch, page, setPage }) {
       sort = "";
     if (genre) {
       tempPage=1;
+      setPage(1)
       isGenre = `genre=${genre}&`;
       setFilters({ ...filters, genre: genre });
     } else if (filters.genre !== null) {
@@ -113,7 +114,7 @@ function Home({ search, setSearch, page, setPage }) {
     setPageCount(result.data.pages)
     setLoading(true);
   }
-
+  
   const asc_desc = (sortBy) => {
     setFilters({ ...filters, asc_desc: sortBy });
     getGames({ asc_desc: sortBy });
@@ -127,6 +128,7 @@ function Home({ search, setSearch, page, setPage }) {
   }
   const handleSearch = (e) => {
     setSearch(e.target.value);
+    setPage(1)
   };
   const showCarousel = (e) => {
     let img = e.target;
@@ -232,6 +234,8 @@ function Home({ search, setSearch, page, setPage }) {
                       placeholder="Search games..."
                       aria-label="Search"
                       onChange={handleSearch}
+                      id="search"
+                      defaultValue={search}
                     />
                     <i className="fa-solid fa-magnifying-glass close-search "></i>
                   </div>
@@ -556,6 +560,7 @@ function Home({ search, setSearch, page, setPage }) {
                     <Pagination
                       size="large"
                       count={pageCount}
+                      page={page}
                       showFirstButton showLastButton variant="outlined" color="primary"
                       onChange={handlePage}
                     />

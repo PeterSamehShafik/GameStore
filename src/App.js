@@ -169,7 +169,7 @@ function App() {
 
 
   return <>
-    {location.pathname.toLowerCase().includes("cpanel") ? "" : <Navbar currentUser={crrUser} removeUser={removeUser} cart={cart} setSearch={setSearch} />}
+    {location.pathname.toLowerCase().includes("cpanel") ? "" : <Navbar setPage = {setGamePage} currentUser={crrUser} removeUser={removeUser} cart={cart} setSearch={setSearch} />}
 
     {
       crrUser ?

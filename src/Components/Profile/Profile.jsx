@@ -81,6 +81,7 @@ export default function Profile({ crrUser, currentUser }) {
         .catch(function (error) {
           if (error.response) {
             console.log(error.response);
+            navigate('/404')
           }
           if (
             error.response?.data?.message === "JsonWebTokenError: jwt malformed"
@@ -88,11 +89,11 @@ export default function Profile({ crrUser, currentUser }) {
             navigate("/login");
           }
         });
-
+      console.log(result)
       if (result?.data?.message === "done") {
         setProfile(result.data.user);
         setReload(false);
-      }
+      } 
     } else {
       const result = await axios
         .get(`${baseURL}/user/profile`, config)
@@ -105,6 +106,7 @@ export default function Profile({ crrUser, currentUser }) {
           ) {
             navigate("/login");
           }
+          
         });
       if (result?.data?.message === "done") {
         setProfile(result.data.user);
@@ -496,7 +498,12 @@ export default function Profile({ crrUser, currentUser }) {
                       </div>
                     </nav>
                   </div>
-                  <Outlet context={[profile, setProfile, getProfile]} />
+                  {
+                    profile?
+                    <Outlet context={[profile, setProfile, getProfile]} />
+                    :
+                    ''
+                  }
                 </div>
               </div>
             </div>
