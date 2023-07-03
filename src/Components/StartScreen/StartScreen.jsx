@@ -144,6 +144,10 @@ function StartScreen({ currentUser }) {
                             <div className="w-100 px-lg-0 px-4">
                               <Link
                                 to="/profile"
+                                onClick={()=>{
+                                  localStorage.setItem("userId", "owner")
+                                  localStorage.setItem("id", currentUser._id)
+                                }}
                                 className="btn btn-light my-1 rounded-5 px-3 w-100 "
                               >
                                 {/* <button className="btn btn-light my-1 rounded-5 px-3 w-100 "> */}
@@ -156,7 +160,7 @@ function StartScreen({ currentUser }) {
                           <div className="px-0 d-flex justify-content-center">
                             <div className="w-100 px-lg-0 px-4">
                               {currentUser.role === roles.superAdmin ||
-                              currentUser === roles.admin ? (
+                                currentUser === roles.admin ? (
                                 <Link
                                   to="/cpanel"
                                   className="btn btn-light my-1 rounded-5 px-3 w-100 "
@@ -190,7 +194,7 @@ function StartScreen({ currentUser }) {
             </div>
           </div>
         </div>
-      </div>
+      </div >
     </>
   );
 }
