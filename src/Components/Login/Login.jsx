@@ -5,6 +5,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import "./Login.css";
 import { baseURL } from "../../index.js";
+import { motion } from "framer-motion";
 
 export default function Login({ currentUser }) {
   let navigate = useNavigate();
@@ -91,7 +92,7 @@ export default function Login({ currentUser }) {
 
   async function checkAPI(e) {
     e.preventDefault();
-    if(ErrList.length !== 0){
+    if (ErrList.length !== 0) {
       setAPIRes('Invalid data')
       return;
     }
@@ -130,140 +131,148 @@ export default function Login({ currentUser }) {
 
   return (
     <>
-      <div className="sign-in-page">
-        <section>
-          {/* getting background */}
-          {[...Array(260)].map((num,idx) => {
-            return <span className="bg" key={idx}></span>;
-          })}
+      <motion.main
+        className="main__container"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ x: "100%", opacity: 0 }}
+        transition={{ duration: 1, opacity:{duration:2}  }}
+      >
+        <div className="sign-in-page">
+          <section>
+            {/* getting background */}
+            {[...Array(260)].map((num, idx) => {
+              return <span className="bg" key={idx}></span>;
+            })}
 
-          <div className="signin mt-5">
-            <div className="content">
-              <h2>Sign In</h2>
+            <div className="signin mt-5">
+              <div className="content">
+                <h2>Sign In</h2>
 
-              <form onSubmit={checkAPI} className="form">
-                {APIRes ? (
-                  <div className="alert alert-danger"> {APIRes} </div>
-                ) : (
-                  ""
-                )}
-                <div className="inputBox ">
-                  <input
-                    autoComplete="off"
-                    autoFocus
-                    required
-                    onChange={getUser}
-                    typeof="text"
-                    id="email"
-                    className="position-relative"
-                  />{" "}
-                  <div className="position-absolute check-mark d-none">
-                    <i className="fa-solid fa-check"></i>
-                    <i className="fa-solid fa-xmark"></i>
-                  </div>
-                  <i className="desc">Email</i>
-                  <p className="text-danger mb-2" id="email">
-                    {getError("email")}
-                  </p>
-                </div>
-
-                <div className="inputBox">
-                  <input
-                    className="position-relative"
-                    autoComplete="off"
-                    autoFocus
-                    required
-                    onChange={getUser}
-                    type="password"
-                    id="password"
-                  />
-                  <div className="position-absolute check-mark d-none">
-                    <i className="fa-solid fa-check"></i>
-                    <i className="fa-solid fa-xmark"></i>
-                  </div>
-                  <span
-                    className="show-password bg-transparent position-absolute cursor-pointer"
-                    onClick={handlePassword}
-                  >
-                    {
-                      !showPassword?
-                      <i className="fa-regular fa-eye-slash"></i>
-                      :
-                      ''
-                    }
-                    {
-                      showPassword?
-                      <i className="fa-regular fa-eye "></i>
-                      :
-                      ''
-                    }
-                  </span>
-                  <i className="desc">Password</i>
-                  <p className="text-danger wrong-input mb-2 " id="password">
-                    {getError("password")}
-                  </p>
-                </div>
-
-                <div className="links">
-                  <Link className="hover-50" to="/forgot">
-                    Forgotten password?
-                  </Link>
-                  <Link className="sign-up-btn hover-50" to="/signup">
-                    Signup
-                  </Link>
-                </div>
-
-                <div className="inputBox">
-                  {googleFlag || apiFlag ? (
-                    ""
+                <form onSubmit={checkAPI} className="form">
+                  {APIRes ? (
+                    <div className="alert alert-danger"> {APIRes} </div>
                   ) : (
-                    <button
-                      className="sign-btn btn hover-50 text-white bg-violet w-100 py-2"
-                      type="submit"
-                    >
-                      Login
-                    </button>
+                    ""
                   )}
-
-                  {apiFlag || googleFlag ? (
-                    ""
-                  ) : (
-                    <div
-                      onClick={googleSign}
-                      className="bg-google py-2 google-btn w-100 cursor-pointer d-flex justify-content-center align-items-center my-3"
-                    >
-                      <div className="google-icon-wrapper">
-                        <img
-                          className="google-icon"
-                          src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
-                        />
-                      </div>
-                      <p className="hover-50 text-white m-0">
-                        <b>Sign in with google</b>
-                      </p>
+                  <div className="inputBox ">
+                    <input
+                      autoComplete="off"
+                      autoFocus
+                      required
+                      onChange={getUser}
+                      typeof="text"
+                      id="email"
+                      className="position-relative"
+                    />{" "}
+                    <div className="position-absolute check-mark d-none">
+                      <i className="fa-solid fa-check"></i>
+                      <i className="fa-solid fa-xmark"></i>
                     </div>
-                  )}
+                    <i className="desc">Email</i>
+                    <p className="text-danger mb-2" id="email">
+                      {getError("email")}
+                    </p>
+                  </div>
 
-                  {apiFlag || googleFlag ? (
-                    <button className="btn btn-info w-100 d-flex justify-content-center align-items-center">
-                      <div className="sk-chase">
-                        <div className="sk-chase-dot"></div>
-                        <div className="sk-chase-dot"></div>
-                        <div className="sk-chase-dot"></div>
-                        <div className="sk-chase-dot"></div>
-                        <div className="sk-chase-dot"></div>
-                        <div className="sk-chase-dot"></div>
+                  <div className="inputBox">
+                    <input
+                      className="position-relative"
+                      autoComplete="off"
+                      autoFocus
+                      required
+                      onChange={getUser}
+                      type="password"
+                      id="password"
+                    />
+                    <div className="position-absolute check-mark d-none">
+                      <i className="fa-solid fa-check"></i>
+                      <i className="fa-solid fa-xmark"></i>
+                    </div>
+                    <span
+                      className="show-password bg-transparent position-absolute cursor-pointer"
+                      onClick={handlePassword}
+                    >
+                      {
+                        !showPassword ?
+                          <i className="fa-regular fa-eye-slash"></i>
+                          :
+                          ''
+                      }
+                      {
+                        showPassword ?
+                          <i className="fa-regular fa-eye "></i>
+                          :
+                          ''
+                      }
+                    </span>
+                    <i className="desc">Password</i>
+                    <p className="text-danger wrong-input mb-2 " id="password">
+                      {getError("password")}
+                    </p>
+                  </div>
+
+                  <div className="links">
+                    <Link className="hover-50" to="/forgot">
+                      Forgotten password?
+                    </Link>
+                    <Link className="sign-up-btn hover-50" to="/signup">
+                      Signup
+                    </Link>
+                  </div>
+
+                  <div className="inputBox">
+                    {googleFlag || apiFlag ? (
+                      ""
+                    ) : (
+                      <button
+                        className="sign-btn btn hover-50 text-white bg-violet w-100 py-2"
+                        type="submit"
+                      >
+                        Login
+                      </button>
+                    )}
+
+                    {apiFlag || googleFlag ? (
+                      ""
+                    ) : (
+                      <div
+                        onClick={googleSign}
+                        className="bg-google py-2 google-btn w-100 cursor-pointer d-flex justify-content-center align-items-center my-3"
+                      >
+                        <div className="google-icon-wrapper">
+                          <img
+                            className="google-icon"
+                            src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
+                          />
+                        </div>
+                        <p className="hover-50 text-white m-0">
+                          <b>Sign in with google</b>
+                        </p>
                       </div>
-                    </button>
-                  ) : (
-                    ""
-                  )}
-                </div>
-              </form>
+                    )}
+
+                    {apiFlag || googleFlag ? (
+                      <button className="btn btn-info w-100 d-flex justify-content-center align-items-center">
+                        <div className="sk-chase">
+                          <div className="sk-chase-dot"></div>
+                          <div className="sk-chase-dot"></div>
+                          <div className="sk-chase-dot"></div>
+                          <div className="sk-chase-dot"></div>
+                          <div className="sk-chase-dot"></div>
+                          <div className="sk-chase-dot"></div>
+                        </div>
+                      </button>
+                    ) : (
+                      ""
+                    )}
+                  </div>
+                </form>
+              </div>
             </div>
-          </div>
-        </section>
-      </div>
+          </section>
+        </div>
+      </motion.main>
     </>
   );
 }

@@ -7,6 +7,7 @@ import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import { motion } from "framer-motion";
 
 export default function Profile({ crrUser, currentUser }) {
   const { id } = useParams();
@@ -93,7 +94,7 @@ export default function Profile({ crrUser, currentUser }) {
       if (result?.data?.message === "done") {
         setProfile(result.data.user);
         setReload(false);
-      } 
+      }
     } else {
       const result = await axios
         .get(`${baseURL}/user/profile`, config)
@@ -106,7 +107,7 @@ export default function Profile({ crrUser, currentUser }) {
           ) {
             navigate("/login");
           }
-          
+
         });
       if (result?.data?.message === "done") {
         setProfile(result.data.user);
@@ -212,7 +213,7 @@ export default function Profile({ crrUser, currentUser }) {
   const checkIsFollowed = () => {
     if (localStorage.getItem("id") === crrUser?._id) {
       localStorage.setItem("userId", "owner");
-    }else{
+    } else {
       localStorage.setItem("userId", "user");
     }
     let checkId = localStorage.getItem("id");
@@ -273,295 +274,303 @@ export default function Profile({ crrUser, currentUser }) {
 
   return (
     <>
-      {profile && !reload ? (
-        <>
-          <div className="container profile">
-            <header className="d-flex justify-content-between align-items-center mb-2">
-              <Link to="/home" className="back-store h4 fw-bolder text-white">
-                <i className="fa-solid fa-arrow-left me-2"></i>
-                <strong>Store</strong>
-              </Link>
-            </header>
-            <div className="main-body">
-              <div className="row">
-                <div className="col-md-4">
-                  <div className="card ">
-                    <div className="card-body">
-                      <div className="d-flex flex-column align-items-center">
-                        <div className="profile-img position-relative">
-                          {localStorage.getItem("userId") === "user" ? (
-                            ""
-                          ) : (
-                            <div className="image-upload position-absolute top-0 end-0">
-                              <label htmlFor="file-input">
-                                <i className="fa-regular fa-pen-to-square fa-lg"></i>
-                              </label>
-                              <input
-                                id="file-input"
-                                type="file"
-                                onChange={inputImage}
+      <motion.main
+        className="main__container"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ x: "100%", opacity: 0 }}
+        transition={{ duration: 1 }}
+      >
+        {profile && !reload ? (
+          <>
+            <div className="container profile">
+              <header className="d-flex justify-content-between align-items-center mb-2">
+                <Link to="/home" className="back-store h4 fw-bolder text-white">
+                  <i className="fa-solid fa-arrow-left me-2"></i>
+                  <strong>Store</strong>
+                </Link>
+              </header>
+              <div className="main-body">
+                <div className="row">
+                  <div className="col-md-4">
+                    <div className="card ">
+                      <div className="card-body">
+                        <div className="d-flex flex-column align-items-center">
+                          <div className="profile-img position-relative">
+                            {localStorage.getItem("userId") === "user" ? (
+                              ""
+                            ) : (
+                              <div className="image-upload position-absolute top-0 end-0">
+                                <label htmlFor="file-input">
+                                  <i className="fa-regular fa-pen-to-square fa-lg"></i>
+                                </label>
+                                <input
+                                  id="file-input"
+                                  type="file"
+                                  onChange={inputImage}
+                                />
+                              </div>
+                            )}
+                            {showCropper ? (
+                              <div className="text-center">
+                                <Cropper
+                                  id="cropperComp"
+                                  src={profile.temp}
+                                  initialAspectRatio={6 / 6}
+                                  aspectRatio={6 / 6}
+                                  responsive={true}
+                                  minCropBoxHeight={100}
+                                  minCropBoxWidth={100}
+                                  guides={false}
+                                  autoCropArea={0.9}
+                                  movable={false}
+                                  checkOrientation={true}
+                                  onInitialized={(instance) => {
+                                    setCropper(instance);
+                                  }}
+                                  className="w-100 h-100"
+                                />
+                                <button
+                                  onClick={getCropData}
+                                  className="btn btn-outline-info mt-2"
+                                >
+                                  Crop Image
+                                </button>
+                              </div>
+                            ) : (
+                              <img
+                                src={
+                                  profile.temp
+                                    ? profile.temp
+                                    : profile.profilePic?.secure_url
+                                }
+                                alt="Profile"
+                                className="rounded-circle img-fluid "
+                                width="150"
                               />
-                            </div>
-                          )}
-                          {showCropper ? (
-                            <div className="text-center">
-                              <Cropper
-                                id="cropperComp"
-                                src={profile.temp}
-                                initialAspectRatio={6 / 6}
-                                aspectRatio={6 / 6}
-                                responsive={true}
-                                minCropBoxHeight={100}
-                                minCropBoxWidth={100}
-                                guides={false}
-                                autoCropArea={0.9}
-                                movable={false}
-                                checkOrientation={true}
-                                onInitialized={(instance) => {
-                                  setCropper(instance);
-                                }}
-                                className="w-100 h-100"
-                              />
+                            )}
+                          </div>
+                          <div className="save-image-buttons d-flex justify-content-between">
+                            {file && !showCropper ? (
+                              <div className="mt-2">
+                                <button
+                                  className="btn btn-success btn-sm me-2"
+                                  onClick={saveImage}
+                                >
+                                  {" "}
+                                  Save{" "}
+                                </button>
+                                <button
+                                  className="btn btn-danger btn-sm"
+                                  onClick={removePic}
+                                >
+                                  {" "}
+                                  Cancel{" "}
+                                </button>
+                              </div>
+                            ) : (
+                              ""
+                            )}
+                          </div>
+                          <div className="mt-3 text-center">
+                            <h4>
+                              {profile.firstName} {profile.lastName}
+                            </h4>
+                            <h6 className="text-muted text-center">
+                              username: {profile.userName}
+                            </h6>
+                            {localStorage.getItem("userId") === "owner" ? (
+                              ""
+                            ) : isFollowed ? (
                               <button
-                                onClick={getCropData}
+                                className="btn btn-info mt-2"
+                                onClick={removeFollowing}
+                              >
+                                {" "}
+                                Unfollow{" "}
+                              </button>
+                            ) : (
+                              <button
                                 className="btn btn-outline-info mt-2"
-                              >
-                                Crop Image
-                              </button>
-                            </div>
-                          ) : (
-                            <img
-                              src={
-                                profile.temp
-                                  ? profile.temp
-                                  : profile.profilePic?.secure_url
-                              }
-                              alt="Profile"
-                              className="rounded-circle img-fluid "
-                              width="150"
-                            />
-                          )}
-                        </div>
-                        <div className="save-image-buttons d-flex justify-content-between">
-                          {file && !showCropper ? (
-                            <div className="mt-2">
-                              <button
-                                className="btn btn-success btn-sm me-2"
-                                onClick={saveImage}
+                                onClick={addFollowing}
                               >
                                 {" "}
-                                Save{" "}
+                                Follow{" "}
                               </button>
-                              <button
-                                className="btn btn-danger btn-sm"
-                                onClick={removePic}
-                              >
-                                {" "}
-                                Cancel{" "}
-                              </button>
-                            </div>
-                          ) : (
-                            ""
-                          )}
-                        </div>
-                        <div className="mt-3 text-center">
-                          <h4>
-                            {profile.firstName} {profile.lastName}
-                          </h4>
-                          <h6 className="text-muted text-center">
-                            username: {profile.userName}
-                          </h6>
-                          {localStorage.getItem("userId") === "owner" ? (
-                            ""
-                          ) : isFollowed ? (
-                            <button
-                              className="btn btn-info mt-2"
-                              onClick={removeFollowing}
-                            >
-                              {" "}
-                              Unfollow{" "}
-                            </button>
-                          ) : (
-                            <button
-                              className="btn btn-outline-info mt-2"
-                              onClick={addFollowing}
-                            >
-                              {" "}
-                              Follow{" "}
-                            </button>
-                          )}
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="col-md-8">
-                  <div className="mb-3 ">
-                    <nav className="navbar z-minus navbar-expand-sm navbar-light bg-dark-grey ">
-                      <div className="container-fluid ">
-                        <div className="">
-                          <button
-                            className="navbar-toggler"
-                            type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#navbarNav"
-                            aria-controls="navbarNav"
-                            aria-expanded="false"
-                            aria-label="Toggle navigation"
+                  <div className="col-md-8">
+                    <div className="mb-3 ">
+                      <nav className="navbar z-minus navbar-expand-sm navbar-light bg-dark-grey ">
+                        <div className="container-fluid ">
+                          <div className="">
+                            <button
+                              className="navbar-toggler"
+                              type="button"
+                              data-bs-toggle="collapse"
+                              data-bs-target="#navbarNav"
+                              aria-controls="navbarNav"
+                              aria-expanded="false"
+                              aria-label="Toggle navigation"
+                            >
+                              {/* <span className="navbar-toggler-icon text-white"></span> */}
+                              <i class="fa-solid fa-bars toggler-icon"></i>
+                            </button>
+                          </div>
+                          <div
+                            className="collapse navbar-collapse text-center"
+                            id="navbarNav"
                           >
-                            {/* <span className="navbar-toggler-icon text-white"></span> */}
-                            <i class="fa-solid fa-bars toggler-icon"></i>
-                          </button>
-                        </div>
-                        <div
-                          className="collapse navbar-collapse text-center"
-                          id="navbarNav"
-                        >
-                          <ul className="fs-6 py-2  mb-0 rounded-2 navbar-nav mx-auto mt-sm-0 mt-2 w-100 d-flex justify-content-around">
-                            <li className="nav-item" onClick={modifyButtons}>
-                              <Link
-                                className={
-                                  pathname === "info" ? "text-violet" : ""
-                                }
-                                to="info"
-                                id="info"
-                              >
-                                Info
-                              </Link>
-                            </li>
-                            <div className="line-grey d-block d-sm-none my-1"></div>
-                            {localStorage.getItem("userId") === "user" ? (
-                              ""
-                            ) : (
-                              <>
-                                <li
-                                  className="nav-item "
-                                  onClick={modifyButtons}
+                            <ul className="fs-6 py-2  mb-0 rounded-2 navbar-nav mx-auto mt-sm-0 mt-2 w-100 d-flex justify-content-around">
+                              <li className="nav-item" onClick={modifyButtons}>
+                                <Link
+                                  className={
+                                    pathname === "info" ? "text-violet" : ""
+                                  }
+                                  to="info"
+                                  id="info"
                                 >
-                                  <Link
-                                    className={
-                                      pathname === "activity"
-                                        ? "text-violet"
-                                        : ""
-                                    }
-                                    to="activity"
-                                    id="activity"
+                                  Info
+                                </Link>
+                              </li>
+                              <div className="line-grey d-block d-sm-none my-1"></div>
+                              {localStorage.getItem("userId") === "user" ? (
+                                ""
+                              ) : (
+                                <>
+                                  <li
+                                    className="nav-item "
+                                    onClick={modifyButtons}
                                   >
-                                    Activity
-                                  </Link>
-                                </li>
-                                <div className="line-grey w-100 d-block d-sm-none my-1"></div>
-                                <li
-                                  className="nav-item"
-                                  onClick={modifyButtons}
+                                    <Link
+                                      className={
+                                        pathname === "activity"
+                                          ? "text-violet"
+                                          : ""
+                                      }
+                                      to="activity"
+                                      id="activity"
+                                    >
+                                      Activity
+                                    </Link>
+                                  </li>
+                                  <div className="line-grey w-100 d-block d-sm-none my-1"></div>
+                                  <li
+                                    className="nav-item"
+                                    onClick={modifyButtons}
+                                  >
+                                    <Link
+                                      className={
+                                        pathname === "wishlist"
+                                          ? "text-violet"
+                                          : ""
+                                      }
+                                      to="wishlist"
+                                      id="wishlist"
+                                    >
+                                      Wishlist
+                                    </Link>
+                                  </li>
+                                  <div className="line-grey w-100 d-block d-sm-none my-1"></div>
+                                </>
+                              )}
+                              <li className="nav-item" onClick={modifyButtons}>
+                                <Link
+                                  className={
+                                    pathname === "following" ? "text-violet" : ""
+                                  }
+                                  to="following"
+                                  id="following"
                                 >
-                                  <Link
-                                    className={
-                                      pathname === "wishlist"
-                                        ? "text-violet"
-                                        : ""
-                                    }
-                                    to="wishlist"
-                                    id="wishlist"
-                                  >
-                                    Wishlist
-                                  </Link>
-                                </li>
-                                <div className="line-grey w-100 d-block d-sm-none my-1"></div>
-                              </>
-                            )}
-                            <li className="nav-item" onClick={modifyButtons}>
-                              <Link
-                                className={
-                                  pathname === "following" ? "text-violet" : ""
-                                }
-                                to="following"
-                                id="following"
-                              >
-                                Followers
-                              </Link>
-                            </li>
-                            <div className="line-grey w-100 d-block d-sm-none my-1"></div>
-                            <li className="nav-item" onClick={modifyButtons}>
-                              <Link
-                                className={
-                                  pathname === "games" ? "text-violet" : ""
-                                }
-                                to="games"
-                                id="games"
-                              >
-                                Games
-                              </Link>
-                            </li>
-                          </ul>
+                                  Followers
+                                </Link>
+                              </li>
+                              <div className="line-grey w-100 d-block d-sm-none my-1"></div>
+                              <li className="nav-item" onClick={modifyButtons}>
+                                <Link
+                                  className={
+                                    pathname === "games" ? "text-violet" : ""
+                                  }
+                                  to="games"
+                                  id="games"
+                                >
+                                  Games
+                                </Link>
+                              </li>
+                            </ul>
+                          </div>
                         </div>
-                      </div>
-                    </nav>
+                      </nav>
+                    </div>
+                    {
+                      profile ?
+                        <Outlet context={[profile, setProfile, getProfile]} />
+                        :
+                        ''
+                    }
                   </div>
-                  {
-                    profile?
-                    <Outlet context={[profile, setProfile, getProfile]} />
-                    :
-                    ''
-                  }
                 </div>
               </div>
             </div>
-          </div>
-          <Modal
-            show={showModal}
-            onHide={handleCloseModal}
-            className="text-white"
-            backdrop={modalData.isStatic ? "static" : true}
-            keyboard={modalData.isStatic ? false : true}
-          >
-            {modalData.isStatic ? (
-              <Modal.Header>
-                <Modal.Title>{modalData.header}</Modal.Title>
-              </Modal.Header>
-            ) : (
-              <Modal.Header closeButton>
-                <Modal.Title>{modalData.header}</Modal.Title>
-              </Modal.Header>
-            )}
+            <Modal
+              show={showModal}
+              onHide={handleCloseModal}
+              className="text-white"
+              backdrop={modalData.isStatic ? "static" : true}
+              keyboard={modalData.isStatic ? false : true}
+            >
+              {modalData.isStatic ? (
+                <Modal.Header>
+                  <Modal.Title>{modalData.header}</Modal.Title>
+                </Modal.Header>
+              ) : (
+                <Modal.Header closeButton>
+                  <Modal.Title>{modalData.header}</Modal.Title>
+                </Modal.Header>
+              )}
 
-            <Modal.Body>{modalData.body}</Modal.Body>
-            <Modal.Footer>
-              {modalData.isCloseBtn === true ? (
-                <Button
-                  variant={modalData.closeBtnColor}
-                  onClick={handleCloseModal}
-                >
-                  {modalData.closeBtnTxt}
-                </Button>
-              ) : (
-                ""
-              )}
-              {modalData.isMainBtn === true ? (
-                <Button
-                  variant={modalData.mainBtnColor}
-                  onClick={applyCloseModel}
-                >
-                  {modalData.mainBtnTxt}
-                </Button>
-              ) : (
-                ""
-              )}
-            </Modal.Footer>
-          </Modal>
-        </>
-      ) : (
-        <div className="w-100 vh-100 d-flex justify-content-center align-items-center position-absolute top-0">
-          <div className="sk-chase">
-            <div className="sk-chase-dot"></div>
-            <div className="sk-chase-dot"></div>
-            <div className="sk-chase-dot"></div>
-            <div className="sk-chase-dot"></div>
-            <div className="sk-chase-dot"></div>
-            <div className="sk-chase-dot"></div>
+              <Modal.Body>{modalData.body}</Modal.Body>
+              <Modal.Footer>
+                {modalData.isCloseBtn === true ? (
+                  <Button
+                    variant={modalData.closeBtnColor}
+                    onClick={handleCloseModal}
+                  >
+                    {modalData.closeBtnTxt}
+                  </Button>
+                ) : (
+                  ""
+                )}
+                {modalData.isMainBtn === true ? (
+                  <Button
+                    variant={modalData.mainBtnColor}
+                    onClick={applyCloseModel}
+                  >
+                    {modalData.mainBtnTxt}
+                  </Button>
+                ) : (
+                  ""
+                )}
+              </Modal.Footer>
+            </Modal>
+          </>
+        ) : (
+          <div className="w-100 vh-100 d-flex justify-content-center align-items-center position-absolute top-0">
+            <div className="sk-chase">
+              <div className="sk-chase-dot"></div>
+              <div className="sk-chase-dot"></div>
+              <div className="sk-chase-dot"></div>
+              <div className="sk-chase-dot"></div>
+              <div className="sk-chase-dot"></div>
+              <div className="sk-chase-dot"></div>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </motion.main>
     </>
   );
 }

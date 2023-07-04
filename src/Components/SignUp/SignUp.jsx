@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "../Login/Login.css";
 import { baseURL } from "../../index.js";
 import "./SignUp.css";
-
+import { motion } from "framer-motion";
 export default function Signup() {
   let navigate = useNavigate();
 
@@ -139,200 +139,209 @@ export default function Signup() {
   };
   return (
     <>
-      <div className="sign-up-page">
-        <section>
-          {/* getting background */}
-          {[...Array(260)].map((num, idx) => {
-            return <span key={idx}></span>;
-          })}
+      <motion.main
+        className="main__container"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ x: "100%", opacity: 0 }}
+        transition={{ duration: 1 }}
+      >
+        <div className="sign-up-page">
+          <section>
+            {/* getting background */}
+            {[...Array(260)].map((num, idx) => {
+              return <span key={idx}></span>;
+            })}
 
-          <div className="signup mt-5">
-            <div className="content">
-              <h2>Sign Up</h2>
+            <div className="signup mt-5">
+              <div className="content">
+                <h2>Sign Up</h2>
 
-              <form onSubmit={checkAPI} className="form" >
-                {APIRes ? (
-                  <div className="alert alert-danger"> {APIRes} </div>
-                ) : (
-                  ""
-                )}
-                <div className="d-flex">
-                  <div className="inputBox me-2">
+                <form onSubmit={checkAPI} className="form" >
+                  {APIRes ? (
+                    <div className="alert alert-danger"> {APIRes} </div>
+                  ) : (
+                    ""
+                  )}
+                  <div className="d-flex">
+                    <div className="inputBox me-2">
+                      <input
+                        autoComplete="off"
+                        required
+                        onChange={getUser}
+                        typeof="text"
+                        id="firstName"
+                        className="input-field position-relative"
+                      />{" "}
+                      <div className="position-absolute check-mark d-none">
+                        <i className="fa-solid fa-check"></i>
+                        <i className="fa-solid fa-xmark"></i>
+                      </div>
+                      <i className="desc">First Name</i>
+                      <p className="text-danger mb-2" id="firstName">
+                        {getError("firstName")}
+                      </p>
+                    </div>
+
+                    <div className="inputBox ms-2">
+                      <input
+                        autoComplete="off"
+                        required
+                        onChange={getUser}
+                        typeof="text"
+                        id="lastName"
+                        className="input-field position-relative"
+                      />{" "}
+                      <div className="position-absolute check-mark d-none">
+                        <i className="fa-solid fa-check"></i>
+                        <i className="fa-solid fa-xmark"></i>
+                      </div>
+                      <i className="desc">Last Name</i>
+                      <p className="text-danger mb-2" id="lastName">
+                        {getError("lastName")}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="inputBox ">
                     <input
-                      autoComplete="off"                      
+                      autoComplete="off"
                       required
                       onChange={getUser}
-                      typeof="text"
-                      id="firstName"
+                      type="email"
+                      id="email"
                       className="input-field position-relative"
                     />{" "}
                     <div className="position-absolute check-mark d-none">
                       <i className="fa-solid fa-check"></i>
                       <i className="fa-solid fa-xmark"></i>
                     </div>
-                    <i className="desc">First Name</i>
-                    <p className="text-danger mb-2" id="firstName">
-                      {getError("firstName")}
+                    <i className="desc">Email</i>
+                    <p className="text-danger mb-2" id="email">
+                      {getError("email")}
                     </p>
                   </div>
 
-                  <div className="inputBox ms-2">
+                  <div className="inputBox ">
                     <input
-                      autoComplete="off"                      
+                      autoComplete="off"
                       required
                       onChange={getUser}
-                      typeof="text"
-                      id="lastName"
+                      id="userName"
+                      type="text"
                       className="input-field position-relative"
                     />{" "}
                     <div className="position-absolute check-mark d-none">
                       <i className="fa-solid fa-check"></i>
                       <i className="fa-solid fa-xmark"></i>
                     </div>
-                    <i className="desc">Last Name</i>
-                    <p className="text-danger mb-2" id="lastName">
-                      {getError("lastName")}
+                    <i className="desc">userName</i>
+                    <p className="text-danger mb-2" id="userName">
+                      {getError("userName")}
                     </p>
                   </div>
-                </div>
-
-                <div className="inputBox ">
-                  <input
-                    autoComplete="off"                    
-                    required
-                    onChange={getUser}
-                    type="email"
-                    id="email"
-                    className="input-field position-relative"
-                  />{" "}
-                  <div className="position-absolute check-mark d-none">
-                    <i className="fa-solid fa-check"></i>
-                    <i className="fa-solid fa-xmark"></i>
+                  <div className="inputBox ">
+                    <input
+                      autoComplete="off"
+                      required
+                      onChange={getUser}
+                      typeof="text"
+                      id="phone"
+                      className="input-field position-relative"
+                    />{" "}
+                    <div className="position-absolute check-mark d-none">
+                      <i className="fa-solid fa-check"></i>
+                      <i className="fa-solid fa-xmark"></i>
+                    </div>
+                    <i className="desc">Phone</i>
+                    <p className="text-danger mb-2" id="phone">
+                      {getError("phone")}
+                    </p>
                   </div>
-                  <i className="desc">Email</i>
-                  <p className="text-danger mb-2" id="email">
-                    {getError("email")}
-                  </p>
-                </div>
 
-                <div className="inputBox ">
-                  <input
-                    autoComplete="off"                    
-                    required
-                    onChange={getUser}
-                    id="userName"
-                    type="text"
-                    className="input-field position-relative"
-                  />{" "}
-                  <div className="position-absolute check-mark d-none">
-                    <i className="fa-solid fa-check"></i>
-                    <i className="fa-solid fa-xmark"></i>
+                  <div className="inputBox ">
+                    <input
+                      autoComplete="off"
+                      onChange={getUser}
+                      type="date"
+                      id="DOB"
+                      className="input-field position-relative"
+                    />{" "}
+                    <i className="desc">Date of birth:</i>
+                    <p className="text-danger mb-2" id="DOB">
+                      {getError("DOB")}
+                    </p>
                   </div>
-                  <i className="desc">userName</i>
-                  <p className="text-danger mb-2" id="userName">
-                    {getError("userName")}
-                  </p>
-                </div>
-                <div className="inputBox ">
-                  <input
-                    autoComplete="off"                    
-                    required
-                    onChange={getUser}
-                    typeof="text"
-                    id="phone"
-                    className="input-field position-relative"
-                  />{" "}
-                  <div className="position-absolute check-mark d-none">
-                    <i className="fa-solid fa-check"></i>
-                    <i className="fa-solid fa-xmark"></i>
-                  </div>
-                  <i className="desc">Phone</i>
-                  <p className="text-danger mb-2" id="phone">
-                    {getError("phone")}
-                  </p>
-                </div>
 
-                <div className="inputBox ">
-                  <input
-                    autoComplete="off"                    
-                    onChange={getUser}
-                    type="date"
-                    id="DOB"
-                    className="input-field position-relative"
-                  />{" "}
-                  <i className="desc">Date of birth:</i>
-                  <p className="text-danger mb-2" id="DOB">
-                    {getError("DOB")}
-                  </p>
-                </div>
-
-                <div className="inputBox">
-                  <input
-                    autoComplete="off"                    
-                    required
-                    onChange={getUser}
-                    type="password"
-                    id="password"
-                    className="position-relative"
-                  />
-                  <div className="position-absolute check-mark d-none">
-                    <i className="fa-solid fa-check"></i>
-                    <i className="fa-solid fa-xmark"></i>
+                  <div className="inputBox">
+                    <input
+                      autoComplete="off"
+                      required
+                      onChange={getUser}
+                      type="password"
+                      id="password"
+                      className="position-relative"
+                    />
+                    <div className="position-absolute check-mark d-none">
+                      <i className="fa-solid fa-check"></i>
+                      <i className="fa-solid fa-xmark"></i>
+                    </div>
+                    <span
+                      className="show-password bg-transparent position-absolute cursor-pointer"
+                      onClick={handlePassword}
+                    >
+                      {!showPassword ? (
+                        <i className="fa-regular fa-eye-slash"></i>
+                      ) : (
+                        ""
+                      )}
+                      {showPassword ? <i className="fa-regular fa-eye"></i> : ""}
+                    </span>
+                    <i className="desc">Password</i>
+                    <p className="text-danger wrong-input mb-2 " id="email">
+                      {getError("password")}
+                    </p>
                   </div>
-                  <span
-                    className="show-password bg-transparent position-absolute cursor-pointer"
-                    onClick={handlePassword}
-                  >
-                    {!showPassword ? (
-                      <i className="fa-regular fa-eye-slash"></i>
+
+                  <div className="inputBox">
+                    {apiFlag ? (
+                      ""
+                    ) : (
+                      <button
+                        className="sign-btn btn hover-50 text-white bg-violet w-100 py-2"
+                        type="submit"
+                      >
+                        Sign Up
+                      </button>
+                    )}
+                    <div className="links">
+                      <Link className=" sign-up-btn mt-2 hover-50" to="/login">
+                        Already have an account?
+                      </Link>
+                    </div>
+
+                    {apiFlag ? (
+                      <button className="btn btn-info w-100 d-flex justify-content-center align-items-center">
+                        <div className="sk-chase">
+                          <div className="sk-chase-dot"></div>
+                          <div className="sk-chase-dot"></div>
+                          <div className="sk-chase-dot"></div>
+                          <div className="sk-chase-dot"></div>
+                          <div className="sk-chase-dot"></div>
+                          <div className="sk-chase-dot"></div>
+                        </div>
+                      </button>
                     ) : (
                       ""
                     )}
-                    {showPassword ? <i className="fa-regular fa-eye"></i> : ""}
-                  </span>
-                  <i className="desc">Password</i>
-                  <p className="text-danger wrong-input mb-2 " id="email">
-                    {getError("password")}
-                  </p>
-                </div>
-
-                <div className="inputBox">
-                  {apiFlag ? (
-                    ""
-                  ) : (
-                    <button
-                      className="sign-btn btn hover-50 text-white bg-violet w-100 py-2"
-                      type="submit"
-                    >
-                      Sign Up
-                    </button>
-                  )}
-                  <div className="links">
-                    <Link className=" sign-up-btn mt-2 hover-50" to="/login">
-                      Already have an account?
-                    </Link>
                   </div>
-
-                  {apiFlag ? (
-                    <button className="btn btn-info w-100 d-flex justify-content-center align-items-center">
-                      <div className="sk-chase">
-                        <div className="sk-chase-dot"></div>
-                        <div className="sk-chase-dot"></div>
-                        <div className="sk-chase-dot"></div>
-                        <div className="sk-chase-dot"></div>
-                        <div className="sk-chase-dot"></div>
-                        <div className="sk-chase-dot"></div>
-                      </div>
-                    </button>
-                  ) : (
-                    ""
-                  )}
-                </div>
-              </form>
+                </form>
+              </div>
             </div>
-          </div>
-        </section>
-      </div>
+          </section>
+        </div>
+
+      </motion.main>
     </>
   );
 }

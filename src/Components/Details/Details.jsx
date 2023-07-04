@@ -8,6 +8,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a lo
 import { Carousel } from "react-responsive-carousel";
 import Rating from "@mui/material/Rating";
 import jwtDecode from "jwt-decode";
+import { motion } from "framer-motion";
 
 //modal
 import Button from "react-bootstrap/Button";
@@ -347,230 +348,280 @@ function Details({ currentUser, getCart, cart }) {
   useEffect(() => {
     getGame()
   }, [window.location.href])
-  
+
 
   return (
     <>
-      {game === "Loading" ? (
-        <div className="w-100 vh-100 d-flex justify-content-center align-items-center position-absolute top-0">
-          <div className="sk-chase">
-            <div className="sk-chase-dot"></div>
-            <div className="sk-chase-dot"></div>
-            <div className="sk-chase-dot"></div>
-            <div className="sk-chase-dot"></div>
-            <div className="sk-chase-dot"></div>
-            <div className="sk-chase-dot"></div>
-          </div>
-        </div>
-      ) : game ? (
-        <div className="container-fluid px-sm-5 ">
-          <div className="row">
-            <header className="d-flex justify-content-between align-items-center mb-2">
-              <Link to="/home" className="back-store h4 fw-bolder">
-                <i className="fa-solid fa-arrow-left me-2"></i>
-                <strong>Store</strong>
-              </Link>
-            </header>
-          </div>
-          <div className="row">
-            <div className=" col-lg-4 ">
-              <div className="game-pic-vid d-flex flex-column align-items-center">
-                <div className="main-pic-vid">
-                  {game.video?.secure_url ? (
-                    <HoverVideoPlayer
-                      videoSrc={game.video.secure_url}
-                      pausedOverlay={
-                        <img
-                          src={game.mainPic.secure_url}
-                          alt={game.slug}
-                          style={{
-                            // Make the image expand to cover the video's dimensions
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "cover",
-                          }}
-                        />
-                      }
-                      loadingOverlay={
-                        <div className="loading-overlay">
-                          <div className="loading-spinner" />
-                        </div>
-                      }
-                    />
-                  ) : (
-                    <img
-                      src={game.mainPic.secure_url}
-                      alt={game.slug}
-                      className="img-fluid"
-                    />
-                  )}
-                </div>
-                <div className="game-name">
-                  <h2 className="display-6 fw-bolder mb-0 cursor-normal">
-                    {game.name}
-                  </h2>
-                </div>
-                <div className="rating mx-auto d-flex flex-lg-column flex-sm-row flex-column align-items-center mt-3 mb-4">
-                  {game.avgRate ? (
-                    <div className=" d-flex ">
-                      <span className=" game-rating  rounded-circle fa-2xl bg-warning fw-bold d-flex justify-content-center align-items-center">
-                        {game.avgRate}
-                      </span>
-                      <div className="rate-info ms-2">
-                        <h4>User Score</h4>
-                        <p>Mixed or average reviews based on users</p>
-                      </div>
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                  <div className="rate-game my-2 bg-secondary p-2 rounded-3 w-auto ms-4">
-                    <Rating
-                      name="simple-controlled"
-                      value={userRate}
-                      precision={0.5}
-                      size="large"
-                      onChange={(event, newValue) => {
-                        giveRate(newValue);
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
+      <motion.main
+        className="main__container"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0, y: "50%" }}
+        transition={{ duration: 0.5 }}
+      >
+        {game === "Loading" ? (
+          <div className="w-100 vh-100 d-flex justify-content-center align-items-center position-absolute top-0">
+            <div className="sk-chase">
+              <div className="sk-chase-dot"></div>
+              <div className="sk-chase-dot"></div>
+              <div className="sk-chase-dot"></div>
+              <div className="sk-chase-dot"></div>
+              <div className="sk-chase-dot"></div>
+              <div className="sk-chase-dot"></div>
             </div>
-            <div className=" col-lg-8 d-flex flex-column justify-content-between align-items-center">
-              <div className="about-section w-100">
-                <div
-                  className="accordion text-bg-dark accordion-flush"
-                  id="accordionExample"
-                >
-                  <div className="card text-bg-dark">
-                    <div className="card-header fw-bolder h4">About</div>
-                    <div className="card-body">
-                      <p className="card-text">{game.desc}</p>
-                    </div>
-                    <div className="card-footer text-muted p-0 bg-dark">
-                      <div className="accordion-item text-bg-test ">
-                        <div
-                          id="flush-collapseOne"
-                          className="accordion-collapse collapse"
-                          aria-labelledby="flush-headingOne"
-                          data-bs-parent="#accordionFlushExample"
-                        >
-                          <div className="accordion-body">
-                            <ul className="text-bg-test">
-                              <li className="fw-bolder">{game.name}</li>
-                              <li className="text-white-50">
-                                Released: {game.released.split("T")[0]}
-                              </li>
-                              <li className="text-white-50">
-                                Platforms:
-                                {game.platform.map((platform, idx) => {
-                                  return <span key={idx}> {platform} </span>;
-                                })}
-                              </li>
-                              <li className="text-white-50">
-                                {game.genreId ? "Genre: " : ""}
-                                {game.genreId?.name}{" "}
-                              </li>
-                              <Link
-                                to={`/profile/info/${game.createdBy?._id}`}
-                                onClick={() => {
-                                  localStorage.setItem("userId", "user");
-                                }}
-                              >
-                                <li className="text-white-50">
-                                  {game?.createdBy?._id === currentUser?._id ? (
-                                    ""
-                                  ) : (
-                                    <span>
-                                      {" "}
-                                      Publisher:{" "}
-                                      <span className="publisher">
-                                        {game.createdBy?.firstName}{" "}
-                                        {game.createdBy?.lastName}
-                                      </span>{" "}
-                                    </span>
-                                  )}
-                                </li>
-                              </Link>
-                            </ul>
+          </div>
+        ) : game ? (
+          <div className="container-fluid px-sm-5 ">
+            <div className="row">
+              <header className="d-flex justify-content-between align-items-center mb-2">
+                <Link to="/home" className="back-store h4 fw-bolder">
+                  <i className="fa-solid fa-arrow-left me-2"></i>
+                  <strong>Store</strong>
+                </Link>
+              </header>
+            </div>
+            <div className="row">
+              <div className=" col-lg-4 ">
+                <div className="game-pic-vid d-flex flex-column align-items-center">
+                  <div className="main-pic-vid">
+                    {game.video?.secure_url ? (
+                      <HoverVideoPlayer
+                        videoSrc={game.video.secure_url}
+                        pausedOverlay={
+                          <img
+                            src={game.mainPic.secure_url}
+                            alt={game.slug}
+                            style={{
+                              // Make the image expand to cover the video's dimensions
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover",
+                            }}
+                          />
+                        }
+                        loadingOverlay={
+                          <div className="loading-overlay">
+                            <div className="loading-spinner" />
                           </div>
-                        </div>
-
-                        <h2 className="accordion-header" id="flush-headingOne">
-                          <button
-                            className="accordion-button collapsed text-bg-test "
-                            type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#flush-collapseOne"
-                            aria-expanded="false"
-                            aria-controls="collapseOne"
-                          >
-                            More
-                          </button>
-                        </h2>
-                      </div>
-                    </div>
+                        }
+                      />
+                    ) : (
+                      <img
+                        src={game.mainPic.secure_url}
+                        alt={game.slug}
+                        className="img-fluid"
+                      />
+                    )}
                   </div>
-                </div>
-              </div>
-              <div className="game-carousal mt-2 w-100">
-                {game?.pics[0]?.secure_url ? (
-                  <>
-                    <h2 className="ps-2">Game Images:</h2> <hr />
-                    <Carousel infiniteLoop showStatus={false}>
-                      {game.pics.map((image, idx) => {
-                        return (
-                          <div
-                            key={idx}
-                            className="game-carousal d-flex align-items-center justify-content-center h-100"
-                          >
-                            <img src={image.secure_url} className="img-fluid" />
-                          </div>
-                        );
-                      })}
-                    </Carousel>
-                  </>
-                ) : (
-                  "No images for this Game"
-                )}
-              </div>
-              <div className="game-functionalities mt-1 w-100 text-bg-dark d-flex p-3 justify-content-between align-items-center">
-                <div className="price-lv h5 text-muted">
-                  <span className="fw-bolder m-0 me-2">${game.price}</span>
-                  <span
-                    className="fav ms-auto h4 disabled"
-                    onClick={addToWishList}
-                  >
-                    {isInWishlist ? <i className="fa-solid fa-heart"></i> : ""}
-                    {!isInWishlist ? (
-                      <i className="fa-regular fa-heart"></i>
+                  <div className="game-name">
+                    <h2 className="display-6 fw-bolder mb-0 cursor-normal">
+                      {game.name}
+                    </h2>
+                  </div>
+                  <div className="rating mx-auto d-flex flex-lg-column flex-sm-row flex-column align-items-center mt-3 mb-4">
+                    {game.avgRate ? (
+                      <div className=" d-flex ">
+                        <span className=" game-rating  rounded-circle fa-2xl bg-warning fw-bold d-flex justify-content-center align-items-center">
+                          {game.avgRate}
+                        </span>
+                        <div className="rate-info ms-2">
+                          <h4>User Score</h4>
+                          <p>Mixed or average reviews based on users</p>
+                        </div>
+                      </div>
                     ) : (
                       ""
                     )}
-                  </span>
+                    <div className="rate-game my-2 bg-secondary p-2 rounded-3 w-auto ms-4">
+                      <Rating
+                        name="simple-controlled"
+                        value={userRate}
+                        precision={0.5}
+                        size="large"
+                        onChange={(event, newValue) => {
+                          giveRate(newValue);
+                        }}
+                      />
+                    </div>
+                  </div>
                 </div>
-                {game.createdBy?._id === currentUser?._id ? (
-                  <span className="fw-bolder text-success pe-2">Creator</span>
-                ) : (
-                  <>
-                    {isInCart && currentUser ? (
-                      <span className="fw-bolder pe-2 text-success">Added</span>
-                    ) : currentUser ? (
-                      <span
-                        className="cart text-muted fw-bolder pe-2"
-                        onClick={addToCart}
+              </div>
+              <div className=" col-lg-8 d-flex flex-column justify-content-between align-items-center">
+                <div className="about-section w-100">
+                  <div
+                    className="accordion text-bg-dark accordion-flush"
+                    id="accordionExample"
+                  >
+                    <div className="card text-bg-dark">
+                      <div className="card-header fw-bolder h4">About</div>
+                      <div className="card-body">
+                        <p className="card-text">{game.desc}</p>
+                      </div>
+                      <div className="card-footer text-muted p-0 bg-dark">
+                        <div className="accordion-item text-bg-test ">
+                          <div
+                            id="flush-collapseOne"
+                            className="accordion-collapse collapse"
+                            aria-labelledby="flush-headingOne"
+                            data-bs-parent="#accordionFlushExample"
+                          >
+                            <div className="accordion-body">
+                              <ul className="text-bg-test">
+                                <li className="fw-bolder">{game.name}</li>
+                                <li className="text-white-50">
+                                  Released: {game.released.split("T")[0]}
+                                </li>
+                                <li className="text-white-50">
+                                  Platforms:
+                                  {game.platform.map((platform, idx) => {
+                                    return <span key={idx}> {platform} </span>;
+                                  })}
+                                </li>
+                                <li className="text-white-50">
+                                  {game.genreId ? "Genre: " : ""}
+                                  {game.genreId?.name}{" "}
+                                </li>
+                                <Link
+                                  to={`/profile/info/${game.createdBy?._id}`}
+                                  onClick={() => {
+                                    localStorage.setItem("userId", "user");
+                                  }}
+                                >
+                                  <li className="text-white-50">
+                                    {game?.createdBy?._id === currentUser?._id ? (
+                                      ""
+                                    ) : (
+                                      <span>
+                                        {" "}
+                                        Publisher:{" "}
+                                        <span className="publisher">
+                                          {game.createdBy?.firstName}{" "}
+                                          {game.createdBy?.lastName}
+                                        </span>{" "}
+                                      </span>
+                                    )}
+                                  </li>
+                                </Link>
+                              </ul>
+                            </div>
+                          </div>
+
+                          <h2 className="accordion-header" id="flush-headingOne">
+                            <button
+                              className="accordion-button collapsed text-bg-test "
+                              type="button"
+                              data-bs-toggle="collapse"
+                              data-bs-target="#flush-collapseOne"
+                              aria-expanded="false"
+                              aria-controls="collapseOne"
+                            >
+                              More
+                            </button>
+                          </h2>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="game-carousal mt-2 w-100">
+                  {game?.pics[0]?.secure_url ? (
+                    <>
+                      <h2 className="ps-2">Game Images:</h2> <hr />
+                      <Carousel infiniteLoop showStatus={false}>
+                        {game.pics.map((image, idx) => {
+                          return (
+                            <div
+                              key={idx}
+                              className="game-carousal d-flex align-items-center justify-content-center h-100"
+                            >
+                              <img src={image.secure_url} className="img-fluid" />
+                            </div>
+                          );
+                        })}
+                      </Carousel>
+                    </>
+                  ) : (
+                    "No images for this Game"
+                  )}
+                </div>
+                <div className="game-functionalities mt-1 w-100 text-bg-dark d-flex p-3 justify-content-between align-items-center">
+                  <div className="price-lv h5 text-muted">
+                    <span className="fw-bolder m-0 me-2">${game.price}</span>
+                    <span
+                      className="fav ms-auto h4 disabled"
+                      onClick={addToWishList}
+                    >
+                      {isInWishlist ? <i className="fa-solid fa-heart"></i> : ""}
+                      {!isInWishlist ? (
+                        <i className="fa-regular fa-heart"></i>
+                      ) : (
+                        ""
+                      )}
+                    </span>
+                  </div>
+                  {game.createdBy?._id === currentUser?._id ? (
+                    <span className="fw-bolder text-success pe-2">Creator</span>
+                  ) : (
+                    <>
+                      {isInCart && currentUser ? (
+                        <span className="fw-bolder pe-2 text-success">Added</span>
+                      ) : currentUser ? (
+                        <span
+                          className="cart text-muted fw-bolder pe-2"
+                          onClick={addToCart}
+                        >
+                          Add to cart <strong>✚</strong>
+                        </span>
+                      ) : (
+                        <span
+                          className="cart text-muted fw-bolder pe-2"
+                          onClick={() => {
+                            callModal({
+                              header: "Warning",
+                              body: "You need to login before adding to a cart",
+                              mainBtnTxt: "Sign in",
+                              mainBtnFunc: () => {
+                                navigate("/login");
+                              },
+                              mainBtnColor: "success",
+                            });
+                          }}
+                        >
+                          Add to cart <strong>✚</strong>
+                        </span>
+                      )}
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="row mt-2 mb-4">
+              <div className="container">
+                <div className="comments-section m-auto">
+                  <div className="comments-header">
+                    <h2>Comments:</h2> <hr />
+                  </div>
+                  <div className="comments-add">
+                    <textarea
+                      id="commentBody"
+                      className="form-control comment-area"
+                      placeholder="What do you think? Add a comment and collaborate"
+                      rows="3"
+                    ></textarea>
+                    {currentUser ? (
+                      <button
+                        className="btn btn-success mt-2"
+                        onClick={addComment}
                       >
-                        Add to cart <strong>✚</strong>
-                      </span>
+                        {addCommentFlag ? "Waiting..." : "Post Comment"}{" "}
+                      </button>
                     ) : (
-                      <span
-                        className="cart text-muted fw-bolder pe-2"
+                      <button
+                        className="btn btn-success mt-2"
                         onClick={() => {
                           callModal({
                             header: "Warning",
-                            body: "You need to login before adding to a cart",
+                            body: "You need to login before adding a comment",
                             mainBtnTxt: "Sign in",
                             mainBtnFunc: () => {
                               navigate("/login");
@@ -579,236 +630,194 @@ function Details({ currentUser, getCart, cart }) {
                           });
                         }}
                       >
-                        Add to cart <strong>✚</strong>
-                      </span>
+                        {addCommentFlag ? "Waiting..." : "Post Comment"}{" "}
+                      </button>
                     )}
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
-          <div className="row mt-2 mb-4">
-            <div className="container">
-              <div className="comments-section m-auto">
-                <div className="comments-header">
-                  <h2>Comments:</h2> <hr />
-                </div>
-                <div className="comments-add">
-                  <textarea
-                    id="commentBody"
-                    className="form-control comment-area"
-                    placeholder="What do you think? Add a comment and collaborate"
-                    rows="3"
-                  ></textarea>
-                  {currentUser ? (
-                    <button
-                      className="btn btn-success mt-2"
-                      onClick={addComment}
-                    >
-                      {addCommentFlag ? "Waiting..." : "Post Comment"}{" "}
-                    </button>
-                  ) : (
-                    <button
-                      className="btn btn-success mt-2"
-                      onClick={() => {
-                        callModal({
-                          header: "Warning",
-                          body: "You need to login before adding a comment",
-                          mainBtnTxt: "Sign in",
-                          mainBtnFunc: () => {
-                            navigate("/login");
-                          },
-                          mainBtnColor: "success",
-                        });
-                      }}
-                    >
-                      {addCommentFlag ? "Waiting..." : "Post Comment"}{" "}
-                    </button>
-                  )}
-                </div>
-                <hr />
-                {comments === "loading" ? (
-                  <p>Loading.....</p>
-                ) : comments ? (
-                  comments.length > 0 ? (
-                    comments.map((comment, index) => {
-                      return (
-                        <div key={comment._id} className="comments-show my-2">
-                          <div className="user-comment hover-75 p-3 shadow rounded-5">
-                            <div className="comment-details">
-                              <div className="d-flex align-items-start">
-                                <div className="d-flex align-items-center">
-                                  <img
-                                    alt="user"
-                                    className="img-fluid rounded-circle user-pic me-2"
-                                    src={
-                                      comment.createdBy?.profilePic?.secure_url
-                                    }
-                                  />
-                                  <h4 className="user-name fw-bolder">
-                                    {comment?.createdBy?.firstName}{" "}
-                                    {comment?.createdBy?.lastName}
-                                  </h4>
-                                </div>
-                                {comment?.createdBy?._id === currentUser?._id ||
-                                currentUser?.role === "superAdmin" ||
-                                game?.createdBy?._id === currentUser?._id ? (
-                                  <div className="dropdownmenu ms-auto">
-                                    <div className="dropdown">
-                                      <button
-                                        className="btn btn-transparent text-white dropdown-toggle"
-                                        type="button"
-                                        id="dropdownMenuButton1"
-                                        data-bs-toggle="dropdown"
-                                        aria-expanded="false"
-                                      >
-                                        <i className="fa-solid fa-ellipsis-vertical"></i>
-                                      </button>
-
-                                      <ul
-                                        className="dropdown-menu"
-                                        aria-labelledby="dropdownMenuButton1"
-                                      >
-                                        {comment?.createdBy?._id ==
-                                        currentUser?._id ? (
-                                          <>
-                                            <span
-                                              onClick={() => {
-                                                editComment(comment._id);
-                                              }}
-                                              className="cursor-pointer text-success me-2 hover-75 dropdown-item"
-                                            >
-                                              <i className="fa-solid fa-pen-to-square fa-lg"></i>
-                                              <span className="ps-2">Edit</span>
-                                            </span>
-                                          </>
-                                        ) : (
-                                          ""
-                                        )}
-                                        {comment?.createdBy?._id ==
-                                          currentUser?._id ||
-                                        currentUser?.role === "superAdmin" ||
-                                        game?.createdBy?._id ==
-                                          currentUser?._id ? (
-                                          <span
-                                            className="cursor-pointer text-danger hover-75 dropdown-item"
-                                            onClick={() => {
-                                              callModal({
-                                                isMainBtn: true,
-                                                header: "Delete Comment",
-                                                body: "Are you sure?",
-                                                mainBtnTxt: "Yes",
-                                                mainBtnColor: "danger",
-                                                mainBtnFunc: () =>
-                                                  deleteComment(
-                                                    comment._id,
-                                                    index
-                                                  ),
-                                                closeBtnTxt: "No",
-                                                closeBtnColor: "success",
-                                              });
-                                            }}
-                                          >
-                                            <i className="fa-solid fa-trash-can fa-lg"></i>{" "}
-                                            <span className="ps-2">Delete</span>
-                                          </span>
-                                        ) : (
-                                          ""
-                                        )}
-                                      </ul>
-                                    </div>
+                  </div>
+                  <hr />
+                  {comments === "loading" ? (
+                    <p>Loading.....</p>
+                  ) : comments ? (
+                    comments.length > 0 ? (
+                      comments.map((comment, index) => {
+                        return (
+                          <div key={comment._id} className="comments-show my-2">
+                            <div className="user-comment hover-75 p-3 shadow rounded-5">
+                              <div className="comment-details">
+                                <div className="d-flex align-items-start">
+                                  <div className="d-flex align-items-center">
+                                    <img
+                                      alt="user"
+                                      className="img-fluid rounded-circle user-pic me-2"
+                                      src={
+                                        comment.createdBy?.profilePic?.secure_url
+                                      }
+                                    />
+                                    <h4 className="user-name fw-bolder">
+                                      {comment?.createdBy?.firstName}{" "}
+                                      {comment?.createdBy?.lastName}
+                                    </h4>
                                   </div>
-                                ) : (
-                                  ""
-                                )}
-                              </div>
-                              <div className="comment-body w-100 mt-2">
-                                <p className=""> {comment.body} </p>
-                                <div
-                                  className="edit-comment-section d-none"
-                                  id={comment._id}
-                                >
-                                  <textarea
-                                    className="form-control bg-transparent text-white w-100 h-50 mb-2"
-                                    type="text"
-                                  />
-                                  <button
-                                    className="btn btn-outline-success d-block ms-sm-2 h-50 "
-                                    onClick={() => {
-                                      saveEditComment(comment._id);
-                                    }}
+                                  {comment?.createdBy?._id === currentUser?._id ||
+                                    currentUser?.role === "superAdmin" ||
+                                    game?.createdBy?._id === currentUser?._id ? (
+                                    <div className="dropdownmenu ms-auto">
+                                      <div className="dropdown">
+                                        <button
+                                          className="btn btn-transparent text-white dropdown-toggle"
+                                          type="button"
+                                          id="dropdownMenuButton1"
+                                          data-bs-toggle="dropdown"
+                                          aria-expanded="false"
+                                        >
+                                          <i className="fa-solid fa-ellipsis-vertical"></i>
+                                        </button>
+
+                                        <ul
+                                          className="dropdown-menu"
+                                          aria-labelledby="dropdownMenuButton1"
+                                        >
+                                          {comment?.createdBy?._id ==
+                                            currentUser?._id ? (
+                                            <>
+                                              <span
+                                                onClick={() => {
+                                                  editComment(comment._id);
+                                                }}
+                                                className="cursor-pointer text-success me-2 hover-75 dropdown-item"
+                                              >
+                                                <i className="fa-solid fa-pen-to-square fa-lg"></i>
+                                                <span className="ps-2">Edit</span>
+                                              </span>
+                                            </>
+                                          ) : (
+                                            ""
+                                          )}
+                                          {comment?.createdBy?._id ==
+                                            currentUser?._id ||
+                                            currentUser?.role === "superAdmin" ||
+                                            game?.createdBy?._id ==
+                                            currentUser?._id ? (
+                                            <span
+                                              className="cursor-pointer text-danger hover-75 dropdown-item"
+                                              onClick={() => {
+                                                callModal({
+                                                  isMainBtn: true,
+                                                  header: "Delete Comment",
+                                                  body: "Are you sure?",
+                                                  mainBtnTxt: "Yes",
+                                                  mainBtnColor: "danger",
+                                                  mainBtnFunc: () =>
+                                                    deleteComment(
+                                                      comment._id,
+                                                      index
+                                                    ),
+                                                  closeBtnTxt: "No",
+                                                  closeBtnColor: "success",
+                                                });
+                                              }}
+                                            >
+                                              <i className="fa-solid fa-trash-can fa-lg"></i>{" "}
+                                              <span className="ps-2">Delete</span>
+                                            </span>
+                                          ) : (
+                                            ""
+                                          )}
+                                        </ul>
+                                      </div>
+                                    </div>
+                                  ) : (
+                                    ""
+                                  )}
+                                </div>
+                                <div className="comment-body w-100 mt-2">
+                                  <p className=""> {comment.body} </p>
+                                  <div
+                                    className="edit-comment-section d-none"
+                                    id={comment._id}
                                   >
-                                    Save
-                                  </button>
+                                    <textarea
+                                      className="form-control bg-transparent text-white w-100 h-50 mb-2"
+                                      type="text"
+                                    />
+                                    <button
+                                      className="btn btn-outline-success d-block ms-sm-2 h-50 "
+                                      onClick={() => {
+                                        saveEditComment(comment._id);
+                                      }}
+                                    >
+                                      Save
+                                    </button>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                            <hr className="my-2" />
-                            <div className="comment-footer d-flex justify-content-between align-items-center">
-                              <div className="social-comment d-flex ms-1">
-                                <div className="like p-1 cursor-pointer me-3">
-                                  <i className="fa-solid fa-thumbs-up fa-xl"></i>
-                                  <span> {comment.likes.length} </span>
+                              <hr className="my-2" />
+                              <div className="comment-footer d-flex justify-content-between align-items-center">
+                                <div className="social-comment d-flex ms-1">
+                                  <div className="like p-1 cursor-pointer me-3">
+                                    <i className="fa-solid fa-thumbs-up fa-xl"></i>
+                                    <span> {comment.likes.length} </span>
+                                  </div>
+
+                                  <div className="unlike p-1 cursor-pointer">
+                                    <i className="fa-solid fa-thumbs-down fa-xl"></i>
+                                    <span> {comment.dislikes.length} </span>
+                                  </div>
                                 </div>
 
-                                <div className="unlike p-1 cursor-pointer">
-                                  <i className="fa-solid fa-thumbs-down fa-xl"></i>
-                                  <span> {comment.dislikes.length} </span>
-                                </div>
+                                <div className="owner-admin-control mt-0"></div>
                               </div>
-
-                              <div className="owner-admin-control mt-0"></div>
                             </div>
                           </div>
-                        </div>
-                      );
-                    })
+                        );
+                      })
+                    ) : (
+                      <p>Be the first to comment !</p>
+                    )
                   ) : (
-                    <p>Be the first to comment !</p>
-                  )
-                ) : (
-                  <p>Cannot Load Comments</p>
-                )}
+                    <p>Cannot Load Comments</p>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
 
-          <Modal
-            show={showModal}
-            onHide={handleCloseModal}
-            className="text-white"
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>{modalData.header}</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>{modalData.body}</Modal.Body>
-            <Modal.Footer>
-              <Button
-                variant={modalData.closeBtnColor}
-                onClick={handleCloseModal}
-              >
-                {modalData.closeBtnTxt}
-              </Button>
-              {modalData.isMainBtn === true ? (
+            <Modal
+              show={showModal}
+              onHide={handleCloseModal}
+              className="text-white"
+            >
+              <Modal.Header closeButton>
+                <Modal.Title>{modalData.header}</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>{modalData.body}</Modal.Body>
+              <Modal.Footer>
                 <Button
-                  variant={modalData.mainBtnColor}
-                  onClick={applyCloseModel}
+                  variant={modalData.closeBtnColor}
+                  onClick={handleCloseModal}
                 >
-                  {modalData.mainBtnTxt}
+                  {modalData.closeBtnTxt}
                 </Button>
-              ) : (
-                ""
-              )}
-            </Modal.Footer>
-          </Modal>
-        </div>
-      ) : (
-        <div className="m-auto d-flex flex-column align-items-center mt-5">
-          <img src="/error?.png" className="img-fluid w-25" alt="" srcSet="" />
-          <p className="fs-1 mx-auto">Something went wrong....</p>
-          <p className="fs-1 mx-auto">Please try again</p>
-        </div>
-      )}
+                {modalData.isMainBtn === true ? (
+                  <Button
+                    variant={modalData.mainBtnColor}
+                    onClick={applyCloseModel}
+                  >
+                    {modalData.mainBtnTxt}
+                  </Button>
+                ) : (
+                  ""
+                )}
+              </Modal.Footer>
+            </Modal>
+          </div>
+        ) : (
+          <div className="m-auto d-flex flex-column align-items-center mt-5">
+            <img src="/error?.png" className="img-fluid w-25" alt="" srcSet="" />
+            <p className="fs-1 mx-auto">Something went wrong....</p>
+            <p className="fs-1 mx-auto">Please try again</p>
+          </div>
+        )}
+      </motion.main>
     </>
   );
 }

@@ -1,6 +1,7 @@
 body {
     background-color: #0f1011;
     color: white;
+    overflow-x: hidden;
 }
 .bg-main{
   background-color: #0f1011;
