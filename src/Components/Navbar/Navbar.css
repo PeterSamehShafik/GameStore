@@ -8,7 +8,7 @@ nav {
 }
 .main-nav{
     transition: all 0.6s;
-    z-index: 99999 !important;
+    z-index: 999 !important;
 }
 
 .nav-link {
@@ -90,6 +90,22 @@ nav img {
 
     }
 }
+.badge{
+    font-size: 11px !important;
+
+}
+.notify-icon, .cart-icon{
+    transition: all 0.2s ease-in-out !important;
+}
+.notify-icon:hover, .cart-icon:hover{
+    background-color: #892be0 !important;
+    transform: scale(1.1) !important;
+    color: white !important;
+}
+.notify-icon:hover i, .cart-icon:hover i{
+    color: white !important;
+}
+
 
 
 /* userName hover */
@@ -171,4 +187,26 @@ nav img {
 .c-panel:hover{
  transform: scale(1.1);
  color: #8a2be2 !important;
+}
+.MuiPaper-root{
+    position: absolute !important;
+    width: 20rem !important;
+    block-size: fit-content !important;
+    z-index: 99999 !important;
+    top: 8% !important;
+}
+ul.MuiList-root {
+    padding: 0px !important;
+}
+.notifications-item{
+    transition: all 0.2s;
+}
+.notifications-item:hover{
+    background-color:#646a6e;
+}
+.bg-notify{
+    background-color: #3a5a87;
+}
+.bg-notify:hover{
+    background-color: #2d476a;
 }

@@ -77,6 +77,24 @@ function App() {
   }
   //End of Cart
 
+  // Notification
+  const [notifyCount, setNotifyCount] = useState(0);
+  const getNotifyCount = async () => {
+    const config = {
+      headers: {
+        authorization: BEARERKEY + localStorage.getItem("token"),
+      },
+    };
+    const result = await axios
+      .get(`${baseURL}/user/notifyCount`, config)
+      .catch((e) => console.log(e));
+      console.log(result?.data)
+    if (result?.data?.message === "done") {
+      setNotifyCount(result.data.notifyCount);
+    }
+  };
+
+
   function ProtectedRoute(props) {
     if (localStorage.getItem("token")) {
       return props.children;
@@ -110,11 +128,12 @@ function App() {
     });
     if (result?.data?.message == "done") {
       setCrrUser(result.data.user);
+      getNotifyCount();
     } else {
       localStorage.removeItem("token");
       setCrrUser(null);
     }
-
+  
   }
   async function removeUser() {
     const config = {
@@ -163,6 +182,7 @@ function App() {
     // isLogin()
     if (localStorage.getItem("token")) {
       currentUser();
+      
     }
     window.addEventListener("scroll", handleVisibleButton);
 
@@ -170,7 +190,7 @@ function App() {
 
 
   return <>
-    {location.pathname.toLowerCase().includes("cpanel") ? "" : <Navbar setPage={setGamePage} currentUser={crrUser} removeUser={removeUser} cart={cart} setSearch={setSearch} />}
+    {location.pathname.toLowerCase().includes("cpanel") ? "" : <Navbar notifyCount = {notifyCount} setNotifyCount = {setNotifyCount} setPage={setGamePage} currentUser={crrUser} removeUser={removeUser} cart={cart} setSearch={setSearch} />}
 
     {
       crrUser ?

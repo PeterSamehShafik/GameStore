@@ -90,7 +90,7 @@ export default function Profile({ crrUser, currentUser }) {
             navigate("/login");
           }
         });
-      console.log(result)
+      
       if (result?.data?.message === "done") {
         setProfile(result.data.user);
         setReload(false);

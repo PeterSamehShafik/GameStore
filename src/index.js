@@ -18,7 +18,7 @@ import '@fortawesome/fontawesome-free/js/all.min.js'
 import NotFound from './Components/NotFound/NotFound.jsx';
 
 
-export const baseURL = 'https://game-store-be.vercel.app/api/v1'
+export const baseURL = 'http://localhost:3001/api/v1'
 export const BEARERKEY = "gameStore3000__"
 export const roles = { user: "user", admin: "admin", superAdmin: "superAdmin" }
 
@@ -32,19 +32,19 @@ function fallbackRender({ error, resetErrorBoundary }) {
   //     <button className='btn' onClick={resetErrorBoundary}> Try again </button>
   //   </div>
   // );
-  return<> <NotFound error = {error } resetErrorBoundary = {resetErrorBoundary}/> </>
+  return <> <NotFound error={error} resetErrorBoundary={resetErrorBoundary} /> </>
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
     <React.StrictMode>
-        <ErrorBoundary fallbackRender={fallbackRender} onReset={(details) => {
-              
+      <ErrorBoundary fallbackRender={fallbackRender} onReset={(details) => {
 
-        }}>
-          <App />
-        </ErrorBoundary>
+
+      }}>
+        <App />
+      </ErrorBoundary>
     </React.StrictMode>
   </BrowserRouter>
 );

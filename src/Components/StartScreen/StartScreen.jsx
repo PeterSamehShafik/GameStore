@@ -7,9 +7,55 @@ import Box from '@mui/material/Box';
 import Popper from '@mui/material/Popper';
 import Fade from '@mui/material/Fade';
 import { motion } from "framer-motion";
-
+//modal
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 
 function StartScreen({ currentUser }) {
+
+   //modal
+   const [showModal, setShowModal] = useState(false);
+   const [modalData, setModalData] = useState({
+     header: "",
+     body: "",
+     isMainBtn: true,
+   });
+   const handleCloseModal = () => setShowModal(false);
+   const handleShowModal = () => setShowModal(true);
+ 
+   const callModal = ({
+     header = "Are you sure?",
+     body,
+     closeBtnColor = "secondary",
+     closeBtnTxt = "Close",
+     mainBtnColor = "primary",
+     mainBtnTxt,
+     mainBtnFunc,
+     isMainBtn = true,
+   } = {}) => {
+     setModalData({
+       ...modalData,
+       header,
+       body,
+       closeBtnColor,
+       closeBtnTxt,
+       mainBtnColor,
+       mainBtnTxt,
+       mainBtnFunc,
+       isMainBtn,
+     });
+     handleShowModal();
+   };
+   const applyCloseModel = () => {
+     modalData.mainBtnFunc();
+     handleCloseModal();
+   };
+   //end of modal
+
+
+
+
+
   const [game, setGame] = useState({
     slug: "",
     _id: "",
@@ -215,6 +261,29 @@ function StartScreen({ currentUser }) {
                     <div className="app-route mt-4 pb-3 px-lg-4 px-md-5 px-0  d-flex flex-column align-items-center">
                       <div className="container">
                         <div className="row g-3 justify-content-center py-3 ">
+                        <div className="px-0 d-flex justify-content-center">
+                                <div className="w-100 px-lg-0 px-4">
+                                  <button
+                                    onClick={() => {
+                                      callModal({header:"What's new?",body:<>
+                                      <ol>
+                                        <li> Adding notifications feature.  </li>
+                                        <li> Routing animation.  </li>
+                                        <li> Google sign in.  </li>
+                                        <li> Bug Fixes.  </li>
+                                      </ol>
+                                      <p>With these exciting updates, the website now offers a seamless user experience, empowering visitors to effortlessly explore and engage with its enhanced features.</p>
+                                      </>, isMainBtn:false, closeBtnTxt:"Let's play", closeBtnColor:'success'})
+                                    }}
+                                    className="btn btn-light my-1 rounded-5 px-3 w-100 "
+                                  >
+                                    {/* <button className="btn btn-light my-1 rounded-5 px-3 w-100 "> */}
+                                    <i class="fa-solid fa-bell fa-shake"></i>
+                                    <span className="ms-2">What's new?</span>
+                                    {/* </button> */}
+                                  </button>
+                                </div>
+                              </div>
                           <div className="px-0 d-flex justify-content-center">
                             <div className="w-100 px-lg-0 px-4">
                               <Link
@@ -262,6 +331,7 @@ function StartScreen({ currentUser }) {
                               </div>
                               <div className="px-0 d-flex justify-content-center">
                                 <div className="w-100 px-lg-0 px-4">
+                                
                                   {currentUser.role === roles.superAdmin ||
                                     currentUser === roles.admin ? (
                                     <Link
@@ -276,12 +346,15 @@ function StartScreen({ currentUser }) {
                                   ) : (
                                     ""
                                   )}
+                                
                                 </div>
                               </div>
+
                             </>
                           ) : (
                             ""
                           )}
+                          
                         </div>
                       </div>
                       {/* <button className='btn btn-light my-1 rounded-5 px-4 py-2'>
@@ -295,6 +368,37 @@ function StartScreen({ currentUser }) {
                     </div>
                   </div>
                 </div>
+                <Modal
+                size="lg"
+              show={showModal}
+              onHide={handleCloseModal}
+              className="text-white"
+              aria-labelledby="contained-modal-title-vcenter"
+              centered
+            >
+              <Modal.Header closeButton>
+                <Modal.Title>{modalData.header}</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>{modalData.body}</Modal.Body>
+              <Modal.Footer>
+                <Button
+                  variant={modalData.closeBtnColor}
+                  onClick={handleCloseModal}
+                >
+                  {modalData.closeBtnTxt}
+                </Button>
+                {modalData.isMainBtn === true ? (
+                  <Button
+                    variant={modalData.mainBtnColor}
+                    onClick={applyCloseModel}
+                  >
+                    {modalData.mainBtnTxt}
+                  </Button>
+                ) : (
+                  ""
+                )}
+              </Modal.Footer>
+            </Modal>
               </div>
             </div>
           </div>
