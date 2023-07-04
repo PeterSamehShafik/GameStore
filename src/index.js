@@ -18,7 +18,7 @@ import '@fortawesome/fontawesome-free/js/all.min.js'
 import NotFound from './Components/NotFound/NotFound.jsx';
 
 
-export const baseURL = 'http://localhost:3001/api/v1'
+export const baseURL = 'https://game-store-be.vercel.app/api/v1'
 export const BEARERKEY = "gameStore3000__"
 export const roles = { user: "user", admin: "admin", superAdmin: "superAdmin" }
 
