@@ -20,6 +20,7 @@ import CPanel from './CPanel/CPanel.jsx';
 import CPNav from './CPanel/CPNav/CPNav.jsx';
 import GameControl from './CPanel/GameControl/GameControl.jsx';
 import UserControl from './CPanel/UserControl/UserControl.jsx';
+import { AnimatePresence } from "framer-motion";
 
 
 
@@ -169,7 +170,7 @@ function App() {
 
 
   return <>
-    {location.pathname.toLowerCase().includes("cpanel") ? "" : <Navbar setPage = {setGamePage} currentUser={crrUser} removeUser={removeUser} cart={cart} setSearch={setSearch} />}
+    {location.pathname.toLowerCase().includes("cpanel") ? "" : <Navbar setPage={setGamePage} currentUser={crrUser} removeUser={removeUser} cart={cart} setSearch={setSearch} />}
 
     {
       crrUser ?
@@ -178,77 +179,80 @@ function App() {
         ''
     }
     <div className={location.pathname.toLowerCase().includes("cpanel") ? "app" : 'app pt-5 mt-5'}>
-      <Routes>
-        <Route path='/googleOauth' element={<GoogleOauth currentUser={currentUser} />} />
+      <AnimatePresence>
+        <Routes location={location} key={location.pathname.split('/')[1]}>
+          <Route path='/googleOauth' element={<GoogleOauth currentUser={currentUser} />} />
 
-        <Route path='' element={<StartScreen currentUser={crrUser} />} />
-        <Route path='home' element={<Home search={search} setSearch={setSearch} page={gamePage} setPage={setGamePage} />} />
+          <Route path='' element={<StartScreen currentUser={crrUser} />} />
+          <Route path='home' element={<Home search={search} setSearch={setSearch} page={gamePage} setPage={setGamePage} />} />
 
-        <Route path='cpanel' element={<CPanel removeUser={removeUser} />}>
-          <Route
-            index
-            element={<CPNav />}
-          />
-          <Route
-            path="games"
-            element={<GameControl />}
-          />
-          <Route
-            path="users"
-            element={<UserControl />}
-          />
-          <Route
-            path="genres"
-            element={<GenreControl />}
-          />
-          <Route
-            path="support"
-            element={<MySupport />}
-          />
-          <Route
-            path="*"
-            element={<Navigate to="/404" />}
-          />
-        </Route>
+          <Route path='cpanel' element={<CPanel removeUser={removeUser} />}>
+            <Route
+              index
+              element={<CPNav />}
+            />
+            <Route
+              path="games"
+              element={<GameControl />}
+            />
+            <Route
+              path="users"
+              element={<UserControl />}
+            />
+            <Route
+              path="genres"
+              element={<GenreControl />}
+            />
+            <Route
+              path="support"
+              element={<MySupport />}
+            />
+            <Route
+              path="*"
+              element={<Navigate to="/404" />}
+            />
+          </Route>
 
-        <Route path='profile' element={<Profile crrUser={crrUser} currentUser={currentUser} />} >
-          <Route
-            index
-            element={<Info />}
-          />
-          <Route
-            path="info/:id"
-            element={<Info />}
-          />
-          <Route
-            path="info"
-            element={<Info />}
-          />
-          <Route
-            path="wishlist"
-            element={<Wishlist />}
-          />
-          <Route
-            path="activity"
-            element={<Activity />}
-          />
-          <Route
-            path="following"
-            element={<Followers crrUser={crrUser} />}
-          />
-          <Route
-            path="games"
-            element={<Games />}
-          />
-        </Route>
-        <Route path='details/:slug/:id' element={<Details currentUser={crrUser} getCart={getCart} cart={cart} />} />
-        <Route path='login' element={<ProtectedLogin> <Login currentUser={currentUser} /> </ProtectedLogin>} />
-        <Route path='signup' element={<ProtectedLogin> <Signup /> </ProtectedLogin>} />
-        <Route path='forgot' element={<ProtectedLogin> <ForgotPassword /> </ProtectedLogin>} />
-        <Route path='404' element={<NotFound />} />
-        <Route path='*' element={<Navigate to='/404' />} />
+          <Route path='profile' element={<Profile crrUser={crrUser} currentUser={currentUser} />} >
+            <Route
+              index
+              element={<Info />}
+            />
+            <Route
+              path="info/:id"
+              element={<Info />}
+            />
+            <Route
+              path="info"
+              element={<Info />}
+            />
+            <Route
+              path="wishlist"
+              element={<Wishlist />}
+            />
+            <Route
+              path="activity"
+              element={<Activity />}
+            />
+            <Route
+              path="following"
+              element={<Followers crrUser={crrUser} />}
+            />
+            <Route
+              path="games"
+              element={<Games />}
+            />
+          </Route>
+          <Route path='details/:slug/:id' element={<Details currentUser={crrUser} getCart={getCart} cart={cart} />} />
+          <Route path='login' element={<ProtectedLogin> <Login currentUser={currentUser} /> </ProtectedLogin>} />
+          <Route path='signup' element={<ProtectedLogin> <Signup /> </ProtectedLogin>} />
+          <Route path='forgot' element={<ProtectedLogin> <ForgotPassword /> </ProtectedLogin>} />
+          <Route path='404' element={<NotFound />} />
+          <Route path='*' element={<Navigate to='/404' />} />
 
-      </Routes>
+        </Routes>
+
+      </AnimatePresence>
       <button className="d-none" onClick={returnToTop} id="toTop" title="Go to top"><i className="fa-solid fa-jet-fighter-up"></i></button>
 
     </div>

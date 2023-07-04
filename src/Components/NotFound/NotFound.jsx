@@ -6,6 +6,7 @@ import emailjs from '@emailjs/browser';
 //modal
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import { motion } from "framer-motion";
 
 export default function NotFound({ error, resetErrorBoundary }) {
 
@@ -52,7 +53,7 @@ export default function NotFound({ error, resetErrorBoundary }) {
     };
     //end of modal
 
-    const navigateToHome  = () => {
+    const navigateToHome = () => {
         window.location.href = "https://gamestore-379019.web.app/";
     }
     const pauseScreen = () => {
@@ -67,9 +68,9 @@ export default function NotFound({ error, resetErrorBoundary }) {
             isMainBtn: false,
             isCloseBtn: false,
             isStatic: true,
-          });
+        });
         //   e = new Error(error)
-  
+
         emailjs.send('service_721mdfl', 'template_x4hurtm', {
             subject: `GameStore Error Report`,
             user_name: `None`,
@@ -88,70 +89,81 @@ export default function NotFound({ error, resetErrorBoundary }) {
                     closeBtnTxt: "OK",
                 });
             });
-    
+
     }
-    return <div className="not-found position-absolute top-0">
-        <div className="glitch-wrapper">
-            <div className="glitch-text">
-                {
-                    error?
-                    `Oops! Something went wrong!
+    return (
+        <motion.main
+            className="main__container"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ x: "200%", opacity: 0 }}
+            transition={{ duration: 1, opacity:{duration:4}  }}
+        >
+            <div className="not-found position-absolute top-0">
+                <div className="glitch-wrapper">
+                    <div className="glitch-text">
+                        {
+                            error ?
+                                `Oops! Something went wrong!
                         Help us improve your experience by sending an error report`
-                    :
-                    "ERROR 404: Not found"
-                }
+                                :
+                                "ERROR 404: Not found"
+                        }
+                    </div>
+                </div>
+                <div className="w-100 d-flex justify-content-center">
+                    {
+                        error ?
+                            <>
+                                <button id='homeBtn' className="ms-auto me-2 button-49" onMouseLeave={pauseScreen} onMouseEnter={pauseScreen} role="button" onClick={sendEmail}>Send Report</button>
+                                <button id='homeBtn' className="mx-auto button-49" onMouseLeave={pauseScreen} onMouseEnter={pauseScreen} role="button" onClick={navigateToHome}>Back Home</button>
+                            </>
+                            :
+                            <Link to="/">
+                                <button id='homeBtn' className="mx-auto button-49" onMouseLeave={pauseScreen} onMouseEnter={pauseScreen} role="button">Back Home</button>
+                            </Link>
+
+                    }
+                </div>
+                <Modal
+                    show={showModal}
+                    onHide={handleCloseModal}
+                    className="text-white"
+                    backdrop={modalData.isStatic ? "static" : true}
+                    keyboard={modalData.isStatic ? false : true}
+                >
+                    {modalData.isStatic ?
+                        <Modal.Header >
+                            <Modal.Title>{modalData.header}</Modal.Title>
+                        </Modal.Header> :
+                        <Modal.Header closeButton>
+                            <Modal.Title>{modalData.header}</Modal.Title>
+                        </Modal.Header>}
+
+                    <Modal.Body>{modalData.body}</Modal.Body>
+                    <Modal.Footer>
+                        {modalData.isCloseBtn == true ?
+                            <Button
+                                variant={modalData.closeBtnColor}
+                                onClick={handleCloseModal}
+                            >
+                                {modalData.closeBtnTxt}
+                            </Button> : ""}
+                        {modalData.isMainBtn == true ? (
+                            <Button
+                                variant={modalData.mainBtnColor}
+                                onClick={applyCloseModel}
+                            >
+                                {modalData.mainBtnTxt}
+                            </Button>
+                        ) : (
+                            ""
+                        )}
+                    </Modal.Footer>
+                </Modal>
+
             </div>
-        </div>
-        <div className="w-100 d-flex justify-content-center">
-            {
-                error?
-                <>
-                    <button id='homeBtn' className="ms-auto me-2 button-49" onMouseLeave={pauseScreen} onMouseEnter={pauseScreen} role="button" onClick={sendEmail}>Send Report</button>
-                    <button id='homeBtn' className="mx-auto button-49" onMouseLeave={pauseScreen} onMouseEnter={pauseScreen} role="button" onClick={navigateToHome}>Back Home</button>
-                </>
-                :
-                <Link to="/">
-                    <button id='homeBtn' className="mx-auto button-49" onMouseLeave={pauseScreen} onMouseEnter={pauseScreen} role="button">Back Home</button>
-                </Link>
+        </motion.main>
 
-            }
-        </div>
-        <Modal
-                show={showModal}
-                onHide={handleCloseModal}
-                className="text-white"
-                backdrop={modalData.isStatic ? "static" : true}
-                keyboard={modalData.isStatic ? false : true}
-            >
-                {modalData.isStatic ?
-                    <Modal.Header >
-                        <Modal.Title>{modalData.header}</Modal.Title>
-                    </Modal.Header> :
-                    <Modal.Header closeButton>
-                        <Modal.Title>{modalData.header}</Modal.Title>
-                    </Modal.Header>}
-
-                <Modal.Body>{modalData.body}</Modal.Body>
-                <Modal.Footer>
-                    {modalData.isCloseBtn == true ?
-                        <Button
-                            variant={modalData.closeBtnColor}
-                            onClick={handleCloseModal}
-                        >
-                            {modalData.closeBtnTxt}
-                        </Button> : ""}
-                    {modalData.isMainBtn == true ? (
-                        <Button
-                            variant={modalData.mainBtnColor}
-                            onClick={applyCloseModel}
-                        >
-                            {modalData.mainBtnTxt}
-                        </Button>
-                    ) : (
-                        ""
-                    )}
-                </Modal.Footer>
-            </Modal>
-
-    </div>
+    )
 }
