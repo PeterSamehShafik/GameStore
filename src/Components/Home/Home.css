@@ -1,7 +1,7 @@
 main .card {
     cursor: pointer !important;
     transition: all 0.4s !important;
-    min-height: 18rem !important;
+    /* min-height: 18rem !important; */
 }
 
 
@@ -124,7 +124,3 @@ main .card-footer {
     transform: scale(1.1) !important;
 }
 
-.Mui-selected:hover{
-    /* background-color: transparent !important; */
-
-}

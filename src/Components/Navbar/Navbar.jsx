@@ -18,7 +18,7 @@ function Navbar({ currentUser, removeUser, cart, setSearch, setPage, notifyCount
   };
   const [temp, setTemp] = useState(0)
   const [notifications, setNotifications] = useState(null);
-
+  // const [limit, setLimit] = useState(5)
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -250,7 +250,7 @@ function Navbar({ currentUser, removeUser, cart, setSearch, setPage, notifyCount
                         <FontAwesomeIcon icon="fa-solid fa-bag-shopping fa-xl" />
                       </div>
                       {cart?.games?.length !== 0 ? (
-                        <span className="position-absolute d-inline-block p-1 top-0 start-100 translate-middle badge rounded-circle bg-danger p-0">
+                        <span className = {cart?.games?.length? "position-absolute d-inline-block p-1 top-0 start-100 translate-middle badge rounded-circle bg-danger p-0" : "position-absolute d-inline-block top-0 start-100 translate-middle badge rounded-circle bg-danger p-0"}>
                           {cart?.games?.length !== 0
                             ? cart?.games?.length
                             : "0"}

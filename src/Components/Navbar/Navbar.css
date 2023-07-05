@@ -194,6 +194,8 @@ nav img {
     block-size: fit-content !important;
     z-index: 99999 !important;
     top: 8% !important;
+    /* padding-bottom: 25px !important; */
+    max-height: 20rem !important;
 }
 ul.MuiList-root {
     padding: 0px !important;

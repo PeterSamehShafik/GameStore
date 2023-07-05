@@ -8,9 +8,8 @@ import axios from "axios";
 import { baseURL } from "../../index.js";
 import { motion } from "framer-motion";
 //paginate
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
-
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 
 function Home({ search, setSearch, page, setPage }) {
   const [filters, setFilters] = useState({
@@ -26,8 +25,8 @@ function Home({ search, setSearch, page, setPage }) {
   const [pageCount, setPageCount] = useState(1);
 
   const handlePage = (e, value) => {
-    setPage(value)
-  }
+    setPage(value);
+  };
 
   async function getGenres() {
     const result = await axios
@@ -44,13 +43,23 @@ function Home({ search, setSearch, page, setPage }) {
     }
   }
 
-  async function getGames({ genre = null, price = null, avgRate = null, alpha = null, lastAdded = null, released = null, asc_desc, clear = false, } = {}) {
+  async function getGames({
+    genre = null,
+    price = null,
+    avgRate = null,
+    alpha = null,
+    lastAdded = null,
+    released = null,
+    asc_desc,
+    clear = false,
+  } = {}) {
     setLoading("loading");
-    let isGenre = "", tempPage = null,
+    let isGenre = "",
+      tempPage = null,
       sort = "";
     if (genre) {
       tempPage = 1;
-      setPage(1)
+      setPage(1);
       isGenre = `genre=${genre}&`;
       setFilters({ ...filters, genre: genre });
     } else if (filters.genre !== null) {
@@ -104,7 +113,11 @@ function Home({ search, setSearch, page, setPage }) {
     }
     // console.log(`${baseURL}/game/all?page=3&${isGenre + sort + `search=${search}`}`)
     const result = await axios
-      .get(`${baseURL}/game/all?size=18&page=${tempPage ? tempPage : page}&${isGenre + sort + `search=${search}`}`)
+      .get(
+        `${baseURL}/game/all?size=18&page=${tempPage ? tempPage : page}&${
+          isGenre + sort + `search=${search}`
+        }`
+      )
       .catch((err) => {
         setGames(null);
         setLoading(true);
@@ -112,7 +125,7 @@ function Home({ search, setSearch, page, setPage }) {
       });
 
     setGames(result?.data?.games);
-    setPageCount(result.data.pages)
+    setPageCount(result.data.pages);
     setLoading(true);
   }
 
@@ -129,7 +142,7 @@ function Home({ search, setSearch, page, setPage }) {
   }
   const handleSearch = (e) => {
     setSearch(e.target.value);
-    setPage(1)
+    setPage(1);
   };
   const showCarousel = (e) => {
     let img = e.target;
@@ -141,7 +154,7 @@ function Home({ search, setSearch, page, setPage }) {
     // console.log("entering")
   };
   const hideCarousel = (e) => {
-    let carousel = e.target.closest('.parent');
+    let carousel = e.target.closest(".parent");
     // console.log(carousel)
     let img = carousel.nextElementSibling;
     if (carousel.className.includes("carousel")) {
@@ -163,10 +176,10 @@ function Home({ search, setSearch, page, setPage }) {
     <>
       <motion.main
         className="main__container"
-        initial={{opacity:0 }}
-        animate={{opacity:1 }}
-        exit={{  opacity: 0 , x:"100%" }}
-        transition={{ duration: 0.5  }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0, x: "100%" }}
+        transition={{ duration: 0.5 }}
       >
         <main className="d-flex games">
           {games == "loading" ? (
@@ -190,13 +203,17 @@ function Home({ search, setSearch, page, setPage }) {
             <div className="container-fluid">
               <div className="row w-100">
                 <div className="col-sm-3 col-4 pe-0 ">
+                  
                   <nav className="side-nav">
                     <div className="d-flex flex-column flex-shrink-0 p-3 pt-3 text-white bg-transparent ms-4 me-0 ">
                       <div className="genres mt-3 ">
                         <ul className="nav nav-pills flex-column mb-auto">
                           <h2 className="fw-bolder h3 mb-3">Genres</h2>
                           {genres?.map((genre) => (
-                            <Link key={genre._id} to={`/home?genre=${genre.name}`}>
+                            <Link
+                              key={genre._id}
+                              to={`/home?genre=${genre.name}`}
+                            >
                               <li
                                 className={
                                   filters.genre === genre.name
@@ -280,7 +297,9 @@ function Home({ search, setSearch, page, setPage }) {
                                   }
                                   type="button"
                                 >
-                                  <span className="cursor-pointer">Ascending</span>
+                                  <span className="cursor-pointer">
+                                    Ascending
+                                  </span>
                                 </button>
                                 <button
                                   onClick={() => {
@@ -293,7 +312,9 @@ function Home({ search, setSearch, page, setPage }) {
                                   }
                                   type="button"
                                 >
-                                  <span className="cursor-pointer">Descending</span>
+                                  <span className="cursor-pointer">
+                                    Descending
+                                  </span>
                                 </button>
                               </>
                             ) : (
@@ -372,8 +393,13 @@ function Home({ search, setSearch, page, setPage }) {
                           </Link>
                         </div>
                         <div className="right-control">
-                          <span className="text-muted me-3">Display Option:</span>
-                          <button onClick={makeGrid} className="btn btn-dark me-2">
+                          <span className="text-muted me-3">
+                            Display Option:
+                          </span>
+                          <button
+                            onClick={makeGrid}
+                            className="btn btn-dark me-2"
+                          >
                             <div className={isGrid ? "" : "text-muted"}>
                               <i className="fa-solid fa-2x fa-table-cells-large"></i>
                             </div>
@@ -404,155 +430,159 @@ function Home({ search, setSearch, page, setPage }) {
                           <div className="row g-4 mb-3">
                             {games.length === 0 ? (
                               <div className="m-auto d-flex flex-column align-items-center mt-5">
-                                <p className="fs-1 mx-auto">No games found...</p>
+                                <p className="fs-1 mx-auto">
+                                  No games found...
+                                </p>
                               </div>
                             ) : (
                               games?.map((game, idx) => {
-                                return (
-                                  game.isDeleted == true ?
-                                    ''
-                                    :
-                                    <div
-                                      key={game._id}
-                                      className={
-                                        isGrid
-                                          ? "col-sm-6 col-lg-4"
-                                          : " col-md-6 col-lg-6 offset-md-3 offset-lg-3"
-                                      }
+                                return game.isDeleted == true ? (
+                                  ""
+                                ) : (
+                                  <div
+                                    key={game._id}
+                                    className={
+                                      isGrid
+                                        ? "col-sm-6 col-lg-4"
+                                        : " col-md-6 col-lg-6 offset-md-3 offset-lg-3"
+                                    }
+                                  >
+                                    <Link
+                                      to={`/details/${game.slug}/${game._id}`}
                                     >
-                                      <Link to={`/details/${game.slug}/${game._id}`}>
-                                        <div className="card text-bg-dark rounded-4">
-                                          <div className="my-badge">
-                                            {game.genreId.name}
-                                          </div>
-                                          {game.avgRate ? (
-                                            <div className="game-rate-card position-absolute top-0 end-0 d-flex justify-content-center align-items-center ">
-                                              <i className="card-rate fa-solid fa-star display-6 fa-xl text-warning"></i>
-                                              <span className="position-absolute fw-bold h5 m-0 text-white">
-                                                {game.avgRate}
-                                              </span>
-                                            </div>
-                                          ) : (
-                                            ""
-                                          )}
-                                          {game.pics.length ? (
-                                            <div
-                                              id={`carouselExampleIndicators${idx}`}
-                                              className="carousel slide d-none parent"
-                                              data-bs-ride="carousel"
-                                              onMouseLeave={hideCarousel}
-                                            >
-                                              <div className="carousel-indicators ">
-                                                {game?.pics.map((g, idx) => {
-                                                  return (
-                                                    <button
-                                                      type="button"
-                                                      key={idx}
-                                                      data-bs-target="#carouselExampleIndicators"
-                                                      data-bs-slide-to={idx}
-                                                      className={
-                                                        idx == 0 ? "active" : ""
-                                                      }
-                                                      aria-current="true"
-                                                      aria-label={`Slide ${idx + 1}`}
-                                                    ></button>
-                                                  );
-                                                })}
-                                              </div>
-                                              <div className="carousel-inner rounded-4 rounded-bottom">
-                                                {game?.pics.map((g, idx) => {
-                                                  return (
-                                                    <div
-                                                      key={idx}
-                                                      className={
-                                                        idx == 0
-                                                          ? "carousel-item active"
-                                                          : "carousel-item"
-                                                      }
-                                                    >
-                                                      <img
-                                                        src={g.secure_url}
-                                                        className="d-block w-100"
-                                                      />
-                                                    </div>
-                                                  );
-                                                })}
-                                              </div>
-                                              {game.pics.length ? (
-                                                <>
-                                                  <button
-                                                    className="carousel-control-prev bg-secondary"
-                                                    type="button"
-                                                    data-bs-target={`#carouselExampleIndicators${idx}`}
-                                                    data-bs-slide="prev"
-                                                  >
-                                                    <span
-                                                      className="carousel-control-prev-icon"
-                                                      aria-hidden="true"
-                                                    ></span>
-                                                    <span className="visually-hidden">
-                                                      Previous
-                                                    </span>
-                                                  </button>
-                                                  <button
-                                                    className="carousel-control-next bg-secondary"
-                                                    type="button"
-                                                    data-bs-target={`#carouselExampleIndicators${idx}`}
-                                                    data-bs-slide="next"
-                                                  >
-                                                    <span
-                                                      className="carousel-control-next-icon"
-                                                      aria-hidden="true"
-                                                    ></span>
-                                                    <span className="visually-hidden">
-                                                      Next
-                                                    </span>
-                                                  </button>
-                                                </>
-                                              ) : (
-                                                ""
-                                              )}
-                                            </div>
-                                          ) : (
-                                            ""
-                                          )}
-                                          <img
-                                            src={game.mainPic.secure_url}
-                                            className="card-img-top rounded-4 rounded-bottom img-fluid"
-                                            alt={game.slug}
-                                            onMouseEnter={showCarousel}
-                                          />
-                                          <div className="card-body pt-1">
-                                            <div className="cart-price d-flex justify-content-between align-items-start">
-                                              <p className="fw-bolder m-0 text-success">
-                                                ${game.price}
-                                              </p>
-                                            </div>
-                                            <h5 className="card-title fw-bolder mt-2 h4">
-                                              {game.name}
-                                            </h5>
-                                          </div>
-                                          <div className="card-footer ">
-                                            <div className="d-flex justify-content-start align-items-center flex-wrap">
-                                              {game?.platform?.map(
-                                                (platform, idx) => (
-                                                  <div
-                                                    key={idx}
-                                                    className="platform rounded-pill mb-2 p-3 bg-four fa-xs me-2"
-                                                  >
-                                                    {platform}
-                                                  </div>
-                                                )
-                                              )}
-                                            </div>
-                                            <span className="text-muted">
-                                              {game.released.split("T")[0]}
+                                      <div className="card text-bg-dark rounded-4">
+                                        <div className="my-badge">
+                                          {game.genreId.name}
+                                        </div>
+                                        {game.avgRate ? (
+                                          <div className="game-rate-card position-absolute top-0 end-0 d-flex justify-content-center align-items-center ">
+                                            <i className="card-rate fa-solid fa-star display-6 fa-xl text-warning"></i>
+                                            <span className="position-absolute fw-bold h5 m-0 text-white">
+                                              {game.avgRate}
                                             </span>
                                           </div>
+                                        ) : (
+                                          ""
+                                        )}
+                                        {game.pics.length ? (
+                                          <div
+                                            id={`carouselExampleIndicators${idx}`}
+                                            className="carousel slide d-none parent"
+                                            data-bs-ride="carousel"
+                                            onMouseLeave={hideCarousel}
+                                          >
+                                            <div className="carousel-indicators ">
+                                              {game?.pics.map((g, idx) => {
+                                                return (
+                                                  <button
+                                                    type="button"
+                                                    key={idx}
+                                                    data-bs-target="#carouselExampleIndicators"
+                                                    data-bs-slide-to={idx}
+                                                    className={
+                                                      idx == 0 ? "active" : ""
+                                                    }
+                                                    aria-current="true"
+                                                    aria-label={`Slide ${
+                                                      idx + 1
+                                                    }`}
+                                                  ></button>
+                                                );
+                                              })}
+                                            </div>
+                                            <div className="carousel-inner rounded-4 rounded-bottom">
+                                              {game?.pics.map((g, idx) => {
+                                                return (
+                                                  <div
+                                                    key={idx}
+                                                    className={
+                                                      idx == 0
+                                                        ? "carousel-item active"
+                                                        : "carousel-item"
+                                                    }
+                                                  >
+                                                    <img
+                                                      src={g.secure_url}
+                                                      className="d-block w-100"
+                                                    />
+                                                  </div>
+                                                );
+                                              })}
+                                            </div>
+                                            {game.pics.length ? (
+                                              <>
+                                                <button
+                                                  className="carousel-control-prev bg-secondary"
+                                                  type="button"
+                                                  data-bs-target={`#carouselExampleIndicators${idx}`}
+                                                  data-bs-slide="prev"
+                                                >
+                                                  <span
+                                                    className="carousel-control-prev-icon"
+                                                    aria-hidden="true"
+                                                  ></span>
+                                                  <span className="visually-hidden">
+                                                    Previous
+                                                  </span>
+                                                </button>
+                                                <button
+                                                  className="carousel-control-next bg-secondary"
+                                                  type="button"
+                                                  data-bs-target={`#carouselExampleIndicators${idx}`}
+                                                  data-bs-slide="next"
+                                                >
+                                                  <span
+                                                    className="carousel-control-next-icon"
+                                                    aria-hidden="true"
+                                                  ></span>
+                                                  <span className="visually-hidden">
+                                                    Next
+                                                  </span>
+                                                </button>
+                                              </>
+                                            ) : (
+                                              ""
+                                            )}
+                                          </div>
+                                        ) : (
+                                          ""
+                                        )}
+                                        <img
+                                          src={game.mainPic.secure_url}
+                                          className="card-img-top rounded-4 rounded-bottom img-fluid"
+                                          alt={game.slug}
+                                          onMouseEnter={showCarousel}
+                                        />
+                                        <div className="card-body pt-1">
+                                          <div className="cart-price d-flex justify-content-between align-items-start">
+                                            <p className="fw-bolder m-0 text-success">
+                                              ${game.price}
+                                            </p>
+                                          </div>
+                                          <h5 className="card-title fw-bolder mt-2 h4">
+                                            {game.name}
+                                          </h5>
                                         </div>
-                                      </Link>
-                                    </div>
-
+                                        <div className="card-footer ">
+                                          <div className="d-flex justify-content-start align-items-center flex-wrap">
+                                            {game?.platform?.map(
+                                              (platform, idx) => (
+                                                <div
+                                                  key={idx}
+                                                  className="platform rounded-pill mb-2 p-3 bg-four fa-xs me-2"
+                                                >
+                                                  {platform}
+                                                </div>
+                                              )
+                                            )}
+                                          </div>
+                                          <span className="text-muted">
+                                            {game.released.split("T")[0]}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </Link>
+                                  </div>
                                 );
                               })
                             )}
@@ -563,18 +593,26 @@ function Home({ search, setSearch, page, setPage }) {
                   </div>
                 </div>
 
-                <div className={loading !== "loading" && games.length > 0 ? "paginate my-4 d-flex justify-content-center " : "paginate my-4 d-flex justify-content-center d-none"}>
+                <div
+                  className={
+                    loading !== "loading" && games.length > 0
+                      ? "paginate my-4 d-flex justify-content-center "
+                      : "paginate my-4 d-flex justify-content-center d-none"
+                  }
+                >
                   <Stack spacing={2}>
                     <Pagination
                       size="large"
                       count={pageCount}
                       page={page}
-                      showFirstButton showLastButton variant="outlined" color="primary"
+                      showFirstButton
+                      showLastButton
+                      variant="outlined"
+                      color="primary"
                       onChange={handlePage}
                     />
                   </Stack>
                 </div>
-
               </div>
             </div>
           )}

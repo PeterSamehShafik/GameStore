@@ -160,3 +160,32 @@ a {
     width: 15% !important;
   }
 }
+
+
+/* Scrollbar */
+/* set the width and height of your scrollbar */
+::-webkit-scrollbar {
+  width: 15px;
+  height: 100%;
+  background-color:black;
+}
+
+
+/*style the track of your scrollbar*/
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: rgba(0,255,255,0.1);
+}
+
+
+
+
+/*style the thumb of your scrollbar*/
+::-webkit-scrollbar-thumb {
+  background: #892BE0; 
+  border-radius: 10px;
+  box-shadow: 0px 0px 15px #00FFFF; 
+
+}
+
+/* End of scrollbar */
