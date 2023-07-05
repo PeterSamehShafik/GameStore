@@ -56,8 +56,21 @@ nav {
         position: relative;
         /* width: 100%; */
     }
-
+    .cart-icon-font , .notify-icon{
+        display: none !important;
+    }
+    .cart-written, .notification-written{
+        display: block !important;
+    }
 }
+
+.cart-icon-font, .notify-icon{
+    display: block ;
+}
+.cart-written, .notification-written{
+    display: none ;
+}
+
 
 
 nav img {
@@ -212,3 +225,4 @@ ul.MuiList-root {
 .bg-notify:hover{
     background-color: #2d476a;
 }
+

@@ -177,7 +177,9 @@ function Home({ search, setSearch, page, setPage }) {
     }
     // console.log("leaving")
   };
-
+  const colorGenre = (e) => {
+    console.log(e.target)
+  }
   useEffect(() => {
     getGames();
     getGenres();
@@ -289,19 +291,19 @@ function Home({ search, setSearch, page, setPage }) {
                                 <h2 className="accordion-header bg-dark">
                                   <button
                                     id="accordionBtn"
-                                    className="accordion-button"
+                                    className="accordion-button collapsed"
                                     type="button"
                                     data-bs-toggle="collapse"
                                     data-bs-target="#collapseOne"
                                     aria-expanded="false"
                                     aria-controls="collapseOne"
                                   >
-                                    <b className="">Genre</b>
+                                    <b className="">Genre{filters.genre? `: ${filters.genre}` : ''}</b>
                                   </button>
                                 </h2>
                                 <div
                                   id="collapseOne"
-                                  className="accordion-collapse collapse show"
+                                  className="accordion-collapse collapse"
                                   data-bs-parent="#accordionExample"
                                 >
                                   <div className="accordion-body bg-darkBlue text-white">

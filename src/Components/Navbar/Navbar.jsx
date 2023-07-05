@@ -187,11 +187,13 @@ function Navbar({ currentUser, removeUser, cart, setSearch, setPage, notifyCount
                       aria-expanded={open ? "true" : undefined}
                       onClick={open ? handleClose : getNotifications}
                     >
-                      <div className="notify-icon bg-white text-dark rounded-circle p-0 px-1 cursor-pointer ">
-                        <i className="fa-solid fa-earth-americas text-dark"></i>
+                        <p className="notification-written"> Notifications: {notifyCount}
+                         </p>
+                      <div className="notify-icon bg-white text-dark rounded-circle p-0 px-1 cursor-pointer notification-icon">
+                        <i className="fa-solid fa-earth-americas text-dark "></i>
                       </div>
                       {notifyCount !== 0 ? (
-                        <span className="position-absolute d-inline-block p-1 top-0 start-100 translate-middle badge rounded-circle bg-danger p-0">
+                        <span className="notify-icon position-absolute d-inline-block p-1 top-0 start-100 translate-middle badge rounded-circle bg-danger p-0">
                           {notifyCount}
                         </span>
                       ) : (
@@ -246,11 +248,14 @@ function Navbar({ currentUser, removeUser, cart, setSearch, setPage, notifyCount
                       data-bs-target="#offcanvasExample"
                       aria-controls="offcanvasExample"
                     >
-                      <div className="cart-icon bg-white text-dark rounded-circle p-0 px-1 cursor-pointer ">
-                        <FontAwesomeIcon icon="fa-solid fa-bag-shopping fa-xl" />
+                      <p className="cart-written">Cart: {cart?.games?.length !== 0
+                            ? cart?.games?.length
+                            : "0"}</p>
+                      <div className="cart-icon bg-white text-dark rounded-circle p-0 px-1 cursor-pointer cart-icon-font">
+                        <FontAwesomeIcon icon="fa-solid fa-bag-shopping fa-xl " className=""/>
                       </div>
                       {cart?.games?.length !== 0 ? (
-                        <span className = {cart?.games?.length? "position-absolute d-inline-block p-1 top-0 start-100 translate-middle badge rounded-circle bg-danger p-0" : "position-absolute d-inline-block top-0 start-100 translate-middle badge rounded-circle bg-danger p-0"}>
+                        <span className = {cart?.games?.length? "cart-icon-font position-absolute d-inline-block p-1 top-0 start-100 translate-middle badge rounded-circle bg-danger p-0" : "cart-icon-font position-absolute d-inline-block top-0 start-100 translate-middle badge rounded-circle bg-danger p-0"}>
                           {cart?.games?.length !== 0
                             ? cart?.games?.length
                             : "0"}
