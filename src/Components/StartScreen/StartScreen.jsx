@@ -308,6 +308,7 @@ function StartScreen({ currentUser }) {
                                           </li>
                                           <li> Routing animation. </li>
                                           <li> Google sign in. </li>
+                                          <li> Edit scrollbar view </li>
                                           <li> Bug Fixes. </li>
                                         </ol>
                                         <p>

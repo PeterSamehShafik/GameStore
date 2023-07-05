@@ -11,7 +11,10 @@ import { motion } from "framer-motion";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 
+import Avatar from "@mui/material/Avatar";
+
 function Home({ search, setSearch, page, setPage }) {
+  
   const [filters, setFilters] = useState({
     genre: null,
     sort: null,
@@ -53,6 +56,17 @@ function Home({ search, setSearch, page, setPage }) {
     asc_desc,
     clear = false,
   } = {}) {
+    let accordion = document.getElementById("collapseOne");
+    let accordionBtn = document.getElementById("accordionBtn");
+    if(accordion && accordionBtn){
+
+      accordionBtn.classList.add('collapsed')
+      accordionBtn.setAttribute('aria-expanded',false)
+      accordion.classList.remove('show')
+    }
+
+    
+    // document.getElementById("p2").setAttribute("aria-expanded", "false")
     setLoading("loading");
     let isGenre = "",
       tempPage = null,
@@ -201,12 +215,12 @@ function Home({ search, setSearch, page, setPage }) {
             </div>
           ) : (
             <div className="container-fluid">
-              <div className="row w-100">
-                <div className="col-sm-3 col-4 pe-0 ">
+              <div className="row">
+                <div className="col-3 col-sm-2 me-1 genre-large-filter">
                   
                   <nav className="side-nav">
-                    <div className="d-flex flex-column flex-shrink-0 p-3 pt-3 text-white bg-transparent ms-4 me-0 ">
-                      <div className="genres mt-3 ">
+                    <div className="d-flex flex-column flex-shrink-0 pt-3 text-white bg-transparent ms-4 me-0 ">
+                      <div className="genres mt-3">
                         <ul className="nav nav-pills flex-column mb-auto">
                           <h2 className="fw-bolder h3 mb-3">Genres</h2>
                           {genres?.map((genre) => (
@@ -241,7 +255,8 @@ function Home({ search, setSearch, page, setPage }) {
                     </div>
                   </nav>
                 </div>
-                <div className="col-sm-9 col-8 p-0">
+
+                <div className="col mx-sm-1">
                   <div className="page-content w-100 ps-0  pt-0">
                     <div className="main-header">
                       <h1 className="display-3 fw-bolder pt-0 mt-0">
@@ -264,133 +279,199 @@ function Home({ search, setSearch, page, setPage }) {
                       />
                       <i className="fa-solid fa-magnifying-glass close-search "></i>
                     </div>
-                    <div className="games-section pe-2">
-                      <div className="games-control d-flex justify-content-between">
-                        <div className="left-control">
-                          <div className="dropdown d-inline">
-                            <button
-                              className="btn btn-dark me-2 mb-2 dropdown-toggle"
-                              type="button"
-                              id="dropdownMenuButton1"
-                              data-bs-toggle="dropdown"
-                              aria-expanded="false"
-                            >
-                              Sort by :{" "}
-                              <b className="text-capitalize">
-                                {filters.sort
-                                  ? filters.sort?.split("=")[0] == "avgRate"
-                                    ? "Rate"
-                                    : filters.sort?.split("=")[0]
-                                  : "None"}
-                              </b>
-                            </button>
-                            {filters.sort ? (
-                              <>
-                                <button
-                                  onClick={() => {
-                                    asc_desc(1);
-                                  }}
-                                  className={
-                                    filters.asc_desc === 1
-                                      ? "btn btn-secondary me-2 mb-2 btn-sm  "
-                                      : "btn btn-dark me-2 mb-2 btn-sm  "
-                                  }
-                                  type="button"
-                                >
-                                  <span className="cursor-pointer">
-                                    Ascending
-                                  </span>
-                                </button>
-                                <button
-                                  onClick={() => {
-                                    asc_desc(-1);
-                                  }}
-                                  className={
-                                    filters.asc_desc === 1
-                                      ? "btn btn-dark me-2 mb-2 btn-sm  "
-                                      : "btn btn-secondary me-2 mb-2 btn-sm  "
-                                  }
-                                  type="button"
-                                >
-                                  <span className="cursor-pointer">
-                                    Descending
-                                  </span>
-                                </button>
-                              </>
-                            ) : (
-                              ""
-                            )}
-                            <ul
-                              className="dropdown-menu mt-2"
-                              aria-labelledby="dropdownMenuButton1"
-                            >
-                              <li>
-                                <Link
-                                  to={`/home?sort=rate`}
-                                  onClick={() => {
-                                    getGames({ avgRate: "1" });
-                                  }}
-                                  className="dropdown-item"
-                                >
-                                  Rate
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to={`/home?sort=price`}
-                                  onClick={() => {
-                                    getGames({ price: "1" });
-                                  }}
-                                  className="dropdown-item"
-                                >
-                                  Price
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to={`/home?sort=alpha`}
-                                  onClick={() => {
-                                    getGames({ alpha: "1" });
-                                  }}
-                                  className="dropdown-item"
-                                >
-                                  Alpha
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to={`/home?sort=released`}
-                                  onClick={() => {
-                                    getGames({ released: "1" });
-                                  }}
-                                  className="dropdown-item"
-                                >
-                                  Released
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to={`/home?sort=lastAdded`}
-                                  onClick={() => {
-                                    getGames({ lastAdded: "1" });
-                                  }}
-                                  className="dropdown-item"
-                                >
-                                  Last Added
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
 
-                          <Link
-                            to={"/home"}
-                            className="btn btn-dark me-2 mb-2"
-                            onClick={() => {
-                              getGames({ clear: true });
-                            }}
-                          >
-                            <b>Clear Filters</b>
-                          </Link>
+                    <div className="games-section pe-2">
+                      <div className="games-control d-md-flex justify-content-between">
+                        <div className="left-control">
+                          <div className="genre-small-filter my-2 rounded-5">
+                            <div className="accordion my-3" id="accordionExample">
+                              <div className="accordion-item">
+                                <h2 className="accordion-header bg-dark">
+                                  <button
+                                    id="accordionBtn"
+                                    className="accordion-button"
+                                    type="button"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#collapseOne"
+                                    aria-expanded="false"
+                                    aria-controls="collapseOne"
+                                  >
+                                    <b className="">Genre</b>
+                                  </button>
+                                </h2>
+                                <div
+                                  id="collapseOne"
+                                  className="accordion-collapse collapse show"
+                                  data-bs-parent="#accordionExample"
+                                >
+                                  <div className="accordion-body bg-darkBlue text-white">
+                                    <ul className="nav nav-pills flex-column mb-auto">
+                                      {genres?.map((genre) => (
+                                        <Link
+                                          key={genre._id}
+                                          to={`/home?genre=${genre.name}`}
+                                        >
+                                          <li
+                                            className={
+                                              filters.genre === genre.name
+                                                ? "nav-item my-3 hover-50 active bolder"
+                                                : "nav-item my-3 hover-50 bolder"
+                                            }
+                                            key={genre._id}
+                                            onClick={() => {
+                                              getGames({ genre: genre.name });
+                                            }}
+                                          >
+                                            <div className="cursor-pointer ps-0  d-flex align-items-center">
+                                              <Avatar
+                                                alt="Remy Sharp"
+                                                src={genre?.image?.secure_url}
+                                              />
+                                              {/* <img
+                                    src={genre?.image?.secure_url}
+                                    className="img-fluid h-100 rounded-circle"
+                                    alt={genre.slug}
+                                  /> */}
+                                              <span className="ms-3">
+                                                {genre.name}
+                                              </span>
+                                            </div>
+                                          </li>
+                                        </Link>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="d-flex justify-content-md-start justify-content-between ">
+                            <div className="dropdown d-inline">
+                              <button
+                                className="btn btn-dark me-2 mb-2 dropdown-toggle"
+                                type="button"
+                                id="dropdownMenuButton1"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                              >
+                                Sort by :{" "}
+                                <b className="text-capitalize">
+                                  {filters.sort
+                                    ? filters.sort?.split("=")[0] == "avgRate"
+                                      ? "Rate"
+                                      : filters.sort?.split("=")[0]
+                                    : "None"}
+                                </b>
+                              </button>
+                              {filters.sort ? (
+                                <>
+                                  <button
+                                    onClick={() => {
+                                      asc_desc(1);
+                                    }}
+                                    className={
+                                      filters.asc_desc === 1
+                                        ? "btn btn-secondary me-2 mb-2 btn-sm  "
+                                        : "btn btn-dark me-2 mb-2 btn-sm  "
+                                    }
+                                    type="button"
+                                  >
+                                    <span className="cursor-pointer">
+                                      Ascending
+                                    </span>
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      asc_desc(-1);
+                                    }}
+                                    className={
+                                      filters.asc_desc === 1
+                                        ? "btn btn-dark me-2 mb-2 btn-sm  "
+                                        : "btn btn-secondary me-2 mb-2 btn-sm  "
+                                    }
+                                    type="button"
+                                  >
+                                    <span className="cursor-pointer">
+                                      Descending
+                                    </span>
+                                  </button>
+                                </>
+                              ) : (
+                                ""
+                              )}
+                              <ul
+                                className="dropdown-menu mt-2"
+                                aria-labelledby="dropdownMenuButton1"
+                              >
+                                <li>
+                                  <Link
+                                    to={`/home?sort=rate`}
+                                    onClick={() => {
+                                      getGames({ avgRate: "1" });
+                                    }}
+                                    className="dropdown-item"
+                                  >
+                                    Rate
+                                  </Link>
+                                </li>
+                                <li>
+                                  <Link
+                                    to={`/home?sort=price`}
+                                    onClick={() => {
+                                      getGames({ price: "1" });
+                                    }}
+                                    className="dropdown-item"
+                                  >
+                                    Price
+                                  </Link>
+                                </li>
+                                <li>
+                                  <Link
+                                    to={`/home?sort=alpha`}
+                                    onClick={() => {
+                                      getGames({ alpha: "1" });
+                                    }}
+                                    className="dropdown-item"
+                                  >
+                                    Alpha
+                                  </Link>
+                                </li>
+                                <li>
+                                  <Link
+                                    to={`/home?sort=released`}
+                                    onClick={() => {
+                                      getGames({ released: "1" });
+                                    }}
+                                    className="dropdown-item"
+                                  >
+                                    Released
+                                  </Link>
+                                </li>
+                                <li>
+                                  <Link
+                                    to={`/home?sort=lastAdded`}
+                                    onClick={() => {
+                                      getGames({ lastAdded: "1" });
+                                    }}
+                                    className="dropdown-item"
+                                  >
+                                    Last Added
+                                  </Link>
+                                </li>
+                              </ul>
+                            </div>
+                            <div className="clear-filter">
+                              <Link
+                                to={"/home"}
+                                className="btn btn-dark mb-2"
+                                onClick={() => {
+                                  getGames({ clear: true });
+                                }}
+                              >
+                                <b>Clear Filters</b>
+                              </Link>
+                            </div>
+                          </div>
                         </div>
                         <div className="right-control">
                           <span className="text-muted me-3">

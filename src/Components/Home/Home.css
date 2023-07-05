@@ -124,3 +124,39 @@ main .card-footer {
     transform: scale(1.1) !important;
 }
 
+.bg-darkGrey{
+    background-color: #222529 !important;
+}
+.bg-darkBlue{
+    background-color: #293f4a !important;
+}
+main .accordion-item:first-of-type .accordion-button{
+    background-color: #222529 !important;
+    color: white !important;
+
+}
+main .accordion-button:not(.collapsed) {
+    color: white !important;
+    background-color: #222529 !important;
+
+}
+main .accordion-button::after {
+    color: white !important;
+}
+.genre-small-filter{
+    display: none ;
+}
+.genre-large-filter{
+    display: inline ;
+}
+@media (max-width: 770px) {
+    .genre-small-filter{
+        display: inline ;
+    }
+    .genre-large-filter{
+        display: none ;
+    }
+    main{
+        margin-left: 5px;
+    }
+}
