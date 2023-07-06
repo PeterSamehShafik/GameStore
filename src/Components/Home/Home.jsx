@@ -286,7 +286,7 @@ function Home({ search, setSearch, page, setPage }) {
                       <div className="games-control d-md-flex justify-content-sm-between ">
                         <div className="left-control">
                           <div className="genre-small-filter my-2 rounded-5">
-                            <div className="accordion my-3" id="accordionExample">
+                            <div className="accordion genres my-3" id="accordionExample">
                               <div className="accordion-item">
                                 <h2 className="accordion-header bg-dark">
                                   <button
