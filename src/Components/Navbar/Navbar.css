@@ -56,21 +56,13 @@ nav {
         position: relative;
         /* width: 100%; */
     }
-    .cart-icon-font , .notify-icon{
-        display: none !important;
+    .cart-icon-font , .notification-icon, .notification-icon-span, .cart-icon-span{
+        display: none;
     }
     .cart-written, .notification-written{
-        display: block !important;
+        display: inline ;
     }
 }
-
-.cart-icon-font, .notify-icon{
-    display: block ;
-}
-.cart-written, .notification-written{
-    display: none ;
-}
-
 
 
 nav img {
@@ -224,5 +216,21 @@ ul.MuiList-root {
 }
 .bg-notify:hover{
     background-color: #2d476a;
+}
+
+@media (max-width: 991px) {
+    .cart-icon-font , .notification-icon, .notification-icon-span, .cart-icon-span{
+        display: none !important;
+    }
+    .cart-written, .notification-written{
+        display: inline !important;
+    }
+}
+
+.cart-icon-font, .notification-icon, .notification-icon-span, .cart-icon-span{
+    display: inline ;
+}
+.cart-written, .notification-written{
+    display: none ;
 }
 

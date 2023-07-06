@@ -283,7 +283,7 @@ function Home({ search, setSearch, page, setPage }) {
                     </div>
 
                     <div className="games-section pe-2">
-                      <div className="games-control d-md-flex justify-content-between">
+                      <div className="games-control d-md-flex justify-content-sm-between ">
                         <div className="left-control">
                           <div className="genre-small-filter my-2 rounded-5">
                             <div className="accordion my-3" id="accordionExample">
@@ -348,7 +348,7 @@ function Home({ search, setSearch, page, setPage }) {
                             </div>
                           </div>
                           <div className="d-flex justify-content-md-start justify-content-between ">
-                            <div className="dropdown d-inline">
+                            <div className="dropdown ">
                               <button
                                 className="btn btn-dark me-2 mb-2 dropdown-toggle"
                                 type="button"
@@ -365,6 +365,8 @@ function Home({ search, setSearch, page, setPage }) {
                                     : "None"}
                                 </b>
                               </button>
+                              <div>
+
                               {filters.sort ? (
                                 <>
                                   <button
@@ -401,6 +403,7 @@ function Home({ search, setSearch, page, setPage }) {
                               ) : (
                                 ""
                               )}
+                              </div>
                               <ul
                                 className="dropdown-menu mt-2"
                                 aria-labelledby="dropdownMenuButton1"

@@ -10,14 +10,22 @@ import MenuItem from "@mui/material/MenuItem";
 import axios from "axios";
 import Avatar from "@mui/material/Avatar";
 
-function Navbar({ currentUser, removeUser, cart, setSearch, setPage, notifyCount, setNotifyCount }) {
+function Navbar({
+  currentUser,
+  removeUser,
+  cart,
+  setSearch,
+  setPage,
+  notifyCount,
+  setNotifyCount,
+}) {
   const location = useLocation();
   const handleSearch = (e) => {
     setSearch(e.target.value);
     setPage(1);
   };
-  const [temp, setTemp] = useState(0)
-  const [notifications, setNotifications] = useState(null);
+  const [temp, setTemp] = useState(0);
+  const [notifications, setNotifications] = useState("loading");
   // const [limit, setLimit] = useState(5)
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -36,8 +44,6 @@ function Navbar({ currentUser, removeUser, cart, setSearch, setPage, notifyCount
   //handel scrolling hide
   const { scrollDirection } = useScroll();
 
-  
-
   const getNotifications = async (e) => {
     handleClick(e);
     const config = {
@@ -47,17 +53,20 @@ function Navbar({ currentUser, removeUser, cart, setSearch, setPage, notifyCount
     };
     const result = await axios
       .get(`${baseURL}/user/notifications`, config)
-      .catch((e) => console.log(e));
+      .catch((e) => {
+        console.log(e);
+        setNotifications(null);
+      });
     // console.log(result)
     if (result?.data?.message === "done") {
-      setTemp(notifyCount)
+      setTemp(notifyCount);
       setNotifyCount(0);
       setNotifications(result.data.user.notifications);
     }
   };
 
   // useEffect(() => {
-    
+
   // }, []);
 
   return (
@@ -187,15 +196,19 @@ function Navbar({ currentUser, removeUser, cart, setSearch, setPage, notifyCount
                       aria-expanded={open ? "true" : undefined}
                       onClick={open ? handleClose : getNotifications}
                     >
-                        <p className="notification-written"> Notifications: {notifyCount}
-                         </p>
+                      <p className="notification-written">
+                        {" "}
+                        Notifications: {notifyCount}
+                      </p>
                       <div className="notify-icon bg-white text-dark rounded-circle p-0 px-1 cursor-pointer notification-icon">
                         <i className="fa-solid fa-earth-americas text-dark "></i>
                       </div>
                       {notifyCount !== 0 ? (
-                        <span className="notify-icon position-absolute d-inline-block p-1 top-0 start-100 translate-middle badge rounded-circle bg-danger p-0">
-                          {notifyCount}
-                        </span>
+                        <div className="notification-icon-span">
+                          <span className=" position-absolute d-inline-block p-1 top-0 start-100 translate-middle badge rounded-circle bg-danger p-0">
+                            {notifyCount}
+                          </span>
+                        </div>
                       ) : (
                         ""
                       )}
@@ -210,30 +223,66 @@ function Navbar({ currentUser, removeUser, cart, setSearch, setPage, notifyCount
                           "aria-labelledby": "basic-button",
                         }}
                       >
-                        <div class="notifications py-2 bg-secondary text-dark fw-bold" id="box">
-                          <h2 className="h6 px-2  fw-bolder text-black-50">Notifications</h2>
-                          <hr className="my-1"/>
-                          {notifications?.map((notify, idx) => {
-                            return (
-                              <>
-                                <div className={idx < temp && temp !== 0? "notifications-item p-2 bg-notify" : "notifications-item p-2 "}>
-                                  {" "}
-                                    <Link to={`/details/${notify.gameSlug}/${notify.gameId}`}>
-                                  <div className="d-flex">
-                                    <Avatar
-                                      alt="Notify"
-                                      src="https://img.freepik.com/premium-vector/gamer-streamer-mascot-logo-vector-illustration_382438-609.jpg"
-                                      />
-                                  <div class="text ms-2">
-                                    <p className="mb-0"><b>{notify.message.split('has')[0]}</b> has {notify.message.split('has')[1]}</p>
-                                  </div>
-                                  </div>
+                        <div
+                          className="notifications py-2 bg-secondary text-dark fw-bold"
+                          id="box"
+                        >
+                          <h2 className="h6 px-2  fw-bolder text-black-50">
+                            Notifications
+                          </h2>
+                          <hr className="my-1" />
+                          {notifications !== 'loading' ? (
+                            !notifications || notifications.length === 0 ? (
+                              <p className="ms-2">No notification</p>
+                            ) : (
+                              notifications?.map((notify, idx) => {
+                                return (
+                                  <>
+                                    <div
+                                      className={
+                                        idx < temp && temp !== 0
+                                          ? "notifications-item p-2 bg-notify"
+                                          : "notifications-item p-2 "
+                                      }
+                                    >
+                                      {" "}
+                                      <Link
+                                        to={`/details/${notify.gameSlug}/${notify.gameId}`}
+                                      >
+                                        <div className="d-flex">
+                                          <Avatar
+                                            alt="Notify"
+                                            src="https://img.freepik.com/premium-vector/gamer-streamer-mascot-logo-vector-illustration_382438-609.jpg"
+                                          />
+                                          <div className="text ms-2">
+                                            <p className="mb-0">
+                                              <b>
+                                                {notify.message.split("has")[0]}
+                                              </b>{" "}
+                                              has{" "}
+                                              {notify.message.split("has")[1]}
+                                            </p>
+                                          </div>
+                                        </div>
                                       </Link>
-                                </div>
+                                    </div>
                                     <hr className="my-0" />
-                              </>
-                            );
-                          })}
+                                  </>
+                                );
+                              })
+                            )
+                          ) : (
+                            <div className=" d-flex justify-content-center align-items-center mt-5 ">
+                              <div className="sk-chase ">
+                                <div className="sk-chase-dot"></div>
+                                <div className="sk-chase-dot"></div>
+                                <div className="sk-chase-dot"></div>
+                                <div className="sk-chase-dot"></div>
+                                <div className="sk-chase-dot"></div>
+                                <div className="sk-chase-dot"></div>
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </Menu>
                     </div>
@@ -248,18 +297,30 @@ function Navbar({ currentUser, removeUser, cart, setSearch, setPage, notifyCount
                       data-bs-target="#offcanvasExample"
                       aria-controls="offcanvasExample"
                     >
-                      <p className="cart-written">Cart: {cart?.games?.length !== 0
-                            ? cart?.games?.length
-                            : "0"}</p>
+                      <p className="cart-written">
+                        Cart:{" "}
+                        {cart?.games?.length !== 0 ? cart?.games?.length : "0"}
+                      </p>
                       <div className="cart-icon bg-white text-dark rounded-circle p-0 px-1 cursor-pointer cart-icon-font">
-                        <FontAwesomeIcon icon="fa-solid fa-bag-shopping fa-xl " className=""/>
+                        <FontAwesomeIcon
+                          icon="fa-solid fa-bag-shopping fa-xl "
+                          className=""
+                        />
                       </div>
                       {cart?.games?.length !== 0 ? (
-                        <span className = {cart?.games?.length? "cart-icon-font position-absolute d-inline-block p-1 top-0 start-100 translate-middle badge rounded-circle bg-danger p-0" : "cart-icon-font position-absolute d-inline-block top-0 start-100 translate-middle badge rounded-circle bg-danger p-0"}>
-                          {cart?.games?.length !== 0
-                            ? cart?.games?.length
-                            : "0"}
-                        </span>
+                        <div className="cart-icon-span">
+                          <span
+                            className={
+                              cart?.games?.length
+                                ? " position-absolute d-inline-block p-1 top-0 start-100 translate-middle badge rounded-circle bg-danger p-0"
+                                : "cart-icon-span position-absolute d-inline-block top-0 start-100 translate-middle badge rounded-circle bg-danger p-0"
+                            }
+                          >
+                            {cart?.games?.length !== 0
+                              ? cart?.games?.length
+                              : "0"}
+                          </span>
+                        </div>
                       ) : (
                         ""
                       )}
