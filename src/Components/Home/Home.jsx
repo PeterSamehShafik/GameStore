@@ -10,11 +10,58 @@ import { motion } from "framer-motion";
 //paginate
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
+//modal
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
+
 
 import Avatar from "@mui/material/Avatar";
 
 function Home({ search, setSearch, page, setPage }) {
   
+    //modal
+    const [showModal, setShowModal] = useState(false);
+    const [modalData, setModalData] = useState({
+      header: "",
+      body: "",
+      isMainBtn: true,
+    });
+    const handleCloseModal = () => setShowModal(false);
+    const handleShowModal = () => setShowModal(true);
+  
+    const callModal = ({
+      header = "Are you sure?",
+      body,
+      closeBtnColor = "secondary",
+      closeBtnTxt = "Close",
+      mainBtnColor = "primary",
+      mainBtnTxt,
+      mainBtnFunc,
+      isMainBtn = true,
+      isCloseBtn = true,
+      isStatic = false,
+    } = {}) => {
+      setModalData({
+        ...modalData,
+        header,
+        body,
+        closeBtnColor,
+        closeBtnTxt,
+        mainBtnColor,
+        mainBtnTxt,
+        mainBtnFunc,
+        isMainBtn,
+        isCloseBtn,
+        isStatic,
+      });
+      handleShowModal();
+    };
+    const applyCloseModel = () => {
+      modalData.mainBtnFunc();
+      handleCloseModal();
+    };
+    //end of modal
+
   const [filters, setFilters] = useState({
     genre: null,
     sort: null,
@@ -177,12 +224,44 @@ function Home({ search, setSearch, page, setPage }) {
     }
     // console.log("leaving")
   };
-  const colorGenre = (e) => {
-    console.log(e.target)
+  const whatsNew = () => {
+    if(!sessionStorage.getItem("new")){
+      callModal({
+        header: "What's new?",
+        body: (
+          <>
+            <ol>
+              <li>
+                {" "}
+                Adding notifications feature.{" "}
+              </li>
+              <li> Routing animation. </li>
+              <li> Google sign in. </li>
+              <li> Edit scrollbar view </li>
+              <li> Bug Fixes. </li>
+            </ol>
+            <p>
+              With these exciting updates, the
+              website now offers a seamless user
+              experience, empowering visitors to
+              effortlessly explore and engage with
+              its enhanced features.
+            </p>
+          </>
+        ),
+        isMainBtn: false,
+        closeBtnTxt: "Let's play",
+        closeBtnColor: "success",
+        isCloseBtn:true
+      });
+      sessionStorage.setItem("new", "true");
+    }
   }
   useEffect(() => {
     getGames();
     getGenres();
+    whatsNew();
+    
   }, []);
   useEffect(() => {
     getGames();
@@ -704,6 +783,47 @@ function Home({ search, setSearch, page, setPage }) {
           )}
         </main>
       </motion.main>
+      <Modal
+              show={showModal}
+              onHide={handleCloseModal}
+              className="text-white"
+              backdrop={modalData.isStatic ? "static" : true}
+              keyboard={modalData.isStatic ? false : true}
+            >
+              {modalData.isStatic ? (
+                <Modal.Header>
+                  <Modal.Title>{modalData.header}</Modal.Title>
+                </Modal.Header>
+              ) : (
+                <Modal.Header closeButton>
+                  <Modal.Title>{modalData.header}</Modal.Title>
+                </Modal.Header>
+              )}
+
+              <Modal.Body>{modalData.body}</Modal.Body>
+              <Modal.Footer>
+                {modalData.isCloseBtn === true ? (
+                  <Button
+                    variant={modalData.closeBtnColor}
+                    onClick={handleCloseModal}
+                  >
+                    {modalData.closeBtnTxt}
+                  </Button>
+                ) : (
+                  ""
+                )}
+                {modalData.isMainBtn === true ? (
+                  <Button
+                    variant={modalData.mainBtnColor}
+                    onClick={applyCloseModel}
+                  >
+                    {modalData.mainBtnTxt}
+                  </Button>
+                ) : (
+                  ""
+                )}
+              </Modal.Footer>
+            </Modal>
     </>
   );
 }

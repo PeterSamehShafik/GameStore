@@ -22,6 +22,9 @@ import GameControl from './CPanel/GameControl/GameControl.jsx';
 import UserControl from './CPanel/UserControl/UserControl.jsx';
 import { AnimatePresence } from "framer-motion";
 
+//modal
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 
 
 // import { Provider } from 'react-redux';
@@ -35,8 +38,51 @@ import MySupport from './CPanel/MySupport/MySupport.jsx';
 function App() {
   const location = useLocation()
 
-  //scroll to top
+  //modal
+  const [showModal, setShowModal] = useState(false);
+  const [modalData, setModalData] = useState({
+    header: "",
+    body: "",
+    isMainBtn: true,
+  });
+  const handleCloseModal = () => setShowModal(false);
+  const handleShowModal = () => setShowModal(true);
 
+  const callModal = ({
+    header = "Are you sure?",
+    body,
+    closeBtnColor = "secondary",
+    closeBtnTxt = "Close",
+    mainBtnColor = "primary",
+    mainBtnTxt,
+    mainBtnFunc,
+    isMainBtn = true,
+    isCloseBtn = true,
+    isStatic = false,
+  } = {}) => {
+    setModalData({
+      ...modalData,
+      header,
+      body,
+      closeBtnColor,
+      closeBtnTxt,
+      mainBtnColor,
+      mainBtnTxt,
+      mainBtnFunc,
+      isMainBtn,
+      isCloseBtn,
+      isStatic,
+    });
+    handleShowModal();
+  };
+  const applyCloseModel = () => {
+    modalData.mainBtnFunc();
+    handleCloseModal();
+  };
+  //end of modal
+
+
+  //scroll to top
   function returnToTop() {
     // setIsTopBtn(false)
     document.body.scrollTop = 0; // For Safari
@@ -88,7 +134,6 @@ function App() {
     const result = await axios
       .get(`${baseURL}/user/notifyCount`, config)
       .catch((e) => console.log(e));
-      console.log(result?.data)
     if (result?.data?.message === "done") {
       setNotifyCount(result.data.notifyCount);
     }
@@ -133,7 +178,7 @@ function App() {
       localStorage.removeItem("token");
       setCrrUser(null);
     }
-  
+
   }
   async function removeUser() {
     const config = {
@@ -147,11 +192,14 @@ function App() {
       }
     });
     if (result?.data?.message == "done") {
+      sessionStorage.removeItem("new");
       localStorage.removeItem("token");
       navigate('/login');
       setCrrUser(null);
     } else {
-      alert("Failed to log out")
+      // alert("Failed to log out")
+      callModal({ header: "Error", body: "Session expired", isCloseBtn: false, mainBtnTxt: "Log in", isStatic: true, mainBtnFunc: () => { navigate('/login') } })
+
     }
 
   }
@@ -182,7 +230,7 @@ function App() {
     // isLogin()
     if (localStorage.getItem("token")) {
       currentUser();
-      
+
     }
     window.addEventListener("scroll", handleVisibleButton);
 
@@ -190,7 +238,7 @@ function App() {
 
 
   return <>
-    {location.pathname.toLowerCase().includes("cpanel") ? "" : <Navbar notifyCount = {notifyCount} setNotifyCount = {setNotifyCount} setPage={setGamePage} currentUser={crrUser} removeUser={removeUser} cart={cart} setSearch={setSearch} />}
+    {location.pathname.toLowerCase().includes("cpanel") ? "" : <Navbar notifyCount={notifyCount} setNotifyCount={setNotifyCount} setPage={setGamePage} currentUser={crrUser} removeUser={removeUser} cart={cart} setSearch={setSearch} />}
 
     {
       crrUser ?
@@ -276,7 +324,47 @@ function App() {
       <button className="d-none" onClick={returnToTop} id="toTop" title="Go to top"><i className="fa-solid fa-jet-fighter-up"></i></button>
 
     </div>
+    <Modal
+      show={showModal}
+      onHide={handleCloseModal}
+      className="text-white"
+      backdrop={modalData.isStatic ? "static" : true}
+      keyboard={modalData.isStatic ? false : true}
+    >
+      {modalData.isStatic ? (
+        <Modal.Header>
+          <Modal.Title>{modalData.header}</Modal.Title>
+        </Modal.Header>
+      ) : (
+        <Modal.Header closeButton>
+          <Modal.Title>{modalData.header}</Modal.Title>
+        </Modal.Header>
+      )}
 
+      <Modal.Body>{modalData.body}</Modal.Body>
+      <Modal.Footer>
+        {modalData.isCloseBtn === true ? (
+          <Button
+            variant={modalData.closeBtnColor}
+            onClick={handleCloseModal}
+          >
+            {modalData.closeBtnTxt}
+          </Button>
+        ) : (
+          ""
+        )}
+        {modalData.isMainBtn === true ? (
+          <Button
+            variant={modalData.mainBtnColor}
+            onClick={applyCloseModel}
+          >
+            {modalData.mainBtnTxt}
+          </Button>
+        ) : (
+          ""
+        )}
+      </Modal.Footer>
+    </Modal>
     {/* </Provider> */}
 
   </>

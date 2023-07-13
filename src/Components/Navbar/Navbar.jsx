@@ -24,6 +24,8 @@ function Navbar({
     setSearch(e.target.value);
     setPage(1);
   };
+  // const [loadingNav, setLoadingNav] = useState('loading')
+  
   const [temp, setTemp] = useState(0);
   const [notifications, setNotifications] = useState("loading");
   // const [limit, setLimit] = useState(5)
@@ -64,7 +66,6 @@ function Navbar({
       setNotifications(result.data.user.notifications);
     }
   };
-
   // useEffect(() => {
 
   // }, []);
@@ -74,7 +75,11 @@ function Navbar({
       <nav
         className={
           scrollDirection === "down"
-            ? "main-nav navbar top-nav navbar-expand-lg navbar-dark text-white position-fixed w-100 bg-dark top-0"
+            ? 
+              location.pathname === "/"?
+              "main-nav navbar top-nav navbar-expand-lg navbar-dark text-white position-fixed w-100 bg-transparent top-0"
+              :
+              "main-nav navbar top-nav navbar-expand-lg navbar-dark text-white position-fixed w-100 bg-dark top-0"
             : "main-nav navbar top-nav navbar-expand-lg navbar-dark text-white position-fixed w-100 bg-dark top-minus"
         }
       >
