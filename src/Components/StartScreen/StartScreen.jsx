@@ -6,7 +6,6 @@ import { baseURL, roles } from "../../index.js";
 import Box from "@mui/material/Box";
 import Popper from "@mui/material/Popper";
 import Fade from "@mui/material/Fade";
-import { motion } from "framer-motion";
 
 function StartScreen({ currentUser }) {
   const [game, setGame] = useState({
@@ -53,13 +52,7 @@ function StartScreen({ currentUser }) {
 
   return (
     <>
-      <motion.main
-        className="main__container"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.5 }}
-      >
+
         <div className="myVideo">
           <video autoPlay muted loop>
             <source src="/liveWP.mp4" type="video/mp4" />
@@ -343,7 +336,7 @@ function StartScreen({ currentUser }) {
             </div>
           </div>
         )}
-      </motion.main>
+
     </>
   );
 }

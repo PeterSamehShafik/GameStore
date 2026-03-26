@@ -5,7 +5,6 @@ import { Link, useNavigate } from "react-router-dom";
 import "../Login/Login.css";
 import { baseURL } from "../../index.js";
 import "./SignUp.css";
-import { motion } from "framer-motion";
 export default function Signup() {
   let navigate = useNavigate();
 
@@ -139,13 +138,7 @@ export default function Signup() {
   };
   return (
     <>
-      <motion.main
-        className="main__container"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ x: "100%", opacity: 0 }}
-        transition={{ duration: 1 }}
-      >
+      
         <div className="sign-up-page">
           <section>
             {/* getting background */}
@@ -341,7 +334,7 @@ export default function Signup() {
           </section>
         </div>
 
-      </motion.main>
+
     </>
   );
 }

@@ -3,7 +3,6 @@ import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { baseURL, BEARERKEY, roles } from "./../index.js";
 import "./CPanel.css"
-import { motion } from "framer-motion";
 //modal
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
@@ -128,13 +127,7 @@ export default function CPanel({ removeUser }) {
 
 
     return <>
-        <motion.main
-            className="main__container"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1 }}
-        >
+
             {profile === "Loading" ?
                 <div className="w-100 vh-100 d-flex justify-content-center align-items-center position-absolute top-0">
                     <div className="sk-chase">
@@ -334,6 +327,6 @@ export default function CPanel({ removeUser }) {
                         </Modal>
                     </>
             }
-        </motion.main>
+
     </>
 }

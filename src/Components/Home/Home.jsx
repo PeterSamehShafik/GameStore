@@ -6,7 +6,7 @@ import "./Navigation.css";
 import "./NavigationMediaQuery.css";
 import axios from "axios";
 import { baseURL } from "../../index.js";
-import { motion } from "framer-motion";
+
 //paginate
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
@@ -18,7 +18,6 @@ import Modal from "react-bootstrap/Modal";
 import Avatar from "@mui/material/Avatar";
 
 function Home({ search, setSearch, page, setPage }) {
-  
     //modal
     const [showModal, setShowModal] = useState(false);
     const [modalData, setModalData] = useState({
@@ -269,13 +268,7 @@ function Home({ search, setSearch, page, setPage }) {
 
   return (
     <>
-      <motion.main
-        className="main__container"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0, x: "100%" }}
-        transition={{ duration: 0.5 }}
-      >
+
         <main className="d-flex games">
           {games == "loading" ? (
             <div className="w-100 vh-100 d-flex justify-content-center align-items-center position-absolute top-0">
@@ -782,7 +775,7 @@ function Home({ search, setSearch, page, setPage }) {
             </div>
           )}
         </main>
-      </motion.main>
+
       <Modal
               show={showModal}
               onHide={handleCloseModal}

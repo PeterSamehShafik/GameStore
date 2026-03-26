@@ -7,7 +7,7 @@ import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { motion } from "framer-motion";
+
 
 export default function Profile({ crrUser, currentUser }) {
   const { id } = useParams();
@@ -274,13 +274,7 @@ export default function Profile({ crrUser, currentUser }) {
 
   return (
     <>
-      <motion.main
-        className="main__container"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ x: "100%", opacity: 0 }}
-        transition={{ duration: 1 }}
-      >
+      
         {profile && !reload ? (
           <>
             <div className="container profile">
@@ -570,7 +564,6 @@ export default function Profile({ crrUser, currentUser }) {
             </div>
           </div>
         )}
-      </motion.main>
     </>
   );
 }

@@ -20,7 +20,6 @@ import CPanel from './CPanel/CPanel.jsx';
 import CPNav from './CPanel/CPNav/CPNav.jsx';
 import GameControl from './CPanel/GameControl/GameControl.jsx';
 import UserControl from './CPanel/UserControl/UserControl.jsx';
-import { AnimatePresence } from "framer-motion";
 
 //modal
 import Button from "react-bootstrap/Button";
@@ -247,7 +246,7 @@ function App() {
         ''
     }
     <div className={location.pathname.toLowerCase().includes("cpanel") ? "app" : 'app pt-5 mt-5'}>
-      <AnimatePresence>
+
         <Routes location={location} key={location.pathname.split('/')[1]}>
           <Route path='/googleOauth' element={<GoogleOauth currentUser={currentUser} />} />
 
@@ -320,7 +319,6 @@ function App() {
 
         </Routes>
 
-      </AnimatePresence>
       <button className="d-none" onClick={returnToTop} id="toTop" title="Go to top"><i className="fa-solid fa-jet-fighter-up"></i></button>
 
     </div>

@@ -6,7 +6,7 @@ import emailjs from '@emailjs/browser';
 //modal
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { motion } from "framer-motion";
+
 
 export default function NotFound({ error, resetErrorBoundary }) {
 
@@ -92,13 +92,7 @@ export default function NotFound({ error, resetErrorBoundary }) {
 
     }
     return (
-        <motion.main
-            className="main__container"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ x: "200%", opacity: 0 }}
-            transition={{ duration: 1, opacity:{duration:4}  }}
-        >
+
             <div className="not-found position-absolute top-0">
                 <div className="glitch-wrapper">
                     <div className="glitch-text">
@@ -163,7 +157,7 @@ export default function NotFound({ error, resetErrorBoundary }) {
                 </Modal>
 
             </div>
-        </motion.main>
+        
 
     )
 }

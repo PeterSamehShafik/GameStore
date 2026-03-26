@@ -8,7 +8,6 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a lo
 import { Carousel } from "react-responsive-carousel";
 import Rating from "@mui/material/Rating";
 import jwtDecode from "jwt-decode";
-import { motion } from "framer-motion";
 
 //modal
 import Button from "react-bootstrap/Button";
@@ -352,13 +351,7 @@ function Details({ currentUser, getCart, cart }) {
 
   return (
     <>
-      <motion.main
-        className="main__container"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0, y: "50%" }}
-        transition={{ duration: 0.5 }}
-      >
+
         {game === "Loading" ? (
           <div className="w-100 vh-100 d-flex justify-content-center align-items-center position-absolute top-0">
             <div className="sk-chase">
@@ -817,7 +810,7 @@ function Details({ currentUser, getCart, cart }) {
             <p className="fs-1 mx-auto">Please try again</p>
           </div>
         )}
-      </motion.main>
+
     </>
   );
 }
